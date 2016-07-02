@@ -1,0 +1,622 @@
+﻿<window>
+  <id>730351</id>
+  <defaultcontrol>10</defaultcontrol>
+  <allowoverlay>yes</allowoverlay>
+  <define>#header.label:Clickfinder Simple Guide</define>
+  <controls>
+
+    <import>ClickfinderSimpleGuide.window.xml</import>
+    <import>common.time.xml</import>    
+    <import>common.overlay.xml</import>
+
+
+    <control>
+      <description>Shows which EPG View is active</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>928</posX>
+      <posY>225</posY>
+      <width>300</width>
+      <align>left</align>
+      <!--font>font10</font -->
+      <label>#EPGView</label>
+      <textcolor>FF85cffe</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Shows which ChannelGroup is active</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1820</posX>
+      <posY>225</posY>
+      <width>300</width>
+      <align>right</align>
+      <label>#ChannelGroup</label>
+      <textcolor>FF85cffe</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    
+    <control>
+      <description>Datum des SQL-Search Strings</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1200</posX>
+      <posY>225</posY>      
+      <label>#ItemsRightListLabel</label>
+      <textcolor>FF85cffe</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Datum Programms</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>928</posX>
+      <posY>265</posY>
+      <font>font10</font>
+      <label>#SelectedProgramDates</label>
+      <textcolor>FFFFFF</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Channel-Name</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1820</posX>
+      <posY>265</posY>
+      <label>#ChannelName</label>
+      <font>font10</font>
+      <align>right</align>
+      <textcolor>c1c1c1</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+
+    <!-- List Control auf der rechten Seite -->
+    <!-- Best with font2 set height to 8 in fonts.xml (Default is 11)-->
+    <control>
+      <description>list to show channels with channel state logos</description>
+      <type>listcontrol</type>
+      <id>37</id>
+      <posX>1023</posX>
+      <posY>302</posY>
+      <width>805</width>
+      <height>735</height>
+      <textureFocus>tv_miniguide_bar.png</textureFocus>
+      <textureNoFocus>tv_miniguide_bar_nofocus.png</textureNoFocus>
+      <textureWith>30</textureWith>
+      <textYOff>6</textYOff>
+      <textXOff>-36</textXOff>
+      <textXOff2>972</textXOff2>
+      <textYOff2>40</textYOff2>
+      <textXOff3>45</textXOff3>
+      <textYOff3>40</textYOff3>
+      <IconXOff>-92</IconXOff>
+      <IconYOff>5</IconYOff>
+      <PinIconHeight>45</PinIconHeight>
+      <!-- PinIcon is the recording sign-->
+      <PinIconWidth>75</PinIconWidth>
+      <PinIconXOff>730</PinIconXOff>
+      <PinIconYOff>25</PinIconYOff>
+      <spinPosX>938</spinPosX>
+      <spinPosY>1020</spinPosY>
+      <!-- zeigt das 1/x an -->
+      <spinColor>FF85cffe</spinColor>
+      <spinWidth>30</spinWidth>
+      <spinHeight>20</spinHeight>
+      <spinCanFocus>no</spinCanFocus>
+      <itemWidth>70</itemWidth>
+      <itemHeight>70</itemHeight>
+      <spaceBetweenItems>0</spaceBetweenItems>
+      <textcolorNoFocus>ffa0d0ff</textcolorNoFocus>
+      <textcolorNoFocus2>c1c1c1</textcolorNoFocus2>
+      <textcolorNoFocus3>c1c1c1</textcolorNoFocus3>
+      <textureHeight>84</textureHeight>
+      <keepaspectratio>yes</keepaspectratio>
+      <font>font11</font>      <!-- Program title-->
+      <font3>TitanLight10</font3>
+      <!-- Channel and startTime to endTime-->
+      <textcolor>FFFFFFFF</textcolor>
+      <textcolor2>FFFFFFFF</textcolor2>
+      <textcolor3>FFFFFFFF</textcolor3>
+      <remoteColor>ffa0d0ff</remoteColor>
+      <!-- used for selected channel -->
+      <playedColor>FF85cffe</playedColor>
+      <unfocusedAlpha>255</unfocusedAlpha>
+    </control>
+
+    <!-- Titel über dem Bild auf der rechten Seite-->
+    <control Style="smallTitle">
+      <description>Selected item Label</description>
+      <type>fadelabel</type>
+      <id>1</id>
+      <posX>0</posX>
+      <posY>240</posY>
+      <label>#DetailTitle</label>
+      <!-- textcolor>36beeb</textcolor -->
+      <textcolor>FF85cffe</textcolor>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <!-- Short Description neben dem Bild-->
+    <control>
+      <description>Detail Describtion</description>
+      <type>textboxscrollup</type>
+      <id>1</id>
+      <posX>400</posX>
+      <posY>280</posY>
+      <width>500</width>
+      <height>160</height>
+      <label>#ShortDescription</label>
+      <textcolor>c1c1c1</textcolor>
+      <seperator>-------------------------------------------</seperator>
+      <font>font11</font>
+      <visible></visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <!--Bild-->
+    <control>
+      <description>Detail Image</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>65</posX>
+      <posY>290</posY>
+      <width>330</width>
+      <height>160</height>
+      <texture>#DetailImage</texture>
+      <colorkey>0</colorkey>
+      <filtered>yes</filtered>
+      <centered>yes</centered>
+      <zoom>yes</zoom>
+      <zoomfromtop>yes</zoomfromtop>
+      <keepaspectratio>no</keepaspectratio>
+      <visible></visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <!-- lange Beschreibung-->
+    <control>
+      <description>Detail Describtion</description>
+      <type>textboxscrollup</type>
+      <id>1</id>
+      <posX>70</posX>
+      <posY>470</posY>
+      <width>850</width>
+      <height>428</height>
+      <label>#DetailDescription</label>
+      <seperator>-------------------------------------------</seperator>
+      <font>font11</font>
+      <visible></visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    
+
+    <!-- this is the background of the control under the panel -->
+    <control>
+      <id>1</id>
+      <description>Time Progressbar Background Image</description>
+      <type>image</type>
+      <posX>750</posX>
+      <posY>1055</posY>
+      <width>360</width>
+      <height>12</height>
+      <texture>tvhome_progress_bg.png</texture>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <!-- this is the control under the panel -->
+    <control>
+      <id>11</id>
+      <description>Page Progress Bar</description>
+      <type>progress</type>
+      <posX>740</posX>
+      <posY>1055</posY>
+      <width>380</width>
+      <height>10</height>
+      <innerheight>10</innerheight>
+      <visible></visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <!-- DataLoadingAnimation -->
+    <control>
+      <id>9</id>
+      <type>animation</type>
+      <posX>1376</posX>
+      <posY>570</posY>
+      <width>70</width>
+      <height>70</height>
+      <textures>
+        common.waiting.1.png;common.waiting.2.png;common.waiting.3.png;common.waiting.4.png;common.waiting.5.png;
+        common.waiting.6.png;common.waiting.7.png;common.waiting.8.png
+      </textures>
+      <Duration>0:0:01.5</Duration>
+    </control>
+  
+    <!-- Schriftzug wann TV Movie zum letzten Mal upgedated wurde-->
+    <control>
+      <description>TvMovie++ LastUpdate</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>80</posX>
+      <posY>1050</posY>
+      <label>#SettingLastUpdate</label>
+      <textcolor>4e4e4e</textcolor>
+      <font>font10</font>
+      <align>left</align>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    <!-- Alles was im Blauen Bereich steht -->
+    <control>
+      <description>Program Audio Image</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>70</posX>
+      <posY>910</posY>
+      <width>120</width>
+      <height>95</height>
+      <texture>#DetailAudioImage</texture>
+      <colorkey>0</colorkey>
+      <filtered>yes</filtered>
+      <centered>yes</centered>
+      <keepaspectratio>yes</keepaspectratio>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Program HD/SD Image</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>220</posX>
+      <posY>910</posY>
+      <width>110</width>
+      <height>95</height>
+      <texture>#DetailProgramFormat</texture>
+      <colorkey>0</colorkey>
+      <filtered>yes</filtered>
+      <centered>yes</centered>
+      <keepaspectratio>yes</keepaspectratio>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Detail FSK Logo</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>370</posX>      
+      <posY>935</posY>
+      <width>55</width>
+      <height>55</height>
+      <texture></texture>
+      <colorkey>0</colorkey>
+      <filtered>yes</filtered>
+      <centered>no</centered>
+      <keepaspectratio>yes</keepaspectratio>
+      <texture>#DetailFSK</texture>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Fun</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>70</posX>
+      <posY>1010</posY>
+      <width>120</width>
+      <!--label>#ClickfinderPG.Translation.FunLabel</label -->
+	  <label>Spass</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>     
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>FunStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>110</posX>
+      <posY>1030</posY>
+      <width>100</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingFun</percentage>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Action</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>190</posX>
+      <posY>1010</posY>
+      <width>120</width>
+      <label>Action</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>ActionStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>230</posX>
+      <posY>1030</posY>
+      <width>100</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingAction</percentage>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Gefühl</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>310</posX>
+      <posY>1010</posY>
+      <width>120</width>
+      <label>Gefühl</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>GefühlStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>350</posX>
+      <posY>1030</posY>
+      <width>100</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingEmotions</percentage>      
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Erotik</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>430</posX>
+      <posY>1010</posY>
+      <width>120</width>
+      <label>Erotik</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>ErotikStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>470</posX>
+      <posY>1030</posY>
+      <width>100</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingErotic</percentage>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Spannung</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>550</posX>
+      <posY>1010</posY>
+      <width>150</width>
+      <label>Spannung</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>SpannungStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>610</posX>
+      <posY>1030</posY>
+      <width>100</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingSuspense</percentage>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>Anspruch</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>710</posX>
+      <posY>1010</posY>
+      <width>140</width>
+      <label>Anspruch</label>
+      <font>font10</font>
+      <align>center</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+    <control>
+      <description>AnspruchStars</description>
+      <type>imagelist</type>
+      <id>1</id>
+      <posX>770</posX>
+      <posY>1030</posY>
+      <width>140</width>
+      <height>10</height>
+      <textureWidth>12</textureWidth>
+      <textureHeight>12</textureHeight>
+      <subitems>
+        <subitem>starblack.png</subitem>
+        <subitem>starwhite.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>3</imagesToDraw>
+      <percentage>#DetailRatingLevel</percentage>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Genre</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1030</posX>
+      <posY>995</posY>
+      <width>120</width>
+      <label>Genre</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Genre-Value</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1060</posX>
+      <posY>1020</posY>
+      <width>300</width>
+      <label>#DetailGenre</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>4e4e4e</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Duration</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1300</posX>
+      <posY>995</posY>
+      <width>320</width>
+      <label>Dauer</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Duration-Value</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1320</posX>
+      <posY>1020</posY>
+      <width>300</width>
+      <label>#Duration</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>4e4e4e</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Tv Movie Bewertung</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>1525</posX>
+      <posY>995</posY>
+      <width>320</width>
+      <label>Tv Movie Bewertung</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>FFdddddd</textcolor>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="200">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Tv Movie Bewertung Star</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>1780</posX>
+      <posY>995</posY>
+      <width>40</width>
+      <height>40</height>
+      <texture>#MovieListTvMovieStar</texture>
+      <centered>no</centered>
+      <keepaspectratio>no</keepaspectratio>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+    
+  </controls>
+</window>
+
