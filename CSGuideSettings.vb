@@ -276,7 +276,7 @@ Namespace ClickfinderSimpleGuide
             _view = New CSGuideView(
            "Movie",
            "Overview",
-           "Select * from program program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 29 hour) AND starRating >= 1 AND (genre NOT LIKE '%Serie' OR genre NOT LIKE '%Reihe' OR genre NOT LIKE '%Sitcom%' OR genre NOT LIKE '%Zeichentrick%') GROUP BY program.title, program.episodeName ORDER BY TvMovieProgram.TVMovieBewertung DESC, startTime ASC, starRating DESC, title ASC",
+           "Select * from program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 29 hour) AND starRating >= 1 AND (genre NOT LIKE '%Serie' OR genre NOT LIKE '%Reihe' OR genre NOT LIKE '%Sitcom%' OR genre NOT LIKE '%Zeichentrick%') GROUP BY program.title, program.episodeName ORDER BY TvMovieProgram.TVMovieBewertung DESC, startTime ASC, starRating DESC, title ASC",
            "Now",
            "All Channels",
            "Filme",
@@ -286,7 +286,7 @@ Namespace ClickfinderSimpleGuide
             _view = New CSGuideView(
            "MoviePreview",
            "Overview",
-           "Select * from program program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 173 hour) AND starRating >= 1 AND (genre NOT LIKE '%Serie' OR genre NOT LIKE '%Reihe' OR genre NOT LIKE '%Sitcom%' OR genre NOT LIKE '%Zeichentrick%') GROUP BY program.title, program.episodeName ORDER BY TvMovieProgram.TVMovieBewertung DESC, startTime ASC, starRating DESC, title ASC",
+           "Select * from program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 173 hour) AND starRating >= 1 AND (genre NOT LIKE '%Serie' OR genre NOT LIKE '%Reihe' OR genre NOT LIKE '%Sitcom%' OR genre NOT LIKE '%Zeichentrick%') GROUP BY program.title, program.episodeName ORDER BY TvMovieProgram.TVMovieBewertung DESC, startTime ASC, starRating DESC, title ASC",
            "Now",
            "All Channels",
            "Movie-Vorschau",
@@ -296,7 +296,7 @@ Namespace ClickfinderSimpleGuide
             _view = New CSGuideView(
             "StarRating",
             "Overview",
-            "Select * from program program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 29 hour) AND  starRating >= 7 GROUP BY program.title, program.episodeName ORDER BY starRating DESC, title ASC",
+            "Select * from program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 29 hour) AND  starRating >= 7 GROUP BY program.title, program.episodeName ORDER BY starRating DESC, title ASC",
             "Now",
             "All Channels",
             "Star-Rating",
@@ -304,12 +304,12 @@ Namespace ClickfinderSimpleGuide
             m_view(7) = _view
 
             _view = New CSGuideView(
-            "TVMovieRating",
+            "Tages-Tipps",
             "Overview",
-            "Select * from program program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) > 10 AND startTime >= #StartTime AND startTime <= date_add(date(#StartTime), interval 29 hour) AND  starRating >= 7 GROUP BY program.title, program.episodeName ORDER BY starRating DESC, title ASC",
+            "Select * from program INNER JOIN TvMovieProgram ON program.idprogram = TvMovieProgram.idProgram WHERE #TVGroupFilter AND TIMESTAMPDIFF(MINUTE,program.starttime, program.endtime) >10 AND startTime >= #StartTime AND description like '%Tages-Tipp%' GROUP BY program.title order by startTime ASC, title ASC",
             "Now",
             "All Channels",
-            "TVMovie-Rating",
+            "Tages-Tipps!",
             "0")
             m_view(8) = _view
 

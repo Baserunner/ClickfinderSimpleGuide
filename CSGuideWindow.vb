@@ -689,8 +689,9 @@ Namespace ClickfinderSimpleGuide
             SetProperty("#SettingLastUpdate", CSGuideSettings.TvMovieImportStatus)
             SetProperty("#ChannelGroup", m_TvGroupFilter)
             If m_viewType.Equals("Overview") Then
-                SetProperty("#ItemsRightListLabel",
-                                            m_StartTime.ToString("dddd, dd.MM") & " ~" & m_StartTime.ToString("HH:mm"))
+                'SetProperty("#ItemsRightListLabel",
+                '                            m_StartTime.ToString("dddd, dd.MM") & " ~" & m_StartTime.ToString("HH:mm"))
+                SetProperty("#ItemsRightListLabel", "")
                 SetProperty("#EPGView", m_viewDisplayName)
 
                 SetProperty("#ChannelName", "")
@@ -732,10 +733,12 @@ Namespace ClickfinderSimpleGuide
                             myTVMovieProgram.ReferencedProgram.StartTime.ToString("HH:mm") & " - " &
                             myTVMovieProgram.ReferencedProgram.EndTime.ToString("HH:mm") & ")")
                 If m_viewType.Equals("Single") Then
-                    SetProperty("#ItemsRightListLabel",
-                        myTVMovieProgram.ReferencedProgram.StartTime.ToString("dddd, dd.MM") &
-                        " ~" &
-                        myTVMovieProgram.ReferencedProgram.StartTime.ToString("HH:mm") & " Uhr")
+                    'SetProperty("#ItemsRightListLabel",
+                    '    myTVMovieProgram.ReferencedProgram.StartTime.ToString("dddd, dd.MM") &
+                    '    " ~" &
+                    'myTVMovieProgram.ReferencedProgram.StartTime.ToString("HH:mm") & " Uhr")
+                    SetProperty("#ItemsRightListLabel", "")
+
                     SetProperty("#EPGView", m_viewDisplayName)
                     SetProperty("#ChannelName", myTVMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName)
                 End If

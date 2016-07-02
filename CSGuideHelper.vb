@@ -241,7 +241,9 @@ Namespace ClickfinderSimpleGuide
         End Property
         Friend Shared ReadOnly Property TvMovieStar(ByVal TvMovieProgram As TVMovieProgram) As String
             Get
-                If TvMovieProgram.TVMovieBewertung > 0 Then
+                If TvMovieProgram.ReferencedProgram.Description.Contains("Tages-Tipp") Then
+                    Return "ClickfinderSG_Tagestipp.png"               
+                ElseIf TvMovieProgram.TVMovieBewertung > 0 Then
                     Return "ClickfinderSG_R" & TvMovieProgram.TVMovieBewertung & ".png"
                 Else
                     Return ""

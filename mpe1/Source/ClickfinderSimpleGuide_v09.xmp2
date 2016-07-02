@@ -118,6 +118,13 @@
               <ZipFileName>Installer{CopyFile}\{ba9254bc-8698-4585-a49a-ec98fb133f40}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
               <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d81e957f-f916-49ea-b4c0-a26f09554c43}-ClickfinderSG_Tagestipp.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -363,7 +370,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <OnlineLocation />
     <ReleaseDate>2016-07-02T20:58:06</ReleaseDate>
     <Tags />
-    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\Clickfinder NiceEPG_v09.mpe1</Location>
+    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v09.mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -499,6 +506,13 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d81e957f-f916-49ea-b4c0-a26f09554c43}-ClickfinderSG_Tagestipp.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{3c74a2f9-9c2b-4372-8a4f-e43963fa2d3e}-FSK0.png</ZipFileName>
         <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
@@ -528,7 +542,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\Icon\NiceEPG_Setup.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{9a98ee30-b659-43fb-bcc1-d0ff3309fd2e}-NiceEPG_Setup.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{10cdf368-2ebb-4c02-b52d-d2ccd16b3aa8}-NiceEPG_Setup.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
