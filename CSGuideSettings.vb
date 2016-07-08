@@ -109,6 +109,8 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Private Shared Sub setTVMovieSettings()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = "CSGuideSettings"
             Try
                 m_TvMovieImportStatus = getTvMovieImportStatus()
                 m_TVMovieVersion = _layer.GetSetting("TvMovieVersion", "").Value
@@ -117,11 +119,13 @@ Namespace ClickfinderSimpleGuide
                 m_TVMovieLastUpdate = _layer.GetSetting("TvMovieLastUpdate", "").Value
 
             Catch ex As Exception
-                MyLog.Error("[NiceEPGSettings]: [getTvMovieImportStatus]: problems connecting to database")
+                MyLog.Error(String.Format("[{0}] [{1}]: Move up : exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))                
             End Try
         End Sub
 
         Friend Shared Sub loadFromXmlOrSetDefault()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = "CSGuideSettings"
             Dim _path As String = Config.GetFile(Config.Dir.Config, m_configFileName)
 
             If System.IO.File.Exists(_path) Then
@@ -143,14 +147,16 @@ Namespace ClickfinderSimpleGuide
                 Next
             Else
                 setDefault()
-                MyLog.Info("[NiceEPGSettings]: [loadFromXml]: New Configuration - Loading the Defaults")
+                MyLog.Info(String.Format("[{0}] [{1}]: New Configuration - Loading the Defaults", _mClass, _mName))                
             End If
         End Sub
 
-        Friend Shared Sub saveToXml()
+        Friend Shared Function saveToXml() As Boolean
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = "CSGuideSettings"
 
             Dim _path As String = Config.GetFile(Config.Dir.Config, m_configFileName)
-            MyLog.Info("[NiceEPGSettings]: [saveToXml]: Saving " & _path)
+            MyLog.Info(String.Format("[{0}] [{1}]: Saving to {2}", _mClass, _mName, _path))
             Try
                 Dim _mySettings As New Settings(_path)
                 _mySettings.SetValue("General", "StartView", m_startView)
@@ -166,14 +172,17 @@ Namespace ClickfinderSimpleGuide
                     _mySettings.SetValue("Views", "View" & i & "DisplayName", m_view(i).DisplayName)
                     _mySettings.SetValue("Views", "View" & i & "StartTimeOffset", m_view(i).OffSetMinute)
                 Next
-            Catch
-                MyLog.Error("[NiceEPGSettings]: [saveToXml]: problems saving " & Config.Dir.Config & "\\" & m_configFileName)
+                Return True
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                Return False
             End Try
-        End Sub
+        End Function
 
         Friend Shared Sub logAll()
             Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = "NiceEPGSettings"
+            Dim _mClass As String = "CSGuideSettings"
+
             MyLog.Debug(String.Format("[{0}] [{1}] ClickfinderPath = {2}", _mClass, _mName, m_clickfinderPath))
             MyLog.Debug(String.Format("[{0}] [{1}] ClickfinderImagePath = {2}", _mClass, _mName, m_clickfinderImagePath))
             MyLog.Debug(String.Format("[{0}] [{1}] TvMovieImportStatus = {2}", _mClass, _mName, m_TvMovieImportStatus))
@@ -198,6 +207,9 @@ Namespace ClickfinderSimpleGuide
         Friend Shared Function getTvMovieImportStatus() As String
             Dim _importRunning As Boolean
             Dim _lastUpdate As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = "CSGuideSettings"
+
             Try
                 _importRunning = _layer.GetSetting("TvMovieImportIsRunning", "false").Value
                 If _importRunning Then
@@ -211,7 +223,7 @@ Namespace ClickfinderSimpleGuide
                 End If
 
             Catch ex As Exception
-                MyLog.Error("[NiceEPGSettings]: [getTvMovieImportStatus]: problems connecting to database")
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             End Try
             Return ""
         End Function
@@ -231,7 +243,7 @@ Namespace ClickfinderSimpleGuide
                                   "Now",
                                   "All Channels",
                                   "Single Channel",
-                                  "0")
+                                  "-90")
             m_view(0) = _view
             _view = New CSGuideView(
                                     "Now",
@@ -240,7 +252,7 @@ Namespace ClickfinderSimpleGuide
                                     "Now",
                                     "All Channels",
                                     "Jetzt",
-                                    "-30")
+                                    "0")
             m_view(1) = _view
 
             _view = New CSGuideView(

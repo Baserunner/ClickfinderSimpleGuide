@@ -122,4 +122,3 @@ Namespace ClickfinderSimpleGuide
         End Function
     End Class
 End Namespace
-

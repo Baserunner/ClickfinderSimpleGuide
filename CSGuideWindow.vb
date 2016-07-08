@@ -74,17 +74,17 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Friend Shared Sub SetViewProperties(ByVal i As Integer)
-            m_previousViewNumber = m_actualViewNumber
+
             m_SqlString = CSGuideSettings.View(i).SQL
             m_viewType = CSGuideSettings.View(i).Type
-            m_StartTime = CSGuideSettings.View(i).StartTime
-
+            ' Noch korrigieren siehe CSGuideView Function setViewDate
+            m_StartTime = CSGuideSettings.View(i).StartTime.AddMinutes(CInt(CSGuideSettings.View(i).OffSetMinute))
             ' Bei der View 0 soll die ursprüngliche TV Group bei behalten werden            
             If i <> 0 Then
-
                 m_TvGroupFilter = CSGuideSettings.View(i).TvGroup
             End If
             m_viewDisplayName = CSGuideSettings.View(i).DisplayName
+            m_previousViewNumber = m_actualViewNumber
             m_actualViewNumber = i
         End Sub
 
@@ -115,12 +115,15 @@ Namespace ClickfinderSimpleGuide
 #Region "GUI Events"
 
         Protected Overrides Sub OnPageLoad()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+
             m_actualViewNumber = CSGuideSettings.StartView
             SetViewProperties(m_actualViewNumber)
             MyBase.OnPageLoad()
 
             GUIWindowManager.NeedRefresh()
-            MyLog.Info("[NiceEPGGuiWindow] [OnPageLoad] --- Start ---")
+            MyLog.Info(String.Format("[{0}] [{1}]: --- Start ---", _mClass, _mName))
 
             GuiLayoutLoading()
 
@@ -144,19 +147,20 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Protected Overrides Sub OnPageDestroy(ByVal new_windowId As Integer)
-            MyLog.Debug("[NiceEPGGuiWindow] [OnPageDestroy] Destroying ... New WindowID: " & new_windowId)
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+
+            MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, _mName, new_windowId))
             RememberLastFocusedItem()
-
             AbortRunningThreads()
-
             MyBase.OnPageDestroy(new_windowId)
-
             Dispose()
             AllocResources()
         End Sub
 
         Public Overrides Sub OnAction(ByVal action As MediaPortal.GUI.Library.Action)
-
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
 
             If GUIWindowManager.ActiveWindow = GetID Then
 
@@ -178,7 +182,7 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error("[NiceEPGGuiWindow] [OnAction] [Move up]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move up : exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                     End Try
 
 
@@ -203,7 +207,7 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error("[NiceEPGGuiWindow] [OnAction] [Page up]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page up - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
@@ -225,7 +229,8 @@ Namespace ClickfinderSimpleGuide
                             m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
                         End If
                     Catch ex As Exception
-                        MyLog.Error("[NiceEPGGuiWindow] [OnAction] [Move down]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+
                     End Try
                 End If
 
@@ -248,74 +253,98 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error("[NiceEPGGuiWindow] [OnAction] [Page down]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
                 'Next Item (F8) -> lade den nächsten Tag
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_NEXT_ITEM Then
+                    m_previousViewNumber = m_actualViewNumber
+                    ' wenn die previous View Single ist, ist schon alles geladen
+                    ' das heißt es genügt, wenn der korrekte Item angezeigt wird
+                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                        m_StartTimePreviousItem = m_StartTimePreviousItem.AddDays(1)
+                        SetCorrectListItemIndex()
+                        NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    Else
+                        m_StartTime = m_StartTime.AddDays(1)
 
-                    m_StartTime = m_StartTime.AddDays(1)
-                    RememberLastFocusedItem()
+                        RememberLastFocusedItem()
 
-                    _ItemsCache.Clear()
-                    AbortRunningThreads()
+                        _ItemsCache.Clear()
+                        AbortRunningThreads()
 
-                    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    _ThreadLoadItemsFromDatabase.Start()
-                    MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
-
-
-
+                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                        _ThreadLoadItemsFromDatabase.IsBackground = True
+                        _ThreadLoadItemsFromDatabase.Start()
+                    End If
                     Return
                 End If
 
                 'Prev. Item (F7) -> einen Tag zurück
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_PREV_ITEM Then
+                    m_previousViewNumber = m_actualViewNumber
+                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                        m_StartTimePreviousItem = m_StartTimePreviousItem.AddDays(-1)
+                        SetCorrectListItemIndex()
+                        NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    Else
+                        m_StartTime = m_StartTime.AddDays(-1)
+                        RememberLastFocusedItem()
 
-                    m_StartTime = m_StartTime.AddDays(-1)
-                    RememberLastFocusedItem()
+                        _ItemsCache.Clear()
 
+                        AbortRunningThreads()
 
-                    _ItemsCache.Clear()
+                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                        _ThreadLoadItemsFromDatabase.IsBackground = True
+                        _ThreadLoadItemsFromDatabase.Start()
+                    End If
 
-                    AbortRunningThreads()
-
-                    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    _ThreadLoadItemsFromDatabase.Start()
-                    MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                     Return
                 End If
 
                 'Forward (F6) -> eine Stunde vor
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_FORWARD Then
-                    m_StartTime = m_StartTime.AddMinutes(60)
-                    RememberLastFocusedItem()
+                    m_previousViewNumber = m_actualViewNumber
+                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                        m_StartTimePreviousItem = m_StartTimePreviousItem.AddMinutes(60)
+                        SetCorrectListItemIndex()
+                        NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    Else
+                        m_StartTime = m_StartTime.AddMinutes(60)
+                        RememberLastFocusedItem()
 
-                    _ItemsCache.Clear()
-                    AbortRunningThreads()
+                        _ItemsCache.Clear()
+                        AbortRunningThreads()
 
-                    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    _ThreadLoadItemsFromDatabase.Start()
-                    MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
+                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                        _ThreadLoadItemsFromDatabase.IsBackground = True
+                        _ThreadLoadItemsFromDatabase.Start()
+                    End If
+
                     Return
                 End If
 
                 'Rewind (F5) -> eine Stunde zurück
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_REWIND Then
-                    m_StartTime = m_StartTime.AddMinutes(-60)
-                    RememberLastFocusedItem()
+                    m_previousViewNumber = m_actualViewNumber
+                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                        m_StartTimePreviousItem = m_StartTimePreviousItem.AddMinutes(-60)
+                        SetCorrectListItemIndex()
+                        NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    Else
 
-                    _ItemsCache.Clear()
-                    AbortRunningThreads()
+                        m_StartTime = m_StartTime.AddMinutes(-60)
+                        RememberLastFocusedItem()
 
-                    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    _ThreadLoadItemsFromDatabase.Start()
-                    MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
+                        _ItemsCache.Clear()
+                        AbortRunningThreads()
+
+                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                        _ThreadLoadItemsFromDatabase.IsBackground = True
+                        _ThreadLoadItemsFromDatabase.Start()
+                    End If
                     Return
                 End If
 
@@ -334,7 +363,6 @@ Namespace ClickfinderSimpleGuide
                             Return
 
                         End If
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                     End If
                 End If
 
@@ -353,14 +381,12 @@ Namespace ClickfinderSimpleGuide
                             Return
 
                         End If
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                     End If
                 End If
 
                 '(3) is pressed -> "Late Time"
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 51 Then
                             SetViewProperties(3)
 
@@ -379,7 +405,6 @@ Namespace ClickfinderSimpleGuide
                 '(4) is pressed -> "Night" - 00:00 Uhr
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 52 Then
                             SetViewProperties(4)
 
@@ -398,7 +423,6 @@ Namespace ClickfinderSimpleGuide
                 '(5) is pressed -> "Movies only" - was kommt heute
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 53 Then
                             SetViewProperties(5)
 
@@ -416,7 +440,6 @@ Namespace ClickfinderSimpleGuide
                 '(6) is pressed -> "Movies only" - 7 Tagesvorschau
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 54 Then
                             SetViewProperties(6)
 
@@ -435,7 +458,6 @@ Namespace ClickfinderSimpleGuide
                 '(7) is pressed -> "Star-Rating" 
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 55 Then
                             SetViewProperties(7)
 
@@ -454,7 +476,6 @@ Namespace ClickfinderSimpleGuide
                 '(8) is pressed -> "TV-Movie Bewertung" 
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 56 Then
                             SetViewProperties(8)
 
@@ -473,7 +494,6 @@ Namespace ClickfinderSimpleGuide
                 '(9) is pressed -> "TMDB Info"
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 57 Then
                             'Get the channel number of the program selected
                             _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
@@ -494,7 +514,6 @@ Namespace ClickfinderSimpleGuide
                 '(0) is pressed -> "Single Channel view"
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
-                        MyLog.Info("[NiceEPGGuiWindow] [OnAction] : [{0}]", action.wID.ToString)
                         If action.m_key.KeyChar = 48 Then
                             SetViewProperties(0)
 
@@ -507,7 +526,7 @@ Namespace ClickfinderSimpleGuide
                                     m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
                                 End If
                             Catch ex As Exception
-                                MyLog.Error("[Move (0) is pressed]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                             End Try
 
                             _ItemsCache.Clear()
@@ -523,6 +542,7 @@ Namespace ClickfinderSimpleGuide
 
                 'Move right: Forward is pressed -> one channel group forward
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_RIGHT Then
+                    m_previousViewNumber = m_actualViewNumber
                     If m_viewType.Equals("Overview") Then
                         m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
 
@@ -536,6 +556,16 @@ Namespace ClickfinderSimpleGuide
                     Else
                         m_channelNumber = GetNextChannelNumber(1)
 
+                        Try
+                            If _niceEPGList.IsFocused = True Then
+                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                            End If
+
+                        Catch ex As Exception
+                            MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        End Try
+
                         _ItemsCache.Clear()
                         AbortRunningThreads()
 
@@ -548,6 +578,7 @@ Namespace ClickfinderSimpleGuide
 
                 'Move left -> one channel group back
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_LEFT Then
+                    m_previousViewNumber = m_actualViewNumber
                     'm_NiceEPGViewPrevious = _NiceEPGView
                     If m_viewType.Equals("Overview") Then
                         m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
@@ -561,6 +592,16 @@ Namespace ClickfinderSimpleGuide
                         Return
                     Else
                         m_channelNumber = GetNextChannelNumber(0)
+
+                        Try
+                            If _niceEPGList.IsFocused = True Then
+                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                            End If
+
+                        Catch ex As Exception
+                            MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        End Try
 
                         _ItemsCache.Clear()
                         AbortRunningThreads()
@@ -577,7 +618,8 @@ Namespace ClickfinderSimpleGuide
                     Try
                         If _niceEPGList.IsFocused = True Then CSGuideHelper.StartTv(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Catch ex As Exception
-                        MyLog.Error("[Play Button]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                        MyLog.Error(String.Format("[{0}] [{1}]: Play Button - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+
                     End Try
                 End If
 
@@ -658,6 +700,8 @@ Namespace ClickfinderSimpleGuide
 
         End Function
         Private Function GetYearString(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
             Dim _yearString As String = String.Empty
             Try
                 If Not myTVMovieProgram.ReferencedProgram.OriginalAirDate < New Date(1900, 1, 1) Then
@@ -677,8 +721,8 @@ Namespace ClickfinderSimpleGuide
                     End If
                 End If
             Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
 
-                MyLog.Error("[NiceEPGGuiWindow] [GetYearString]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
 
             Return _yearString
@@ -866,9 +910,9 @@ Namespace ClickfinderSimpleGuide
         End Function
 
         Private Sub LoadItemsFromDatabase()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
             Try
-
-                MyLog.Info("[NiceEPGOverviewGuiWindow] [LoadItemsFromDatabase]: Thread started...")
                 Dim _timer As Date = Date.Now
                 Dim _totaltimer As Date = Date.Now
 
@@ -885,14 +929,10 @@ Namespace ClickfinderSimpleGuide
                 '_SqlStringBuilder.Replace("#IntervalDay", m_IntervalHour)
 
                 _SqlStringBuilder.Replace(" * ", " TVMovieProgram.idProgram, TVMovieProgram.Action, TVMovieProgram.Actors, TVMovieProgram.BildDateiname, TVMovieProgram.Country, TVMovieProgram.Cover, TVMovieProgram.Describtion, TVMovieProgram.Dolby, TVMovieProgram.EpisodeImage, TVMovieProgram.Erotic, TVMovieProgram.FanArt, TVMovieProgram.Feelings, TVMovieProgram.FileName, TVMovieProgram.Fun, TVMovieProgram.HDTV, TVMovieProgram.idEpisode, TVMovieProgram.idMovingPictures, TVMovieProgram.idSeries, TVMovieProgram.idVideo, TVMovieProgram.KurzKritik, TVMovieProgram.local, TVMovieProgram.Regie, TVMovieProgram.Requirement, TVMovieProgram.SeriesPosterImage, TVMovieProgram.ShortDescribtion, TVMovieProgram.Tension, TVMovieProgram.TVMovieBewertung ")
-
-                MyLog.Debug("[NiceEPGGuiWindow] [SetGuiProperties]: startTime = {0}, endTime = {1}", m_StartTime, m_EndTime)
-                MyLog.Debug("[NiceEPGGuiWindow] [SetGuiProperties]: SQLstring = {0}", _SqlStringBuilder.ToString)
-
+                MyLog.Debug(String.Format("[{0}] [{1}]: Executing: {2} ", _mClass, _mName, _SqlStringBuilder.ToString))
                 Dim _SQLstate As SqlStatement = Broker.GetStatement(_SqlStringBuilder.ToString)
                 Dim _ItemsOnLoad As List(Of TVMovieProgram) = ObjectFactory.GetCollection(GetType(TVMovieProgram), _SQLstate.Execute())
-
-                MyLog.Info("[NiceEPGGuiWindow] [LoadItemsFromDatabase]: {0} entries readed from database in {1}s", _ItemsOnLoad.Count, (DateTime.Now - _timer).TotalSeconds)
+                MyLog.Info(String.Format("[{0}] [{1}]: Received {2} records in {3}sec", _mClass, _mName, _ItemsOnLoad.Count, (DateTime.Now - _timer).TotalSeconds))
 
                 If _ItemsOnLoad.Count > 0 Then
                     _ItemsCache = _ItemsOnLoad
@@ -904,19 +944,19 @@ Namespace ClickfinderSimpleGuide
                     NiceEPGSetGUIProperties(Nothing)
                 End If
 
-                MyLog.Info("[NiceEPGGuiWindow] [LoadItemsFromDatabase]: Thread finished in {0}s", (DateTime.Now - _totaltimer).TotalSeconds)
-
             Catch ex As ThreadAbortException
-                MyLog.Info("[NiceEPGGuiWindow] [LoadItemsFromDatabase]: --- THREAD ABORTED ---")
+                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
             Catch ex As GentleException
-                MyLog.Error("[NiceEPGGuiWindow] [LoadItemsFromDatabase]: GentleException err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             Catch ex As Exception
-                MyLog.Error("[NiceEPGGuiWindow] [LoadItemsFromDatabase]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             End Try
 
         End Sub
 
         Private Sub FillniceEPGList()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
 
             Dim _timer As Date = Date.Now
             Dim _ItemCounter As Integer = 0
@@ -944,19 +984,19 @@ Namespace ClickfinderSimpleGuide
                                            Config.GetFile(Config.Dir.Thumbs, "tv\logos\") & Replace(_TvMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName, "/", "_") & ".png", ,
                                            CSGuideHelper.RecordingStatus(_TvMovieProgram.ReferencedProgram))
 
-                    Catch ex2 As ThreadAbortException
-                        MyLog.Info("[NiceEPGGuiWindow] [FillniceEPGList]: --- THREAD ABORTED ---")
-                    Catch ex2 As GentleException
-                        MyLog.Error("[NiceEPGGuiWindow] [FillniceEPGList]: Gentleexception err: {0} stack: {1}", ex2.Message, ex2.StackTrace)
-                    Catch ex2 As Exception
-                        MyLog.Error("[NiceEPGGuiWindow] [FillniceEPGList]: Loop: exception err: {0} stack: {1}", ex2.Message, ex2.StackTrace)
+                    Catch ex As ThreadAbortException
+                        MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
+                    Catch ex As GentleException
+                        MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                    Catch ex As Exception
+                        MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                     End Try
                 Next
 
                 _DataLoadingAnimation.Visible = False
                 _niceEPGList.Visible = True
 
-                MyLog.Info("[NiceEPGGuiWindow] [FillniceEPGList]: Thread finished in {0}s", (DateTime.Now - _timer).TotalSeconds)
+                MyLog.Info(String.Format("[{0}] [{1}]: Thread finished in {2}s", _mClass, _mName, (DateTime.Now - _timer).TotalSeconds))
 
                 GUIListControl.SelectItemControl(GetID, _LastFocusedControlID, _LastFocusedIndex)
                 GUIListControl.FocusControl(GetID, _LastFocusedControlID)
@@ -965,18 +1005,19 @@ Namespace ClickfinderSimpleGuide
 
                 If _niceEPGList.SelectedListItem Is Nothing Then
                     _niceEPGList.SelectedItem = 0
-                    MyLog.Debug("[NiceEPGGuiWindow] [FillniceEPGList]: --- (_niceEPGList.SelectedListItem is Nothing) ---")
+                    MyLog.Debug(String.Format("[{0}] [{1}]: _niceEPGList.SelectedListItem is Nothing", _mClass, _mName))
                 End If
 
-                SetCorrectListItemIndex() ' Funktioniert noch nicht
+                SetCorrectListItemIndex()
                 NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                 'GUIWindowManager.NeedRefresh()
 
             Catch ex As ThreadAbortException
-                MyLog.Info("[NiceEPGGuiWindow] [FillniceEPGList]: --- THREAD ABORTED ---")
+                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
             Catch ex As GentleException
+                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             Catch ex As Exception
-                MyLog.Error("[NiceEPGGuiWindow] [FillniceEPGList]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             End Try
         End Sub
 
@@ -986,18 +1027,21 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Private Sub AbortRunningThreads()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+
             Try
                 If _ThreadLoadItemsFromDatabase.IsAlive = True Then
                     _ThreadLoadItemsFromDatabase.Abort()
-                    MyLog.Debug("[NiceEPGGuiWindow] [AbortRunningThreads]: --- Aborted _ThreadLoadItemsFromDatabase ---")
+                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadLoadItemsFromDatabase aborted", _mClass, _mName))
                 End If
                 If _ThreadNiceEPGList.IsAlive = True Then
                     _ThreadNiceEPGList.Abort()
-                    MyLog.Debug("[NiceEPGGuiWindow] [AbortRunningThreads]: --- Aborted _ThreadNiceEPGList ---")
+                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, _mName))
                 End If
             Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
             End Try
-            MyLog.Debug("[NiceEPGGuiWindow] [AbortRunningThreads]: --- AbortRunningThreads() ended ---")
         End Sub
 
         Private Sub SetCorrectListItemIndex()
@@ -1022,7 +1066,7 @@ Namespace ClickfinderSimpleGuide
                 ' To Delete Start
                 _niceEPGList.SelectedListItemIndex = 0
                 ' To Delete End
-            ElseIf (m_viewType.Equals("Single")) And ((CSGuideSettings.View(m_previousViewNumber).StartTime <> Nothing)) Then
+            ElseIf (m_viewType.Equals("Single")) And (m_StartTimePreviousItem <> Nothing) Then
                 Try
                     For i = 0 To _niceEPGList.Count - 1
                         Dim _TvMovieProgram As TVMovieProgram = TVMovieProgram.Retrieve(_niceEPGList.Item(i).ItemId)
@@ -1201,7 +1245,7 @@ Namespace ClickfinderSimpleGuide
             line19.Label = "OSD Info Button (Y): Zeigt die Hilfe"
             dlgContext.Add(line19)
             line19.Dispose()
-            
+
             dlgContext.DoModal(GUIWindowManager.ActiveWindow)
 
             ' To be completed https://msdn.microsoft.com/de-de/library/system.windows.forms.sendkeys.send%28v=vs.110%29.aspx?cs-save-lang=1&cs-lang=vb#code-snippet-2

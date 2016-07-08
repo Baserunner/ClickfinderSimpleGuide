@@ -152,6 +152,7 @@ Public Class CSGuideSetup
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
         If IsValidationError Then
             MessageBox.Show("Bitte Einträge überprüfen", "Validation Error", MessageBoxButtons.OK, _
                              MessageBoxIcon.Exclamation, _
@@ -232,7 +233,15 @@ Public Class CSGuideSetup
         CSGuideSettings.View(8).TvGroup = V8_ComboBox1.Text
         CSGuideSettings.View(8).Type = V8_ComboBox2.Text
 
-        CSGuideSettings.saveToXml()
+        If CSGuideSettings.saveToXml() Then
+            MsgBox("Successfully saved the Configuration", _
+               MsgBoxStyle.OkOnly Or MsgBoxStyle.Information, _
+               "Saving Config")
+        Else            
+            MsgBox("Problems saving the Configuration - Check the Log", _
+                MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation, _
+                "Saving Config")
+        End If
 
     End Sub
 

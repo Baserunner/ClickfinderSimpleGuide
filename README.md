@@ -9,6 +9,7 @@ This plugin is based on [Clickfinder ProgramGuide Plugin](http://forum.team-medi
 * [TvMovieImport 1.6.4.2](http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/)
 * [TV Movie ClickFinder](http://www.tvmovie.de/news/tv-movie-clickfinder-84949) (no Premium Account required)
 * [ClickFinder Simple Guide Plugin itself](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1)
+
 ## Introduction
 (As this is, most probably for German users only I switch to German now)
 

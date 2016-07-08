@@ -95,14 +95,14 @@
     <Compile Include="CSGuideView.vb" />
     <Compile Include="CSGuideSettings.vb" />
     <Compile Include="CSGuideHelper.vb" />
-    <Compile Include="MyLog.vb" />
-    <Compile Include="CSGuideInit.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="MyLog.vb" />
+    <Compile Include="CSGuideInit.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="CSGuideWindow.vb" />
     <Compile Include="CSGuideSetup.Designer.vb">
       <DependentUpon>CSGuideSetup.vb</DependentUpon>
@@ -114,17 +114,17 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="CSGuideSetup.resx">
       <DependentUpon>CSGuideSetup.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigIcons\Config.png" />
-    <EmbeddedResource Include="ConfigIcons\Config_disable.png" />
+    <EmbeddedResource Include="ConfigIcons\CSG_Setup.png" />
+    <EmbeddedResource Include="ConfigIcons\CSG_Setup_Disabled.png" />
     <Content Include="Help\CSGuide_Help.txt" />
   </ItemGroup>
   <ItemGroup>

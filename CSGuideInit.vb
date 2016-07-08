@@ -35,7 +35,7 @@ Imports System.Text
 'Imports enrichEPG.Database
 
 Namespace ClickfinderSimpleGuide
-    <PluginIcons("ClickfinderSimpleGuide.Config.png", "ClickfinderSimpleGuide.Config_disable.png")> _
+    <PluginIcons("ClickfinderSimpleGuide.CSG_Setup.png", "ClickfinderSimpleGuide.CSG_Setup_Disabled.png")> _
     Public Class CSGuideInit
 
         Inherits GUIWindow
