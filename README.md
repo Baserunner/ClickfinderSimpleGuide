@@ -68,3 +68,13 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
 
 **OSD Info Button (Y)**: Hilfe
 
+## Screenshots
+### Plugin
+![Filme](Screenshots/Screenshot_Filme.png)
+![Tagestipps](Screenshots/Screenshot_Tagestipps.png)
+![SingleChannel](Screenshots/Screenshot_SingleChannel.png)
+![Jetzt](Screenshots/Screenshot_Jetzt.png)
+### Configuration
+![Übersicht](Screenshots/Screenshot_Config1.png)
+![Allgemein](Screenshots/Screenshot_Config2.png)
+![View5](Screenshots/Screenshot_Config3.png)
