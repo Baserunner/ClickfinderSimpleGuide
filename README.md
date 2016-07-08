@@ -70,11 +70,11 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
 
 ## Screenshots
 ### Plugin
-![Filme](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Filme.png)
-![Tagestipps](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Tagestipps.png)
-![SingleChannel](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_SingleChannel.png)
-![Jetzt](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Jetzt.png)
+![Filme](/Screenshots/Screenshot_Filme.png?raw=true)
+![Tagestipps](/Screenshots/Screenshot_Tagestipps.png)
+![SingleChannel](/Screenshots/Screenshot_SingleChannel.png)
+![Jetzt](/Screenshots/Screenshot_Jetzt.png)
 ### Configuration
-![Übersicht](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Config1.png)             
-![Allgemein](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Config2.png)
-![View5](https://raw.githubusercontent.com/Baserunner/ClickfinderSimpleGuide/master/Screenshots/Screenshot_Config3.png)
+![Übersicht](/Screenshots/Screenshot_Config1.png)             
+![Allgemein](/Screenshots/Screenshot_Config2.png)
+![View5](/Screenshot_Config3.png)
