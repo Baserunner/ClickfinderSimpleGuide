@@ -73,10 +73,10 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
 <div align="center">
         <img width="45%" src="Screenshots/Screenshot_Filme.png" alt="About screen" title="Filme Screen"</img>
         <img height="0" width="8px">
-        <img width="45%" src="Screenshots/Screenshot_Tagestipps" alt="List screen" title="Tagestipp Screen"></img>
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="List screen" title="Tagestipp Screen"></img>
 </div>
 ![Filme](/Screenshots/Screenshot_Filme.png?raw=true)
-![Tagestipps](/Screenshots/Screenshot_Tagestipps.png)
+![Tagestipps](https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png)
 ![SingleChannel](/Screenshots/Screenshot_SingleChannel.png)
 ![Jetzt](/Screenshots/Screenshot_Jetzt.png)
 ### Configuration
