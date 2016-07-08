@@ -1,8 +1,10 @@
 # Clickfinder Simple Guide
 ## Overview
-This is a Mediaportal Plugin that shows TV-Movie Data in a simple list form, that is usually shown by Clickfinder. This is for German TV data only.
+This is a Mediaportal Plugin that shows TV-Movie Data in a simple list form. 
+The data becomes originally downloaded from Clickfinder and loaded into MediaPortal Database by the TvMovieImport plugin.
 
-This plugin is based on [Clickfinder ProgramGuide Plugin](http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/) from Scrounger. All credits to him for all his excellent effort 
+This plugin is based on [Clickfinder ProgramGuide Plugin](http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/) from Scrounger. 
+All credits to him for all his excellent effort.
 
 **Requirements:**
 * [Mediaportal](http://www.team-mediaportal.de)
@@ -11,17 +13,17 @@ This plugin is based on [Clickfinder ProgramGuide Plugin](http://forum.team-medi
 * [ClickFinder Simple Guide Plugin itself](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1)
 
 ## Introduction
-(As this is, most probably for German users only I switch to German now)
+(As this is, most probably for German users only, I switch to German now)
 
-Das Plugin soll TV-Movie Programm-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Beispielsweise soll es möglich sein einfach per Tastendruck zu sehen von "Jetzt" im Fernsehen läuft, zur "Prime-Time", welche Spielfilme, etc. ... Es sind insgesamt 8 verschiedene, frei konfigurierbare Views, möglich (Tasten 1-8). Ich habe diese Funktionalität seit dem ich 3PG (EPG Plugin für den Topfield) nicht mehr nutzen kann vermisst.
+Das Plugin soll TV-Movie EPG-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Eine Anforderung war es, dass man einfach per Tastendruck sieht, was zur "Prime-Time" im Fernsehen läuft, welche Spielfilme in der nächsten Woche kommen, etc. Für diesen Zweck stellt das Plugin verschiedene Views zur Verfügung. Insgesamt kann man sich bis zu 8 verschiedene, konfigurierbare Views definieren und über die Tasten 1-8 aufrufen.
 
 Mit der Taste 0 wird das Programm für einen einzelnen Kanal aufgerufen
 
-Die Bedienung soll dem Lesen eines normalen TV-Magazin nachempfunden sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen schauen und IMDB/TMDB Infos abholen.
+Die Bedienung soll dem Lesen eines normalen TV-Magazin nach empfunden sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen schauen und IMDB/TMDB Infos, Taste 9, abholen.
+
+Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können die Views, SQL-Know-How vorrausgesetzt, unter gewissen Einschränkungen, frei definiert werden. Natürlich habe ich 8 Default-Views vordefiniert.
 
 Derzeit wird nur der Titan Skin unterstützt.
-
-Die Views 1-8 sind über das Setup Programm konfigurierbar.
 ## Bedienung
 
 **(1)**: Ruft View 1 auf (Default ist die Übersicht "Jetzt")
@@ -30,7 +32,7 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
 
 **(3)**: Ruft View 3 auf (Default ist die Übersicht "Late Time" - 22:00)
 
-**(4)**: Ruft View 4 auf (Default ist die Übersicht "Night")
+**(4)**: Ruft View 4 auf (Default ist die Übersicht "Night" - 01:00)
 
 **(5)**: Ruft View 5 auf (Default ist die Übersicht "Filme")
 
@@ -75,6 +77,7 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
         <img height="0" width="8px">
         <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="Tagestipp screen" title="Tagestipp Screen"></img>
 </div>
+
 ### Configuration
 <div align="center">
         <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694176/1768ffce-4539-11e6-90fe-faf02ab84ce5.png" alt="Config general" title="Config general"</img>
