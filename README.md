@@ -71,15 +71,13 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar.
 ## Screenshots
 ### Plugin
 <div align="center">
-        <img width="45%" src="Screenshots/Screenshot_Filme.png" alt="About screen" title="Filme Screen"</img>
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694064/8d8e5164-4538-11e6-9552-42c543ee9e24.png" alt="Jetzt screen" title="Jetzt Screen"</img>
         <img height="0" width="8px">
-        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="List screen" title="Tagestipp Screen"></img>
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="Tagestipp screen" title="Tagestipp Screen"></img>
 </div>
-![Filme](/Screenshots/Screenshot_Filme.png?raw=true)
-![Tagestipps](https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png)
-![SingleChannel](/Screenshots/Screenshot_SingleChannel.png)
-![Jetzt](/Screenshots/Screenshot_Jetzt.png)
 ### Configuration
-![Übersicht](/Screenshots/Screenshot_Config1.png)
-![Allgemein](/Screenshots/Screenshot_Config2.png)
-![View5](/Screenshot_Config3.png)
+<div align="center">
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694176/1768ffce-4539-11e6-90fe-faf02ab84ce5.png" alt="Config general" title="Config general"</img>
+        <img height="0" width="8px">
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694201/36f4299a-4539-11e6-8166-a7c0c2fd2627.png" alt="Config View 5" title="Config View 5"></img>
+</div>
