@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Clickfinder Simple Guide by Baserunner</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Baserunner/ClickfinderSimpleGuide">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Baserunner/ClickfinderSimpleGuide/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Baserunner/ClickfinderSimpleGuide/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Clickfinder Simple Guide</h1>
+          <p>Mediaportal Plugin that shows Clickfinder Data</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Baserunner">Baserunner</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="clickfinder-simple-guide" class="anchor" href="#clickfinder-simple-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Clickfinder Simple Guide</h1>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>This is a Mediaportal Plugin that shows TV-Movie Data in a simple list form. 
+The data becomes originally downloaded from Clickfinder and loaded into MediaPortal Database by the TvMovieImport plugin.</p>
+
+<p>This plugin is based on <a href="http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/">Clickfinder ProgramGuide Plugin</a> from Scrounger. 
+All credit goes to him for all his excellent effort.</p>
+
+<p><strong>Requirements:</strong></p>
+
+<ul>
+<li><a href="http://www.team-mediaportal.de">Mediaportal</a></li>
+<li><a href="http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/">TvMovieImport 1.6.4.2</a></li>
+<li>
+<a href="http://www.tvmovie.de/news/tv-movie-clickfinder-84949">TV Movie ClickFinder</a> (no Premium Account required)</li>
+<li><a href="https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1">ClickFinder Simple Guide Plugin itself</a></li>
+</ul>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>(As this is, most probably for German users only, I switch to German now)</p>
+
+<p>Das Plugin soll TV-Movie EPG-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Es soll per Tastendruck zeigen, was zur "Prime-Time" im Fernsehen läuft, welche Spielfilme heute laufen oder in der nächsten Woche kommen, und so weiter.
+Für diesen Zweck stellt das Plugin verschiedene Anzeigen, im Folgenden Views genannt, zur Verfügung. Insgesamt können bis zu 8 verschiedene Views definiert und über die Tasten 1-8 aufgerufen werden.</p>
+
+<p>Mit der Taste 0 wird das Programm für einen einzelnen Kanal aufgerufen.</p>
+
+<p>Die Bedienung soll dem Blättern in einem normalen TV-Magazin ähnlich sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen zappen und IMDB/TMDB Infos (Taste 9) abrufen.</p>
+
+<p>Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können die Views, SQL-Know-How vorrausgesetzt, unter gewissen Einschränkungen, frei definiert werden. Es sind 8 Default-Views vordefiniert.</p>
+
+<p>Ursprünglich hatte ich das Plugin als Kategorie vom ProgramGuide Plugin geplant. Leider hatte ich Probleme damit, weshalb ich Funktionen, die ich nicht nutze, ausgebaut habe. Irgendwann habe ich daraus ein eigenständiges Plugin gebaut.
+Das <em>Clickfinder Simple Guide Plugin</em> hat bei weitem nicht die Funktionalität des <em>Clickfinder Program Guides</em>. Wer Serien, Video, Moving-Picture Unterstützung erwartet, wird von diesem Plugin entäuscht sein. Deswegen auch der Name <em>Simple Guide</em>.</p>
+
+<p>Derzeit wird der <em>Titan Skin</em> unterstützt.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><a href="https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1">Hier</a> befindet sich das .mpe1 File. Der Rest dürfte bekannt sein.</p>
+
+<h2>
+<a id="bedienung" class="anchor" href="#bedienung" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bedienung</h2>
+
+<p><strong>(1)</strong>: Ruft View 1 auf (Default ist die Übersicht "Jetzt")</p>
+
+<p><strong>(2)</strong>: Ruft View 2 auf (Default ist die Übersicht "Prime Time" - 20:15)</p>
+
+<p><strong>(3)</strong>: Ruft View 3 auf (Default ist die Übersicht "Late Time" - 22:00)</p>
+
+<p><strong>(4)</strong>: Ruft View 4 auf (Default ist die Übersicht "Night" - 01:00)</p>
+
+<p><strong>(5)</strong>: Ruft View 5 auf (Default ist die Übersicht "Filme")</p>
+
+<p><strong>(6)</strong>: Ruft View 6 auf (Default ist die Übersicht "Filme Vorschau")</p>
+
+<p><strong>(7)</strong>: Ruft View 7 auf (Default ist die Übersicht "TV-Movie Rating")</p>
+
+<p><strong>(8)</strong>: Ruft View 8 auf (Default ist die Übersicht "Tagestipps") <em>(funktioniert nicht bei allen Installationen)</em></p>
+
+<p><strong>(9)</strong>: Ruft TMDB/IMDB Informationen vom jeweiligen Programm ab</p>
+
+<p><strong>(0)</strong>: Ruft die Einzelkanal View auf</p>
+
+<p><strong>(up/down)</strong>: Navigiere +1/-1</p>
+
+<p><strong>(page up/down)</strong>: Navigiere +7/-7</p>
+
+<p><strong>(right)</strong>: Eine Kanalgruppe vorwärts, in der Einzelkanal Sicht einen Kanal vorwärts</p>
+
+<p><strong>(left)</strong>: Eine Kanalgruppe zurück, in der Einzelkanal Sicht einen Kanal zurück</p>
+
+<p><strong>Next Item (F8)</strong>: Einen Tag vorwärts</p>
+
+<p><strong>Previous Item (F7)</strong>: Einen Tag zurück</p>
+
+<p><strong>Forward (F6)</strong>: Einen Stunde vorwärts</p>
+
+<p><strong>Rewind (F5)</strong>: Einen Stunde zurück</p>
+
+<p><strong>Play Button (P)</strong>: Schalte auf den Kanal</p>
+
+<p><strong>Record Button (R)</strong>: Aufnehmen</p>
+
+<p><strong>Menu Button (F9)</strong>: Hilfe</p>
+
+<p><strong>OSD Info Button (Y)</strong>: Hilfe</p>
+
+<h2>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<h3>
+<a id="plugin" class="anchor" href="#plugin" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Plugin</h3>
+
+<p><img src="https://cloud.githubusercontent.com/assets/8837272/16706541/2b7c1eba-45b1-11e6-9624-8bd57f721551.png" alt="Filme View">
+<img src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="TagesTipps View">
+<img src="https://cloud.githubusercontent.com/assets/8837272/16706449/228d3428-45ad-11e6-8d94-12c9056d13d3.png" alt="Single Channel View"></p>
+
+<h3>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h3>
+
+<div align="center">
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694176/1768ffce-4539-11e6-90fe-faf02ab84ce5.png" alt="Config general" title="Config general">
+        <img height="0" width="8px">
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694201/36f4299a-4539-11e6-8166-a7c0c2fd2627.png" alt="Config View 5" title="Config View 5">
+</div>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
