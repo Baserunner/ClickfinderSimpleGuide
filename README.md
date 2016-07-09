@@ -4,7 +4,7 @@ This is a Mediaportal Plugin that shows TV-Movie Data in a simple list form.
 The data becomes originally downloaded from Clickfinder and loaded into MediaPortal Database by the TvMovieImport plugin.
 
 This plugin is based on [Clickfinder ProgramGuide Plugin](http://forum.team-mediaportal.com/threads/clickfinder-programguide-1-6-1-0.108586/) from Scrounger. 
-All credits to him for all his excellent effort.
+All credit goes to him for all his excellent effort.
 
 **Requirements:**
 * [Mediaportal](http://www.team-mediaportal.de)
@@ -16,18 +16,18 @@ All credits to him for all his excellent effort.
 (As this is, most probably for German users only, I switch to German now)
 
 Das Plugin soll TV-Movie EPG-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Es soll per Tastendruck zeigen, was zur "Prime-Time" im Fernsehen läuft, welche Spielfilme heute laufen oder in der nächsten Woche kommen, und so weiter.
-Für diesen Zweck stellt das Plugin verschiedene Anzeigen, im Folgenden Views, zur Verfügung. Insgesamt können bis zu 8 verschiedene Views definiert und über die Tasten 1-8 aufgerufen werden.
+Für diesen Zweck stellt das Plugin verschiedene Anzeigen, im Folgenden Views genannt, zur Verfügung. Insgesamt können bis zu 8 verschiedene Views definiert und über die Tasten 1-8 aufgerufen werden.
 
 Mit der Taste 0 wird das Programm für einen einzelnen Kanal aufgerufen.
 
-Die Bedienung soll dem Blättern in einem normalen TV-Magazin ähnlich sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen schauen und IMDB/TMDB Infos, Taste 9, abrufen.
+Die Bedienung soll dem Blättern in einem normalen TV-Magazin ähnlich sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen zappen und IMDB/TMDB Infos (Taste 9) abrufen.
 
 Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können die Views, SQL-Know-How vorrausgesetzt, unter gewissen Einschränkungen, frei definiert werden. Es sind 8 Default-Views vordefiniert.
 
-Ursprünglich hatte ich das Plugin als Kategorie vom ProgramGuide Plugin geplant. Leider hatte ich Probleme mit der Stabilität und dann nach und nach Funktionen, die ich nicht nutze ausgebaut. Irgendwann hatte ich ein eigenständiges Plugin. 
-Das Plugin hat bei weitem nicht die Funktionalität des Clickfinder Program Guides. Wer Serien, Video, Moving-Picture Unterstützung erwartet wird von diesem Plugin entäuscht sein. Deswegen auch der Name "Simple Guide".
+Ursprünglich hatte ich das Plugin als Kategorie vom ProgramGuide Plugin geplant. Leider hatte ich Probleme damit, weshalb ich Funktionen, die ich nicht nutze, ausgebaut habe. Irgendwann habe ich daraus ein eigenständiges Plugin gebaut.
+Das *Clickfinder Simple Guide Plugin* hat bei weitem nicht die Funktionalität des *Clickfinder Program Guides*. Wer Serien, Video, Moving-Picture Unterstützung erwartet, wird von diesem Plugin entäuscht sein. Deswegen auch der Name *Simple Guide*.
 
-Derzeit wird nur der Titan Skin unterstützt.
+Derzeit wird der *Titan Skin* unterstützt.
 ## Installation
 [Hier](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1) befindet sich das .mpe1 File. Der Rest dürfte bekannt sein.
 
@@ -79,7 +79,7 @@ Derzeit wird nur der Titan Skin unterstützt.
 
 ## Screenshots
 ### Plugin
-![Jetzt View](https://cloud.githubusercontent.com/assets/8837272/16694064/8d8e5164-4538-11e6-9552-42c543ee9e24.png)
+![Filme View](https://cloud.githubusercontent.com/assets/8837272/16706541/2b7c1eba-45b1-11e6-9624-8bd57f721551.png)
 ![TagesTipps View](https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png)
 ![Single Channel View](https://cloud.githubusercontent.com/assets/8837272/16706449/228d3428-45ad-11e6-8d94-12c9056d13d3.png)
 
