@@ -15,15 +15,22 @@ All credits to him for all his excellent effort.
 ## Introduction
 (As this is, most probably for German users only, I switch to German now)
 
-Das Plugin soll TV-Movie EPG-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Eine Anforderung war es, dass man einfach per Tastendruck sieht, was zur "Prime-Time" im Fernsehen läuft, welche Spielfilme in der nächsten Woche kommen, etc. Für diesen Zweck stellt das Plugin verschiedene Views zur Verfügung. Insgesamt kann man sich bis zu 8 verschiedene, konfigurierbare Views definieren und über die Tasten 1-8 aufrufen.
+Das Plugin soll TV-Movie EPG-Daten auf eine möglichst einfache und schnelle Art und Weise anzeigen. Es soll per Tastendruck zeigen, was zur "Prime-Time" im Fernsehen läuft, welche Spielfilme heute laufen oder in der nächsten Woche kommen, und so weiter.
+Für diesen Zweck stellt das Plugin verschiedene Anzeigen, im Folgenden Views, zur Verfügung. Insgesamt können bis zu 8 verschiedene Views definiert und über die Tasten 1-8 aufgerufen werden.
 
-Mit der Taste 0 wird das Programm für einen einzelnen Kanal aufgerufen
+Mit der Taste 0 wird das Programm für einen einzelnen Kanal aufgerufen.
 
-Die Bedienung soll dem Lesen eines normalen TV-Magazin nach empfunden sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen schauen und IMDB/TMDB Infos, Taste 9, abholen.
+Die Bedienung soll dem Blättern in einem normalen TV-Magazin ähnlich sein. Man kann einen Tag, eine Stunde vor- und zurückblättern, durch Kanalgruppen schauen und IMDB/TMDB Infos, Taste 9, abrufen.
 
-Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können die Views, SQL-Know-How vorrausgesetzt, unter gewissen Einschränkungen, frei definiert werden. Natürlich habe ich 8 Default-Views vordefiniert.
+Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können die Views, SQL-Know-How vorrausgesetzt, unter gewissen Einschränkungen, frei definiert werden. Es sind 8 Default-Views vordefiniert.
+
+Ursprünglich hatte ich das Plugin als Kategorie vom ProgramGuide Plugin geplant. Leider hatte ich Probleme mit der Stabilität und dann nach und nach Funktionen, die ich nicht nutze ausgebaut. Irgendwann hatte ich ein eigenständiges Plugin. 
+Das Plugin hat bei weitem nicht die Funktionalität des Clickfinder Program Guides. Wer Serien, Video, Moving-Picture Unterstützung erwartet wird von diesem Plugin entäuscht sein. Deswegen auch der Name "Simple Guide".
 
 Derzeit wird nur der Titan Skin unterstützt.
+## Installation
+[Hier](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1) befindet sich das .mpe1 File. Der Rest dürfte bekannt sein.
+
 ## Bedienung
 
 **(1)**: Ruft View 1 auf (Default ist die Übersicht "Jetzt")
@@ -72,11 +79,9 @@ Derzeit wird nur der Titan Skin unterstützt.
 
 ## Screenshots
 ### Plugin
-<div align="center">
-        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694064/8d8e5164-4538-11e6-9552-42c543ee9e24.png" alt="Jetzt screen" title="Jetzt Screen"</img>
-        <img height="0" width="8px">
-        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png" alt="Tagestipp screen" title="Tagestipp Screen"></img>
-</div>
+![Jetzt View](https://cloud.githubusercontent.com/assets/8837272/16694064/8d8e5164-4538-11e6-9552-42c543ee9e24.png)
+![TagesTipps View](https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png)
+![Single Channel View](https://cloud.githubusercontent.com/assets/8837272/16706449/228d3428-45ad-11e6-8d94-12c9056d13d3.png)
 
 ### Configuration
 <div align="center">
