@@ -29,7 +29,10 @@ Das *Clickfinder Simple Guide Plugin* hat bei weitem nicht die Funktionalität de
 
 Derzeit wird der *Titan Skin* unterstützt.
 ## Installation
-[Hier](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1) befindet sich das .mpe1 File. Der Rest dürfte bekannt sein.
+[Hier](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1) befindet sich das .mpe1 File. 
+(Auf das .mpe1 klicken, *View Raw* ruft den *Öffnen/Speichern-Dialog* auf)
+
+Der Rest dürfte bekannt sein.
 
 ## Bedienung
 

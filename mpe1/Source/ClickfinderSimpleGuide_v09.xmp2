@@ -374,7 +374,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <Params>
       <Items>
         <SectionParam Name="Icon">
-          <Value>..\..\Icon\NiceEPG_Setup.png</Value>
+          <Value>..\..\ConfigIcons\CSG_Setup.png</Value>
           <ValueType>File</ValueType>
           <Description>The icon file of the package (jpg,png,bmp)</Description>
         </SectionParam>
@@ -541,8 +541,8 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\..\Icon\NiceEPG_Setup.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{90b2771f-4b10-4f3d-8778-6f9490907a7b}-NiceEPG_Setup.png</ZipFileName>
+        <LocalFileName>..\..\ConfigIcons\CSG_Setup.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{59451d10-3e03-4beb-86e6-667f801694b9}-CSG_Setup.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
