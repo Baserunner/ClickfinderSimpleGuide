@@ -12,6 +12,7 @@ Imports System.Text.RegularExpressions
 Imports MediaPortal.Video.Database
 Imports TvDatabase.TvBusinessLayer
 Imports MediaPortal.GUI.Video
+Imports MediaPortal.Core
 ' for Movie Info End
 Imports System.Windows.Forms
 
