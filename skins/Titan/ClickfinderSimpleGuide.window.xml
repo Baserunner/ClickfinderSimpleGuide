@@ -7,10 +7,12 @@
       <id>1</id>
       <width>1920</width>
       <height>1080</height>
-      <texture>hover_ClickfinderSimpleGuide.png</texture>
+      <!-- texture>hover_ClickfinderSimpleGuide.png</texture -->
+      <texture>hover_tetris.png</texture>
     </control>
 
     <control>
+      
       <description>background listview</description>
       <type>image</type>
       <id>0</id>

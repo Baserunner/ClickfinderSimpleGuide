@@ -13,8 +13,15 @@ Imports MediaPortal.Video.Database
 Imports TvDatabase.TvBusinessLayer
 Imports MediaPortal.GUI.Video
 Imports MediaPortal.Core
+Imports MediaPortal.Util
 ' for Movie Info End
 Imports System.Windows.Forms
+Imports System.IO
+' for TMDB Search
+Imports TMDbLib.Client
+Imports TMDbLib.Objects.General
+Imports TMDbLib.Objects.Search
+Imports System.Xml
 
 
 Namespace ClickfinderSimpleGuide
@@ -65,6 +72,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_IntervalHour As Integer = 29 '29 meint bis 05:00 Uhr morgens den nächsten Tag
         Private Shared m_actualViewNumber As Integer
         Private Shared m_previousViewNumber As Integer
+        Private Shadows m_tmdbClient As TMDbClient
         ' Private Shared m_NiceEPGViewPrevious As EPGView
 
 #End Region
@@ -118,6 +126,8 @@ Namespace ClickfinderSimpleGuide
         Protected Overrides Sub OnPageLoad()
             Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim _mClass As String = Me.GetType.Name
+            m_tmdbClient = New TMDbClient("b791cd5a2442ab1e01348a207969a17f")
+            FetchConfig(m_tmdbClient)
 
             m_actualViewNumber = CSGuideSettings.StartView
             SetViewProperties(m_actualViewNumber)
@@ -744,6 +754,7 @@ Namespace ClickfinderSimpleGuide
 
             If myTVMovieProgram IsNot Nothing Then
                 'SetProperty("#DetailDescription", getAdaptedDescription(myTVMovieProgram.ReferencedProgram.Description))
+                SetProperty("#TMDbFanArt", getFanartFileName(myTVMovieProgram))
                 SetProperty("#DetailDescription", myTVMovieProgram.ReferencedProgram.Description)
                 SetProperty("#DetailImage", CSGuideHelper.Image(myTVMovieProgram))
                 SetProperty("#DetailTitle", myTVMovieProgram.ReferencedProgram.Title)
@@ -807,6 +818,61 @@ Namespace ClickfinderSimpleGuide
                 SetProperty("#DetailRatingEmotions", "0")
                 SetProperty("#SelectedProgramDates", "")
                 SetProperty("#ChannelName", "Nichts gefunden")
+            End If
+        End Sub
+        Private Function getFanartFileName(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+            Dim _defaultBackgroundImage As String = "hover_ClickfinderSimpleGuide.png"
+            ' New in this version
+            Try
+                'MyLog.Debug(String.Format("[{0}] [{1}]: fetching TMDb URLs for {3}", _mClass, _mName, myTVMovieProgram.ReferencedProgram.Title.ToString()))
+                Dim results As SearchContainer(Of SearchMovie) =
+                    m_tmdbClient.SearchMovieAsync(myTVMovieProgram.ReferencedProgram.Title, 0, False, myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year).Result
+                If results IsNot Nothing AndAlso results.Results.Count <> 0 Then
+                    Dim result As SearchMovie = results.Results.First()
+                    If Not String.IsNullOrEmpty(result.BackdropPath) Then
+                        Dim _fanArtURL = m_tmdbClient.GetImageUrl("original", result.BackdropPath).ToString()
+                        Dim _rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
+                        Dim _imageFilename As String = _rgx.Match(_fanArtURL).Groups(1).Value
+                        If String.IsNullOrEmpty(_imageFilename) Then
+                            Return _defaultBackgroundImage
+                        End If
+                        Dim _absImagePath As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Fanart\"), _imageFilename)
+                        Dim _imagePath As String = Path.Combine("CSG\Fanart\", _imageFilename)
+
+                        Utils.DownLoadAndCacheImage(_fanArtURL, _absImagePath)
+                        Return _imagePath
+                    Else
+                        Return _defaultBackgroundImage
+                    End If
+                End If
+                Return _defaultBackgroundImage
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                Return _defaultBackgroundImage
+            End Try
+        End Function
+        Private Shared Sub FetchConfig(client As TMDbClient)
+            Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
+
+            Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
+
+            If configXml.Exists AndAlso configXml.LastWriteTimeUtc >= DateTime.UtcNow.AddHours(-1) Then
+                Console.WriteLine("Using stored config")
+                Dim xml As String = File.ReadAllText(configXml.FullName, Encoding.Unicode)
+
+                Dim xmlDoc As New XmlDocument()
+                xmlDoc.LoadXml(xml)
+
+                client.SetConfig(Serializer.Deserialize(Of TMDbConfig)(xmlDoc))
+            Else
+                Console.WriteLine("Getting new config")
+                client.GetConfig()
+
+                Console.WriteLine("Storing config")
+                Dim xmlDoc As XmlDocument = Serializer.Serialize(client.Config)
+                File.WriteAllText(configXml.FullName, xmlDoc.OuterXml, Encoding.Unicode)
             End If
         End Sub
         Private Function getAdaptedDescription(ByVal programDescription As String) As String

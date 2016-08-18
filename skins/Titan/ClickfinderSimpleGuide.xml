@@ -8,8 +8,7 @@
     <import>ClickfinderSimpleGuide.window.xml</import>
     <import>common.time.xml</import>    
     <import>common.overlay.xml</import>
-
-
+    
     <control>
       <description>Shows which EPG View is active</description>
       <type>label</type>
