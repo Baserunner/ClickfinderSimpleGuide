@@ -123,8 +123,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigIcons\CSG_Setup.png" />
-    <EmbeddedResource Include="ConfigIcons\CSG_Setup_Disabled.png" />
     <Content Include="Help\CSGuide_Help.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,15 @@ Namespace ClickfinderSimpleGuide
         <SkinControlAttribute(9)> Protected _DataLoadingAnimation As GUIAnimation = Nothing
         <SkinControlAttribute(11)> Protected _PageProgress As GUIProgressControl = Nothing
         <SkinControlAttribute(37)> Protected _niceEPGList As GUIListControl = Nothing
+        <SkinControlAttribute(91)> Protected _buttonControlView1 As GUIButtonControl = Nothing
+        <SkinControlAttribute(92)> Protected _buttonControlView2 As GUIButtonControl = Nothing
+        <SkinControlAttribute(93)> Protected _buttonControlView3 As GUIButtonControl = Nothing
+        <SkinControlAttribute(94)> Protected _buttonControlView4 As GUIButtonControl = Nothing
+        <SkinControlAttribute(95)> Protected _buttonControlView5 As GUIButtonControl = Nothing
+        <SkinControlAttribute(96)> Protected _buttonControlView6 As GUIButtonControl = Nothing
+        <SkinControlAttribute(97)> Protected _buttonControlView7 As GUIButtonControl = Nothing
+        <SkinControlAttribute(98)> Protected _buttonControlView8 As GUIButtonControl = Nothing
+
 
 #End Region
 
@@ -87,6 +96,7 @@ Namespace ClickfinderSimpleGuide
             m_viewDisplayName = CSGuideSettings.View(i).DisplayName
             m_previousViewNumber = m_actualViewNumber
             m_actualViewNumber = i
+
         End Sub
 
 #End Region
@@ -121,6 +131,8 @@ Namespace ClickfinderSimpleGuide
 
             m_actualViewNumber = CSGuideSettings.StartView
             SetViewProperties(m_actualViewNumber)
+            InitButtons()
+            UpdateButtonState(m_actualViewNumber)
             MyBase.OnPageLoad()
 
             GUIWindowManager.NeedRefresh()
@@ -354,6 +366,7 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 49 Then
                             SetViewProperties(1)
+                            UpdateButtonState(1)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -372,6 +385,7 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 50 Then
                             SetViewProperties(2)
+                            UpdateButtonState(2)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -390,6 +404,7 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 51 Then
                             SetViewProperties(3)
+                            UpdateButtonState(3)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -581,37 +596,37 @@ Namespace ClickfinderSimpleGuide
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_LEFT Then
                     m_previousViewNumber = m_actualViewNumber
                     'm_NiceEPGViewPrevious = _NiceEPGView
-                    If m_viewType.Equals("Overview") Then
-                        m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
+                    'If m_viewType.Equals("Overview") Then
+                    '    m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
+                    '    _ItemsCache.Clear()
+                    '    AbortRunningThreads()
 
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
-                    Else
-                        m_channelNumber = GetNextChannelNumber(0)
+                    '    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                    '    _ThreadLoadItemsFromDatabase.IsBackground = True
+                    '    _ThreadLoadItemsFromDatabase.Start()
+                    '    Return
+                    'Else
+                    '    m_channelNumber = GetNextChannelNumber(0)
 
-                        Try
-                            If _niceEPGList.IsFocused = True Then
-                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                            End If
+                    '    Try
+                    '        If _niceEPGList.IsFocused = True Then
+                    '            NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                    '            m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                    '        End If
 
-                        Catch ex As Exception
-                            MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                        End Try
+                    '    Catch ex As Exception
+                    '        MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                    '    End Try
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
+                    '    _ItemsCache.Clear()
+                    '    AbortRunningThreads()
 
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
-                    End If
+                    '    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                    '    _ThreadLoadItemsFromDatabase.IsBackground = True
+                    '    _ThreadLoadItemsFromDatabase.Start()
+                    '    Return
+                    'End If
                 End If
 
                 'Play Button (P) -> Start channel
@@ -669,6 +684,9 @@ Namespace ClickfinderSimpleGuide
                 If actionType = MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM Then
                     Action_SelectItem()
                 End If
+            End If
+            If control Is _buttonControlView1 Then
+                SendKeys.Send("1")
             End If
 
         End Sub
@@ -1101,7 +1119,32 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
 #End Region
+#Region "Hidden Menu"
+        Private Sub UpdateButtonState(ByVal viewNumber As Integer)
+            Select Case viewNumber
+                Case 1
+                    SendKeys.Send("1")
+                Case 2
+                    SendKeys.Send("22")
+                Case 3
+                    SendKeys.Send("3")
 
+            End Select
+
+
+        End Sub
+
+        Private Sub InitButtons()
+            _buttonControlView1.Label = "(1): " & CSGuideSettings.View(1).DisplayName
+            _buttonControlView2.Label = "(2): " & CSGuideSettings.View(2).DisplayName
+            _buttonControlView3.Label = "(3): " & CSGuideSettings.View(3).DisplayName
+            _buttonControlView4.Label = "(4): " & CSGuideSettings.View(4).DisplayName
+            _buttonControlView5.Label = "(5): " & CSGuideSettings.View(5).DisplayName
+            _buttonControlView6.Label = "(6): " & CSGuideSettings.View(6).DisplayName
+            _buttonControlView7.Label = "(7): " & CSGuideSettings.View(7).DisplayName
+            _buttonControlView8.Label = "(8): " & CSGuideSettings.View(8).DisplayName
+        End Sub
+#End Region
 #Region "MediaPortal Funktionen / Dialogs"
         Private Sub ShowItemsContextMenu(ByVal idProgram As Integer)
             MyLog.Info("")
