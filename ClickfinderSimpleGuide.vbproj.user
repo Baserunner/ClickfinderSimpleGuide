@@ -21,4 +21,7 @@
     <StartWorkingDirectory>C:\Program Files\Team MediaPortal\MediaPortal\plugins\Windows</StartWorkingDirectory>
     <StartAction>Program</StartAction>
   </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\Cornerstone.MP\</ReferencePath>
+  </PropertyGroup>
 </Project>

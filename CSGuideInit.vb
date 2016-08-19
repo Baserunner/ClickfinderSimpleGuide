@@ -151,6 +151,7 @@ Namespace ClickfinderSimpleGuide
             Try
                 CSGuideHelper.CheckConnectionState()
                 MyLog.Debug(String.Format("[{0}] [{1}]: Activating Window 730351", _mClass, _mName))
+
                 GUIWindowManager.ActivateWindow(730351, True)
 
             Catch ex As Exception

@@ -663,6 +663,20 @@ Namespace ClickfinderSimpleGuide
                         End If
                     End If
                 End If
+
+                '''' TEST '''''
+                'Menu Button (q) -> Context Menu open
+                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
+                    If action.m_key IsNot Nothing Then
+                        If action.m_key.KeyChar = 113 Then
+
+                            CSGuideWindowsTMDb.Filename = getFanartFileNameAbsPath(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                            GUIWindowManager.ActivateWindow(730352, True)
+                        End If
+                    End If
+                End If
+
+
             End If
 
             MyBase.OnAction(action)
@@ -852,6 +866,9 @@ Namespace ClickfinderSimpleGuide
                 MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                 Return _defaultBackgroundImage
             End Try
+        End Function
+        Private Function getFanartFileNameAbsPath(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\" & getFanartFileName(myTVMovieProgram)))
         End Function
         Private Shared Sub FetchConfig(client As TMDbClient)
             Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
