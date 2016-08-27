@@ -75,7 +75,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_IntervalHour As Integer = 29 '29 meint bis 05:00 Uhr morgens den nächsten Tag
         Private Shared m_actualViewNumber As Integer
         Private Shared m_previousViewNumber As Integer
-        ' Private Shared m_NiceEPGViewPrevious As EPGView
+        Private Shared m_HiddenMenuOpen As Boolean = False
 
 #End Region
 
@@ -555,38 +555,43 @@ Namespace ClickfinderSimpleGuide
 
                 'Move right: Forward is pressed -> one channel group forward
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_RIGHT Then
-                    m_previousViewNumber = m_actualViewNumber
-                    If m_viewType.Equals("Overview") Then
-                        m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
-
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
-
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                    If m_HiddenMenuOpen Then
+                        m_HiddenMenuOpen = False
                     Else
-                        m_channelNumber = GetNextChannelNumber(1)
+                        m_previousViewNumber = m_actualViewNumber
+                        If m_viewType.Equals("Overview") Then
+                            m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
 
-                        Try
-                            If _niceEPGList.IsFocused = True Then
-                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                            End If
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                        Catch ex As Exception
-                            MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                        End Try
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        Else
+                            m_channelNumber = GetNextChannelNumber(1)
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
+                            Try
+                                If _niceEPGList.IsFocused = True Then
+                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                                End If
 
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                            Catch ex As Exception
+                                MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                            End Try
+
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
+
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        End If
                     End If
+
                 End If
 
                 'Move left -> one channel group back
@@ -604,6 +609,8 @@ Namespace ClickfinderSimpleGuide
                             _ThreadLoadItemsFromDatabase.IsBackground = True
                             _ThreadLoadItemsFromDatabase.Start()
                             Return
+                        Else
+                            m_HiddenMenuOpen = True
                         End If
                     Else
                         'if "Channel Number = 1 AND HiddenMenu Mode the open hidden Menu
@@ -626,6 +633,8 @@ Namespace ClickfinderSimpleGuide
                             _ThreadLoadItemsFromDatabase.IsBackground = True
                             _ThreadLoadItemsFromDatabase.Start()
                             Return
+                        Else
+                            m_HiddenMenuOpen = True
                         End If
                     End If
                 End If

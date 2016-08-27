@@ -29,7 +29,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.9 beta hidden menu"
+                Return "0.92"
             End Get
         End Property
 #End Region
