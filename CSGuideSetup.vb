@@ -74,7 +74,11 @@ Public Class CSGuideSetup
         Else
             Gen_CheckBox1.Checked = False
         End If
-
+        If CSGuideSettings.HiddenMenuMode Then
+            Gen_CheckBox2.Checked = True
+        Else
+            Gen_CheckBox2.Checked = False
+        End If
         V0_TextBox1.Text = CSGuideSettings.View(0).DisplayName
         V0_TextBox2.Text = CSGuideSettings.View(0).TimeString
         V0_TextBox3.Text = CSGuideSettings.View(0).SQL
@@ -168,6 +172,12 @@ Public Class CSGuideSetup
             CSGuideSettings.DebugMode = True
         Else
             CSGuideSettings.DebugMode = False
+        End If
+
+        If Gen_CheckBox2.Checked Then
+            CSGuideSettings.HiddenMenuMode = True
+        Else
+            CSGuideSettings.HiddenMenuMode = False
         End If
 
         CSGuideSettings.View(0).DisplayName = V0_TextBox1.Text

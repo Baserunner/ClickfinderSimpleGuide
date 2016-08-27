@@ -35,6 +35,7 @@ Namespace ClickfinderSimpleGuide
         <SkinControlAttribute(96)> Protected _buttonControlView6 As GUIButtonControl = Nothing
         <SkinControlAttribute(97)> Protected _buttonControlView7 As GUIButtonControl = Nothing
         <SkinControlAttribute(98)> Protected _buttonControlView8 As GUIButtonControl = Nothing
+        <SkinControlAttribute(100)> Protected _buttonControlView0 As GUIButtonControl = Nothing
 
 
 #End Region
@@ -132,7 +133,6 @@ Namespace ClickfinderSimpleGuide
             m_actualViewNumber = CSGuideSettings.StartView
             SetViewProperties(m_actualViewNumber)
             InitButtons()
-            UpdateButtonState(m_actualViewNumber)
             MyBase.OnPageLoad()
 
             GUIWindowManager.NeedRefresh()
@@ -366,7 +366,6 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 49 Then
                             SetViewProperties(1)
-                            UpdateButtonState(1)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -385,7 +384,6 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 50 Then
                             SetViewProperties(2)
-                            UpdateButtonState(2)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -404,7 +402,6 @@ Namespace ClickfinderSimpleGuide
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 51 Then
                             SetViewProperties(3)
-                            UpdateButtonState(3)
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -595,82 +592,86 @@ Namespace ClickfinderSimpleGuide
                 'Move left -> one channel group back
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_LEFT Then
                     m_previousViewNumber = m_actualViewNumber
-                    'm_NiceEPGViewPrevious = _NiceEPGView
-                    'If m_viewType.Equals("Overview") Then
-                    '    m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
+                    If m_viewType.Equals("Overview") Then
+                        'if "All Channels" AND HiddenMenu Mode then open hidden Menu
+                        If Not (m_TvGroupFilter.Equals("All Channels") And CSGuideSettings.HiddenMenuMode) Then
+                            m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
 
-                    '    _ItemsCache.Clear()
-                    '    AbortRunningThreads()
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                    '    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    '    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    '    _ThreadLoadItemsFromDatabase.Start()
-                    '    Return
-                    'Else
-                    '    m_channelNumber = GetNextChannelNumber(0)
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        End If
+                    Else
+                        'if "Channel Number = 1 AND HiddenMenu Mode the open hidden Menu
+                        If Not (m_channelNumber = 1 And CSGuideSettings.HiddenMenuMode) Then
+                            m_channelNumber = GetNextChannelNumber(0)
+                            Try
+                                If _niceEPGList.IsFocused = True Then
+                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                                End If
 
-                    '    Try
-                    '        If _niceEPGList.IsFocused = True Then
-                    '            NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                    '            m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                    '        End If
+                            Catch ex As Exception
+                                MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                            End Try
 
-                    '    Catch ex As Exception
-                    '        MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                    '    End Try
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                    '    _ItemsCache.Clear()
-                    '    AbortRunningThreads()
-
-                    '    _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                    '    _ThreadLoadItemsFromDatabase.IsBackground = True
-                    '    _ThreadLoadItemsFromDatabase.Start()
-                    '    Return
-                    'End If
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        End If
+                    End If
                 End If
 
                 'Play Button (P) -> Start channel
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY Then
-                    Try
-                        If _niceEPGList.IsFocused = True Then CSGuideHelper.StartTv(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
-                    Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Play Button - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        Try
+                            If _niceEPGList.IsFocused = True Then CSGuideHelper.StartTv(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                        Catch ex As Exception
+                            MyLog.Error(String.Format("[{0}] [{1}]: Play Button - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
 
-                    End Try
-                End If
+                        End Try
+                    End If
 
-                'Record Button (R) -> MP TvProgramInfo aufrufen --Über keychar--
-                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
-                    If action.m_key IsNot Nothing Then
-                        If action.m_key.KeyChar = 114 Then
-                            If _niceEPGList.IsFocused = True Then CSGuideHelper.LoadTVProgramInfo(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    'Record Button (R) -> MP TvProgramInfo aufrufen --Über keychar--
+                    If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
+                        If action.m_key IsNot Nothing Then
+                            If action.m_key.KeyChar = 114 Then
+                                If _niceEPGList.IsFocused = True Then CSGuideHelper.LoadTVProgramInfo(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                            End If
+                        End If
+                    End If
+
+                    'Record Button (R) -> MP TvProgramInfo aufrufen
+                    If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_RECORD Then
+                        If _niceEPGList.IsFocused = True Then CSGuideHelper.LoadTVProgramInfo(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+                    End If
+
+                    'Menu Button (F9) -> Context Menu open
+                    If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_CONTEXT_MENU Then
+                        RememberLastFocusedItem()
+                        If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
+                    End If
+
+                    'OSD Info Button (Y) -> Context Menu open (gleiche Fkt. wie Menu Button)
+                    If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
+                        If action.m_key IsNot Nothing Then
+                            If action.m_key.KeyChar = 121 Then
+                                RememberLastFocusedItem()
+                                If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
+                            End If
                         End If
                     End If
                 End If
 
-                'Record Button (R) -> MP TvProgramInfo aufrufen
-                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_RECORD Then
-                    If _niceEPGList.IsFocused = True Then CSGuideHelper.LoadTVProgramInfo(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
-                End If
-
-                'Menu Button (F9) -> Context Menu open
-                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_CONTEXT_MENU Then
-                    RememberLastFocusedItem()
-                    If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
-                End If
-
-                'OSD Info Button (Y) -> Context Menu open (gleiche Fkt. wie Menu Button)
-                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
-                    If action.m_key IsNot Nothing Then
-                        If action.m_key.KeyChar = 121 Then
-                            RememberLastFocusedItem()
-                            If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
-                        End If
-                    End If
-                End If
-            End If
-
-            MyBase.OnAction(action)
+                MyBase.OnAction(action)
         End Sub
 
         Protected Overrides Sub OnClicked(ByVal controlId As Integer, _
@@ -687,6 +688,30 @@ Namespace ClickfinderSimpleGuide
             End If
             If control Is _buttonControlView1 Then
                 SendKeys.Send("1")
+            End If
+            If control Is _buttonControlView2 Then
+                SendKeys.Send("2")
+            End If
+            If control Is _buttonControlView3 Then
+                SendKeys.Send("3")
+            End If
+            If control Is _buttonControlView4 Then
+                SendKeys.Send("4")
+            End If
+            If control Is _buttonControlView5 Then
+                SendKeys.Send("5")
+            End If
+            If control Is _buttonControlView6 Then
+                SendKeys.Send("6")
+            End If
+            If control Is _buttonControlView7 Then
+                SendKeys.Send("7")
+            End If
+            If control Is _buttonControlView8 Then
+                SendKeys.Send("8")
+            End If
+            If control Is _buttonControlView0 Then
+                SendKeys.Send("0")
             End If
 
         End Sub
@@ -1120,19 +1145,6 @@ Namespace ClickfinderSimpleGuide
 
 #End Region
 #Region "Hidden Menu"
-        Private Sub UpdateButtonState(ByVal viewNumber As Integer)
-            Select Case viewNumber
-                Case 1
-                    SendKeys.Send("1")
-                Case 2
-                    SendKeys.Send("22")
-                Case 3
-                    SendKeys.Send("3")
-
-            End Select
-
-
-        End Sub
 
         Private Sub InitButtons()
             _buttonControlView1.Label = "(1): " & CSGuideSettings.View(1).DisplayName
@@ -1143,6 +1155,7 @@ Namespace ClickfinderSimpleGuide
             _buttonControlView6.Label = "(6): " & CSGuideSettings.View(6).DisplayName
             _buttonControlView7.Label = "(7): " & CSGuideSettings.View(7).DisplayName
             _buttonControlView8.Label = "(8): " & CSGuideSettings.View(8).DisplayName
+            _buttonControlView0.Label = "(0): " & CSGuideSettings.View(0).DisplayName
         End Sub
 #End Region
 #Region "MediaPortal Funktionen / Dialogs"
@@ -1359,6 +1372,14 @@ Namespace ClickfinderSimpleGuide
             _ProgressBarThread.Start()
 
             SetProperty("#CurrentPageLabel", "Lade")
+
+            ' set to something - the skin only checks whether filled or not
+            If CSGuideSettings.HiddenMenuMode Then
+                SetProperty("#ShowHiddenMenu", "Show")
+            Else
+                SetProperty("#ShowHiddenMenu", "")
+            End If
+
 
         End Sub
 
