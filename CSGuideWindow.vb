@@ -697,30 +697,39 @@ Namespace ClickfinderSimpleGuide
             End If
             If control Is _buttonControlView1 Then
                 SendKeys.Send("1")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView2 Then
                 SendKeys.Send("2")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView3 Then
                 SendKeys.Send("3")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView4 Then
                 SendKeys.Send("4")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView5 Then
                 SendKeys.Send("5")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView6 Then
                 SendKeys.Send("6")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView7 Then
                 SendKeys.Send("7")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView8 Then
                 SendKeys.Send("8")
+                m_HiddenMenuOpen = False
             End If
             If control Is _buttonControlView0 Then
                 SendKeys.Send("0")
+                m_HiddenMenuOpen = False
             End If
 
         End Sub

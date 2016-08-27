@@ -8,8 +8,10 @@
     <import>ClickfinderSimpleGuide.window.xml</import>
     <import>common.time.xml</import>    
     <import>common.overlay.xml</import>
+	<import>ClickfinderSimpleGuide.include.hiddenMenu.xml</import>
 
 
+    
     <control>
       <description>Shows which EPG View is active</description>
       <type>label</type>
@@ -89,6 +91,7 @@
       <posY>302</posY>
       <width>805</width>
       <height>735</height>
+	  <onleft>91</onleft>
       <textureFocus>tv_miniguide_bar.png</textureFocus>
       <textureNoFocus>tv_miniguide_bar_nofocus.png</textureNoFocus>
       <textureWith>30</textureWith>
@@ -614,9 +617,7 @@
       <keepaspectratio>no</keepaspectratio>
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>
-    </control>
-
-    
+    </control>	
   </controls>
 </window>
 
