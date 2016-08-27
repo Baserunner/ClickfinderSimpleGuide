@@ -534,10 +534,10 @@ Namespace ClickfinderSimpleGuide
                             _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
 
                             Try
-                                If _niceEPGList.IsFocused = True Then
-                                    m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
-                                    m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
-                                End If
+                                '   If _niceEPGList.IsFocused = True Then
+                                m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
+                                m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
+                                '  End If
                             Catch ex As Exception
                                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                             End Try
@@ -740,7 +740,7 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Protected Overrides Sub OnPreviousWindow()
-            MyLog.Debug("[NiceEPGGuiWindow] [OnPreviousWindow]")
+            MyLog.Debug("[CSGuideWindow] [OnPreviousWindow]")
             MyBase.OnPreviousWindow()
             _LastFocusedIndex = 0
             _LastFocusedControlID = _niceEPGList.GetID
