@@ -125,6 +125,13 @@
               <ZipFileName>Installer{CopyFile}\{d81e957f-f916-49ea-b4c0-a26f09554c43}-ClickfinderSG_Tagestipp.png</ZipFileName>
               <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ee090c9a-f677-4dc4-baa8-3497f341b120}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -361,8 +368,8 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <Version>
       <Major>0</Major>
       <Minor>9</Minor>
-      <Build>0</Build>
-      <Revision>1</Revision>
+      <Build>2</Build>
+      <Revision>0</Revision>
     </Version>
     <ExtensionDescription>This plugin is an EPG plugin based on Scroungers Clickfinder Program Guide. Its intention is to provide EPG information at one glance with handy navigation options.Requires "TV Movie EPG Import++" version 1.6.4.2.</ExtensionDescription>
     <VersionDescription />
@@ -370,7 +377,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <OnlineLocation />
     <ReleaseDate>2016-07-02T20:58:06</ReleaseDate>
     <Tags />
-    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v09.mpe1</Location>
+    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v092.mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -513,6 +520,13 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ee090c9a-f677-4dc4-baa8-3497f341b120}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{3c74a2f9-9c2b-4372-8a4f-e43963fa2d3e}-FSK0.png</ZipFileName>
         <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
@@ -542,14 +556,14 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\ConfigIcons\CSG_Setup.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{59451d10-3e03-4beb-86e6-667f801694b9}-CSG_Setup.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{0b539351-a847-4bb8-a43d-f97cc9e8e14b}-CSG_Setup.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
   </UniqueFileList>
   <ProjectSettings>
     <FolderGroups />
-    <ProjectFilename>ClickfinderSimpleGuide_v09.xmp2</ProjectFilename>
+    <ProjectFilename>ClickfinderSimpleGuide_v092.xmp2</ProjectFilename>
     <UpdatePath1 />
     <UpdatePath2 />
     <UpdatePath3 />

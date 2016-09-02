@@ -119,7 +119,6 @@ Namespace ClickfinderSimpleGuide
                 MyLog.BackupLogFiles()
 
                 MyLog.Info(String.Format("[{0}] [{1}] *** Starting *** ", _mClass, _mName))
-                MyLog.Info("[NiceEPG] [PreInit] *** DebugMode is " & CSGuideSettings.DebugMode & " *** ")
                 If CSGuideSettings.DebugMode Then
                     CSGuideSettings.logAll()
                 Else

@@ -16,12 +16,6 @@ Imports MediaPortal.Core
 Imports MediaPortal.Util
 ' for Movie Info End
 Imports System.Windows.Forms
-Imports System.IO
-' for TMDB Search
-Imports TMDbLib.Client
-Imports TMDbLib.Objects.General
-Imports TMDbLib.Objects.Search
-Imports System.Xml
 
 
 Namespace ClickfinderSimpleGuide
@@ -34,6 +28,16 @@ Namespace ClickfinderSimpleGuide
         <SkinControlAttribute(9)> Protected _DataLoadingAnimation As GUIAnimation = Nothing
         <SkinControlAttribute(11)> Protected _PageProgress As GUIProgressControl = Nothing
         <SkinControlAttribute(37)> Protected _niceEPGList As GUIListControl = Nothing
+        <SkinControlAttribute(91)> Protected _buttonControlView1 As GUIButtonControl = Nothing
+        <SkinControlAttribute(92)> Protected _buttonControlView2 As GUIButtonControl = Nothing
+        <SkinControlAttribute(93)> Protected _buttonControlView3 As GUIButtonControl = Nothing
+        <SkinControlAttribute(94)> Protected _buttonControlView4 As GUIButtonControl = Nothing
+        <SkinControlAttribute(95)> Protected _buttonControlView5 As GUIButtonControl = Nothing
+        <SkinControlAttribute(96)> Protected _buttonControlView6 As GUIButtonControl = Nothing
+        <SkinControlAttribute(97)> Protected _buttonControlView7 As GUIButtonControl = Nothing
+        <SkinControlAttribute(98)> Protected _buttonControlView8 As GUIButtonControl = Nothing
+        <SkinControlAttribute(100)> Protected _buttonControlView0 As GUIButtonControl = Nothing
+
 
 #End Region
 
@@ -72,8 +76,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_IntervalHour As Integer = 29 '29 meint bis 05:00 Uhr morgens den nächsten Tag
         Private Shared m_actualViewNumber As Integer
         Private Shared m_previousViewNumber As Integer
-        Private Shadows m_tmdbClient As TMDbClient
-        ' Private Shared m_NiceEPGViewPrevious As EPGView
+        Private Shared m_HiddenMenuOpen As Boolean = False
 
 #End Region
 
@@ -95,6 +98,7 @@ Namespace ClickfinderSimpleGuide
             m_viewDisplayName = CSGuideSettings.View(i).DisplayName
             m_previousViewNumber = m_actualViewNumber
             m_actualViewNumber = i
+
         End Sub
 
 #End Region
@@ -126,11 +130,10 @@ Namespace ClickfinderSimpleGuide
         Protected Overrides Sub OnPageLoad()
             Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim _mClass As String = Me.GetType.Name
-            m_tmdbClient = New TMDbClient("b791cd5a2442ab1e01348a207969a17f")
-            FetchConfig(m_tmdbClient)
 
             m_actualViewNumber = CSGuideSettings.StartView
             SetViewProperties(m_actualViewNumber)
+            InitButtons()
             MyBase.OnPageLoad()
 
             GUIWindowManager.NeedRefresh()
@@ -139,7 +142,7 @@ Namespace ClickfinderSimpleGuide
             GuiLayoutLoading()
 
             _LastFocusedControlID = _niceEPGList.GetID
-            ' _ItemsCache.Clear()
+            _ItemsCache.Clear()
             AbortRunningThreads()
 
             If _ItemsCache.Count = 0 Then
@@ -532,10 +535,10 @@ Namespace ClickfinderSimpleGuide
                             _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
 
                             Try
-                                If _niceEPGList.IsFocused = True Then
-                                    m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
-                                    m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
-                                End If
+                                '   If _niceEPGList.IsFocused = True Then
+                                m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
+                                m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
+                                '  End If
                             Catch ex As Exception
                                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
                             End Try
@@ -553,74 +556,87 @@ Namespace ClickfinderSimpleGuide
 
                 'Move right: Forward is pressed -> one channel group forward
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_RIGHT Then
-                    m_previousViewNumber = m_actualViewNumber
-                    If m_viewType.Equals("Overview") Then
-                        m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
-
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
-
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                    If m_HiddenMenuOpen Then
+                        m_HiddenMenuOpen = False
                     Else
-                        m_channelNumber = GetNextChannelNumber(1)
+                        m_previousViewNumber = m_actualViewNumber
+                        If m_viewType.Equals("Overview") Then
+                            m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
 
-                        Try
-                            If _niceEPGList.IsFocused = True Then
-                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                            End If
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                        Catch ex As Exception
-                            MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                        End Try
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        Else
+                            m_channelNumber = GetNextChannelNumber(1)
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
+                            Try
+                                If _niceEPGList.IsFocused = True Then
+                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                                End If
 
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                            Catch ex As Exception
+                                MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                            End Try
+
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
+
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        End If
                     End If
+
                 End If
 
                 'Move left -> one channel group back
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_LEFT Then
                     m_previousViewNumber = m_actualViewNumber
-                    'm_NiceEPGViewPrevious = _NiceEPGView
                     If m_viewType.Equals("Overview") Then
-                        m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
+                        'if "All Channels" AND HiddenMenu Mode then open hidden Menu
+                        If Not (m_TvGroupFilter.Equals("All Channels") And CSGuideSettings.HiddenMenuMode) Then
+                            m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 0)
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        Else
+                            m_HiddenMenuOpen = True
+                        End If
                     Else
-                        m_channelNumber = GetNextChannelNumber(0)
+                        'if "Channel Number = 1 AND HiddenMenu Mode the open hidden Menu
+                        If Not (m_channelNumber = 1 And CSGuideSettings.HiddenMenuMode) Then
+                            m_channelNumber = GetNextChannelNumber(0)
+                            Try
+                                If _niceEPGList.IsFocused = True Then
+                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                                End If
 
-                        Try
-                            If _niceEPGList.IsFocused = True Then
-                                NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                            End If
+                            Catch ex As Exception
+                                MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                            End Try
 
-                        Catch ex As Exception
-                            MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                        End Try
+                            _ItemsCache.Clear()
+                            AbortRunningThreads()
 
-                        _ItemsCache.Clear()
-                        AbortRunningThreads()
-
-                        _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
-                        _ThreadLoadItemsFromDatabase.IsBackground = True
-                        _ThreadLoadItemsFromDatabase.Start()
-                        Return
+                            _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+                            _ThreadLoadItemsFromDatabase.IsBackground = True
+                            _ThreadLoadItemsFromDatabase.Start()
+                            Return
+                        Else
+                            m_HiddenMenuOpen = True
+                        End If
                     End If
                 End If
 
@@ -663,35 +679,14 @@ Namespace ClickfinderSimpleGuide
                         End If
                     End If
                 End If
-
-                '''' TEST '''''
-                'Menu Button (q) -> Context Menu open
-                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
-                    If action.m_key IsNot Nothing Then
-                        If action.m_key.KeyChar = 113 Then
-                            Try
-                                If _niceEPGList.IsFocused = True Then
-                                    m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
-                                    m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
-                                    CSGuideWindowsTMDb.Filename = getFanartFileNameAbsPath(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                    GUIWindowManager.ActivateWindow(730352, False)
-                                End If
-                            Catch ex As Exception
-                                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                            End Try
-                        End If
-                    End If
-                End If
-
-
             End If
 
             MyBase.OnAction(action)
         End Sub
 
-        Protected Overrides Sub OnClicked(ByVal controlId As Integer, _
-                                  ByVal control As GUIControl, _
-                                  ByVal actionType As  _
+        Protected Overrides Sub OnClicked(ByVal controlId As Integer,
+                                  ByVal control As GUIControl,
+                                  ByVal actionType As _
                                   MediaPortal.GUI.Library.Action.ActionType)
 
             MyBase.OnClicked(controlId, control, actionType)
@@ -700,6 +695,42 @@ Namespace ClickfinderSimpleGuide
                 If actionType = MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM Then
                     Action_SelectItem()
                 End If
+            End If
+            If control Is _buttonControlView1 Then
+                SendKeys.Send("1")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView2 Then
+                SendKeys.Send("2")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView3 Then
+                SendKeys.Send("3")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView4 Then
+                SendKeys.Send("4")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView5 Then
+                SendKeys.Send("5")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView6 Then
+                SendKeys.Send("6")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView7 Then
+                SendKeys.Send("7")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView8 Then
+                SendKeys.Send("8")
+                m_HiddenMenuOpen = False
+            End If
+            If control Is _buttonControlView0 Then
+                SendKeys.Send("0")
+                m_HiddenMenuOpen = False
             End If
 
         End Sub
@@ -710,13 +741,10 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Protected Overrides Sub OnPreviousWindow()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-            MyLog.Debug(String.Format("[{0}] [{1}]: Setting OnPreviousWindow", _mClass, _mName))
-
+            MyLog.Debug("[CSGuideWindow] [OnPreviousWindow]")
             MyBase.OnPreviousWindow()
-            '_LastFocusedIndex = 0
-            '_LastFocusedControlID = _niceEPGList.GetID
+            _LastFocusedIndex = 0
+            _LastFocusedControlID = _niceEPGList.GetID
         End Sub
 #End Region
 
@@ -725,8 +753,8 @@ Namespace ClickfinderSimpleGuide
         Friend Shared Function GetSqlGroupFilterString(ByVal TvGroupFilter As String) As String
             '#CPGFilter vorbereiten
             Dim _groupFilter As New StringBuilder(
-                "(SELECT groupmap.idgroup FROM mptvdb.groupmap Inner " & _
-                "join mptvdb.channelgroup ON groupmap.idgroup = channelgroup.idGroup " & _
+                "(SELECT groupmap.idgroup FROM mptvdb.groupmap Inner " &
+                "join mptvdb.channelgroup ON groupmap.idgroup = channelgroup.idGroup " &
                 "WHERE groupmap.idchannel = program.idchannel and channelgroup.groupName = '#FilterTvGroup')")
             'TvGroup Filter setzen
             _groupFilter.Replace("#FilterTvGroup", TvGroupFilter)
@@ -778,7 +806,6 @@ Namespace ClickfinderSimpleGuide
 
             If myTVMovieProgram IsNot Nothing Then
                 'SetProperty("#DetailDescription", getAdaptedDescription(myTVMovieProgram.ReferencedProgram.Description))
-                SetProperty("#TMDbFanArt", getFanartFileName(myTVMovieProgram))
                 SetProperty("#DetailDescription", myTVMovieProgram.ReferencedProgram.Description)
                 SetProperty("#DetailImage", CSGuideHelper.Image(myTVMovieProgram))
                 SetProperty("#DetailTitle", myTVMovieProgram.ReferencedProgram.Title)
@@ -842,64 +869,6 @@ Namespace ClickfinderSimpleGuide
                 SetProperty("#DetailRatingEmotions", "0")
                 SetProperty("#SelectedProgramDates", "")
                 SetProperty("#ChannelName", "Nichts gefunden")
-            End If
-        End Sub
-        Private Function getFanartFileName(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-            Dim _defaultBackgroundImage As String = "hover_ClickfinderSimpleGuide.png"
-            ' New in this version
-            Try
-                'MyLog.Debug(String.Format("[{0}] [{1}]: fetching TMDb URLs for {3}", _mClass, _mName, myTVMovieProgram.ReferencedProgram.Title.ToString()))
-                Dim results As SearchContainer(Of SearchMovie) =
-                    m_tmdbClient.SearchMovieAsync(myTVMovieProgram.ReferencedProgram.Title, 0, False, myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year).Result
-                If results IsNot Nothing AndAlso results.Results.Count <> 0 Then
-                    Dim result As SearchMovie = results.Results.First()
-                    If Not String.IsNullOrEmpty(result.BackdropPath) Then
-                        Dim _fanArtURL = m_tmdbClient.GetImageUrl("original", result.BackdropPath).ToString()
-                        Dim _rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
-                        Dim _imageFilename As String = _rgx.Match(_fanArtURL).Groups(1).Value
-                        If String.IsNullOrEmpty(_imageFilename) Then
-                            Return _defaultBackgroundImage
-                        End If
-                        Dim _absImagePath As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Fanart\"), _imageFilename)
-                        Dim _imagePath As String = Path.Combine("CSG\Fanart\", _imageFilename)
-
-                        Utils.DownLoadAndCacheImage(_fanArtURL, _absImagePath)
-                        Return _imagePath
-                    Else
-                        Return _defaultBackgroundImage
-                    End If
-                End If
-                Return _defaultBackgroundImage
-            Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                Return _defaultBackgroundImage
-            End Try
-        End Function
-        Private Function getFanartFileNameAbsPath(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\" & getFanartFileName(myTVMovieProgram)))
-        End Function
-        Private Shared Sub FetchConfig(client As TMDbClient)
-            Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
-
-            Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
-
-            If configXml.Exists AndAlso configXml.LastWriteTimeUtc >= DateTime.UtcNow.AddHours(-1) Then
-                Console.WriteLine("Using stored config")
-                Dim xml As String = File.ReadAllText(configXml.FullName, Encoding.Unicode)
-
-                Dim xmlDoc As New XmlDocument()
-                xmlDoc.LoadXml(xml)
-
-                client.SetConfig(Serializer.Deserialize(Of TMDbConfig)(xmlDoc))
-            Else
-                Console.WriteLine("Getting new config")
-                client.GetConfig()
-
-                Console.WriteLine("Storing config")
-                Dim xmlDoc As XmlDocument = Serializer.Serialize(client.Config)
-                File.WriteAllText(configXml.FullName, xmlDoc.OuterXml, Encoding.Unicode)
             End If
         End Sub
         Private Function getAdaptedDescription(ByVal programDescription As String) As String
@@ -1194,7 +1163,20 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
 #End Region
+#Region "Hidden Menu"
 
+        Private Sub InitButtons()
+            _buttonControlView1.Label = "(1): " & CSGuideSettings.View(1).DisplayName
+            _buttonControlView2.Label = "(2): " & CSGuideSettings.View(2).DisplayName
+            _buttonControlView3.Label = "(3): " & CSGuideSettings.View(3).DisplayName
+            _buttonControlView4.Label = "(4): " & CSGuideSettings.View(4).DisplayName
+            _buttonControlView5.Label = "(5): " & CSGuideSettings.View(5).DisplayName
+            _buttonControlView6.Label = "(6): " & CSGuideSettings.View(6).DisplayName
+            _buttonControlView7.Label = "(7): " & CSGuideSettings.View(7).DisplayName
+            _buttonControlView8.Label = "(8): " & CSGuideSettings.View(8).DisplayName
+            _buttonControlView0.Label = "(0): " & CSGuideSettings.View(0).DisplayName
+        End Sub
+#End Region
 #Region "MediaPortal Funktionen / Dialogs"
         Private Sub ShowItemsContextMenu(ByVal idProgram As Integer)
             MyLog.Info("")
@@ -1409,6 +1391,14 @@ Namespace ClickfinderSimpleGuide
             _ProgressBarThread.Start()
 
             SetProperty("#CurrentPageLabel", "Lade")
+
+            ' set to something - the skin only checks whether filled or not
+            If CSGuideSettings.HiddenMenuMode Then
+                SetProperty("#ShowHiddenMenu", "Show")
+            Else
+                SetProperty("#ShowHiddenMenu", "")
+            End If
+
 
         End Sub
 

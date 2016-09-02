@@ -11,6 +11,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_startView As Integer
         Private Shared m_view(9) As CSGuideView
         Private Shared m_debugMode As Boolean
+        Private Shared m_hiddenMenuMode As Boolean
         Private Shared m_clickfinderImagePath As String
         Private Shared m_TvMovieImportStatus As String
         Private Shared _layer As New TvBusinessLayer
@@ -75,6 +76,14 @@ Namespace ClickfinderSimpleGuide
                 m_clickfinderImagePath = value
             End Set
         End Property
+        Friend Shared Property HiddenMenuMode() As Boolean
+            Get
+                Return m_hiddenMenuMode
+            End Get
+            Set(ByVal value As Boolean)
+                m_hiddenMenuMode = value
+            End Set
+        End Property
         Friend Shared Property DebugMode() As Boolean
             Get
                 Return m_debugMode
@@ -132,6 +141,7 @@ Namespace ClickfinderSimpleGuide
                 Dim _mySettings As New Settings(_path)
                 m_startView = _mySettings.GetValueAsInt("General", "StartView", "0")
                 m_debugMode = _mySettings.GetValueAsBool("General", "DebugMode", True)
+                m_hiddenMenuMode = _mySettings.GetValueAsBool("General", "HiddenMenuMode", False)
                 m_clickfinderImagePath = _mySettings.GetValueAsString("General", "ClickfinderImagePath", "")
 
                 For i = 0 To 8
@@ -161,6 +171,7 @@ Namespace ClickfinderSimpleGuide
                 Dim _mySettings As New Settings(_path)
                 _mySettings.SetValue("General", "StartView", m_startView)
                 _mySettings.SetValueAsBool("General", "DebugMode", m_debugMode)
+                _mySettings.SetValueAsBool("General", "HiddenMenuMode", m_hiddenMenuMode)
                 _mySettings.SetValue("General", "ClickfinderImagePath", m_clickfinderImagePath)
 
                 For i = 0 To 8
@@ -192,6 +203,7 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}] ------------------------", _mClass, _mName))
             MyLog.Debug(String.Format("[{0}] [{1}] StartView = {2}", _mClass, _mName, m_startView))
             MyLog.Debug(String.Format("[{0}] [{1}] DebugMode = {2}", _mClass, _mName, m_debugMode))
+            MyLog.Debug(String.Format("[{0}] [{1}] HiddenMenuMode = {2}", _mClass, _mName, m_hiddenMenuMode))
             MyLog.Debug(String.Format("[{0}] [{1}] ------------------------", _mClass, _mName))
             For i = 0 To 8
                 MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "Name = {2}", _mClass, _mName, m_view(i).Name))
@@ -234,6 +246,7 @@ Namespace ClickfinderSimpleGuide
 
             m_startView = 1
             m_debugMode = False
+            m_hiddenMenuMode = False
             m_clickfinderImagePath = Path.GetDirectoryName(m_clickfinderPath) & "\Hyperlinks"
 
             _view = New CSGuideView(

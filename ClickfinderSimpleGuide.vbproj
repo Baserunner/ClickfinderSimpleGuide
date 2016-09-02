@@ -131,9 +131,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigIcons\CSG_Setup.png" />
-    <EmbeddedResource Include="ConfigIcons\CSG_Setup_Disabled.png" />
     <Content Include="Help\CSGuide_Help.txt" />
+    <EmbeddedResource Include="Icon\CSG_Setup.png" />
+    <EmbeddedResource Include="Icon\CSG_Setup_Disabled.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
