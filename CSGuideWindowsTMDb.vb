@@ -92,7 +92,9 @@ Namespace ClickfinderSimpleGuide
 
 
         Protected Overrides Sub OnPreviousWindow()
-            MyLog.Debug("[NiceEPGGuiWindow] [OnPreviousWindow]")
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+            MyLog.Debug(String.Format("[{0}] [{1}]: Calling myBase.OnPreviousWindow", _mClass, _mName))
             MyBase.OnPreviousWindow()
         End Sub
 #End Region

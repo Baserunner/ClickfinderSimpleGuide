@@ -29,7 +29,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.91 beta"
+                Return "0.91 tmdb"
             End Get
         End Property
 #End Region

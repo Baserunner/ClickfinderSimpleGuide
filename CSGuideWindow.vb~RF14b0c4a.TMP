@@ -139,7 +139,7 @@ Namespace ClickfinderSimpleGuide
             GuiLayoutLoading()
 
             _LastFocusedControlID = _niceEPGList.GetID
-            ' _ItemsCache.Clear()
+            _ItemsCache.Clear()
             AbortRunningThreads()
 
             If _ItemsCache.Count = 0 Then
@@ -669,16 +669,9 @@ Namespace ClickfinderSimpleGuide
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 113 Then
-                            Try
-                                If _niceEPGList.IsFocused = True Then
-                                    m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
-                                    m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
-                                    CSGuideWindowsTMDb.Filename = getFanartFileNameAbsPath(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                    GUIWindowManager.ActivateWindow(730352, False)
-                                End If
-                            Catch ex As Exception
-                                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                            End Try
+                            RememberLastFocusedItem()
+                            CSGuideWindowsTMDb.Filename = getFanartFileNameAbsPath(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                            GUIWindowManager.ActivateWindow(730352, False)
                         End If
                     End If
                 End If
@@ -715,8 +708,8 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}]: Setting OnPreviousWindow", _mClass, _mName))
 
             MyBase.OnPreviousWindow()
-            '_LastFocusedIndex = 0
-            '_LastFocusedControlID = _niceEPGList.GetID
+            _LastFocusedIndex = 0
+            _LastFocusedControlID = _niceEPGList.GetID
         End Sub
 #End Region
 
