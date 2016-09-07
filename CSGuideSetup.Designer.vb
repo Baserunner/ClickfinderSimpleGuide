@@ -24,12 +24,13 @@ Partial Class CSGuideSetup
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CSGuideSetup))
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button_Save = New System.Windows.Forms.Button()
         Me.Gen_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Gen_ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.Gen_CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Gen_Label1A = New System.Windows.Forms.Label()
         Me.Gen_Label4A = New System.Windows.Forms.Label()
@@ -176,7 +177,16 @@ Partial Class CSGuideSetup
         Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ErrorProvider2 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Gen_CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Gen_TextBox3 = New System.Windows.Forms.TextBox()
+        Me.V5_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V8_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V7_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V6_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V4_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V3_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V2_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.V1_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage10.SuspendLayout()
@@ -192,14 +202,14 @@ Partial Class CSGuideSetup
         CType(Me.ErrorProvider2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Button1
+        'Button_Save
         '
-        Me.Button1.Location = New System.Drawing.Point(16, 406)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(153, 23)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Save"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button_Save.Location = New System.Drawing.Point(16, 406)
+        Me.Button_Save.Name = "Button_Save"
+        Me.Button_Save.Size = New System.Drawing.Size(153, 23)
+        Me.Button_Save.TabIndex = 0
+        Me.Button_Save.Text = "Save"
+        Me.Button_Save.UseVisualStyleBackColor = True
         '
         'Gen_CheckBox1
         '
@@ -214,7 +224,7 @@ Partial Class CSGuideSetup
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(17, 188)
+        Me.Label3.Location = New System.Drawing.Point(17, 148)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(55, 13)
         Me.Label3.TabIndex = 4
@@ -224,7 +234,7 @@ Partial Class CSGuideSetup
         '
         Me.Gen_ComboBox1.FormattingEnabled = True
         Me.Gen_ComboBox1.Items.AddRange(New Object() {"View 1", "View 2", "View 3", "View 4", "View 5", "View 6", "View 7", "View 8"})
-        Me.Gen_ComboBox1.Location = New System.Drawing.Point(163, 180)
+        Me.Gen_ComboBox1.Location = New System.Drawing.Point(163, 140)
         Me.Gen_ComboBox1.Name = "Gen_ComboBox1"
         Me.Gen_ComboBox1.Size = New System.Drawing.Size(99, 21)
         Me.Gen_ComboBox1.TabIndex = 6
@@ -249,6 +259,8 @@ Partial Class CSGuideSetup
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Gen_TextBox3)
+        Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.Gen_CheckBox2)
         Me.TabPage1.Controls.Add(Me.LinkLabel1)
         Me.TabPage1.Controls.Add(Me.Gen_Label1A)
@@ -276,6 +288,16 @@ Partial Class CSGuideSetup
         Me.TabPage1.Text = "General"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'Gen_CheckBox2
+        '
+        Me.Gen_CheckBox2.AutoSize = True
+        Me.Gen_CheckBox2.Location = New System.Drawing.Point(17, 276)
+        Me.Gen_CheckBox2.Name = "Gen_CheckBox2"
+        Me.Gen_CheckBox2.Size = New System.Drawing.Size(120, 17)
+        Me.Gen_CheckBox2.TabIndex = 22
+        Me.Gen_CheckBox2.Text = "Show Hidden Menu"
+        Me.Gen_CheckBox2.UseVisualStyleBackColor = True
+        '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
@@ -299,7 +321,7 @@ Partial Class CSGuideSetup
         'Gen_Label4A
         '
         Me.Gen_Label4A.AutoSize = True
-        Me.Gen_Label4A.Location = New System.Drawing.Point(160, 143)
+        Me.Gen_Label4A.Location = New System.Drawing.Point(160, 103)
         Me.Gen_Label4A.Name = "Gen_Label4A"
         Me.Gen_Label4A.Size = New System.Drawing.Size(65, 13)
         Me.Gen_Label4A.TabIndex = 19
@@ -308,7 +330,7 @@ Partial Class CSGuideSetup
         'Gen_Label3A
         '
         Me.Gen_Label3A.AutoSize = True
-        Me.Gen_Label3A.Location = New System.Drawing.Point(160, 97)
+        Me.Gen_Label3A.Location = New System.Drawing.Point(160, 57)
         Me.Gen_Label3A.Name = "Gen_Label3A"
         Me.Gen_Label3A.Size = New System.Drawing.Size(46, 13)
         Me.Gen_Label3A.TabIndex = 18
@@ -317,7 +339,7 @@ Partial Class CSGuideSetup
         'Gen_Label2A
         '
         Me.Gen_Label2A.AutoSize = True
-        Me.Gen_Label2A.Location = New System.Drawing.Point(160, 120)
+        Me.Gen_Label2A.Location = New System.Drawing.Point(160, 80)
         Me.Gen_Label2A.Name = "Gen_Label2A"
         Me.Gen_Label2A.Size = New System.Drawing.Size(42, 13)
         Me.Gen_Label2A.TabIndex = 17
@@ -325,7 +347,7 @@ Partial Class CSGuideSetup
         '
         'Gen_Button2
         '
-        Me.Gen_Button2.Location = New System.Drawing.Point(390, 240)
+        Me.Gen_Button2.Location = New System.Drawing.Point(390, 200)
         Me.Gen_Button2.Name = "Gen_Button2"
         Me.Gen_Button2.Size = New System.Drawing.Size(75, 23)
         Me.Gen_Button2.TabIndex = 16
@@ -334,7 +356,7 @@ Partial Class CSGuideSetup
         '
         'Gen_TextBox2
         '
-        Me.Gen_TextBox2.Location = New System.Drawing.Point(163, 240)
+        Me.Gen_TextBox2.Location = New System.Drawing.Point(163, 200)
         Me.Gen_TextBox2.Name = "Gen_TextBox2"
         Me.Gen_TextBox2.Size = New System.Drawing.Size(223, 20)
         Me.Gen_TextBox2.TabIndex = 15
@@ -342,7 +364,7 @@ Partial Class CSGuideSetup
         'Label58
         '
         Me.Label58.AutoSize = True
-        Me.Label58.Location = New System.Drawing.Point(17, 243)
+        Me.Label58.Location = New System.Drawing.Point(17, 205)
         Me.Label58.Name = "Label58"
         Me.Label58.Size = New System.Drawing.Size(136, 13)
         Me.Label58.TabIndex = 14
@@ -352,7 +374,7 @@ Partial Class CSGuideSetup
         '
         Me.Gen_Label4.AutoSize = True
         Me.Gen_Label4.ForeColor = System.Drawing.Color.Black
-        Me.Gen_Label4.Location = New System.Drawing.Point(17, 143)
+        Me.Gen_Label4.Location = New System.Drawing.Point(17, 103)
         Me.Gen_Label4.Name = "Gen_Label4"
         Me.Gen_Label4.Size = New System.Drawing.Size(109, 13)
         Me.Gen_Label4.TabIndex = 13
@@ -362,7 +384,7 @@ Partial Class CSGuideSetup
         '
         Me.Gen_Label3.AutoSize = True
         Me.Gen_Label3.ForeColor = System.Drawing.Color.Black
-        Me.Gen_Label3.Location = New System.Drawing.Point(17, 97)
+        Me.Gen_Label3.Location = New System.Drawing.Point(17, 57)
         Me.Gen_Label3.Name = "Gen_Label3"
         Me.Gen_Label3.Size = New System.Drawing.Size(95, 13)
         Me.Gen_Label3.TabIndex = 12
@@ -372,7 +394,7 @@ Partial Class CSGuideSetup
         '
         Me.Gen_Label2.AutoSize = True
         Me.Gen_Label2.ForeColor = System.Drawing.Color.Black
-        Me.Gen_Label2.Location = New System.Drawing.Point(17, 120)
+        Me.Gen_Label2.Location = New System.Drawing.Point(17, 80)
         Me.Gen_Label2.Name = "Gen_Label2"
         Me.Gen_Label2.Size = New System.Drawing.Size(88, 13)
         Me.Gen_Label2.TabIndex = 11
@@ -380,7 +402,7 @@ Partial Class CSGuideSetup
         '
         'Gen_Button1
         '
-        Me.Gen_Button1.Location = New System.Drawing.Point(390, 209)
+        Me.Gen_Button1.Location = New System.Drawing.Point(390, 169)
         Me.Gen_Button1.Name = "Gen_Button1"
         Me.Gen_Button1.Size = New System.Drawing.Size(75, 23)
         Me.Gen_Button1.TabIndex = 10
@@ -390,7 +412,7 @@ Partial Class CSGuideSetup
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(17, 215)
+        Me.Label2.Location = New System.Drawing.Point(17, 175)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(113, 13)
         Me.Label2.TabIndex = 9
@@ -398,7 +420,7 @@ Partial Class CSGuideSetup
         '
         'Gen_TextBox1
         '
-        Me.Gen_TextBox1.Location = New System.Drawing.Point(163, 211)
+        Me.Gen_TextBox1.Location = New System.Drawing.Point(163, 171)
         Me.Gen_TextBox1.Name = "Gen_TextBox1"
         Me.Gen_TextBox1.Size = New System.Drawing.Size(223, 20)
         Me.Gen_TextBox1.TabIndex = 8
@@ -542,6 +564,7 @@ Partial Class CSGuideSetup
         '
         'TabPage2
         '
+        Me.TabPage2.Controls.Add(Me.V1_CheckBox1)
         Me.TabPage2.Controls.Add(Me.V1_Button1)
         Me.TabPage2.Controls.Add(Me.Label11)
         Me.TabPage2.Controls.Add(Me.Label12)
@@ -677,6 +700,7 @@ Partial Class CSGuideSetup
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.V2_CheckBox1)
         Me.TabPage3.Controls.Add(Me.V2_Button1)
         Me.TabPage3.Controls.Add(Me.Label10)
         Me.TabPage3.Controls.Add(Me.Label17)
@@ -811,6 +835,7 @@ Partial Class CSGuideSetup
         '
         'TabPage4
         '
+        Me.TabPage4.Controls.Add(Me.V3_CheckBox1)
         Me.TabPage4.Controls.Add(Me.V3_Button1)
         Me.TabPage4.Controls.Add(Me.Label22)
         Me.TabPage4.Controls.Add(Me.Label23)
@@ -945,6 +970,7 @@ Partial Class CSGuideSetup
         '
         'TabPage5
         '
+        Me.TabPage5.Controls.Add(Me.V4_CheckBox1)
         Me.TabPage5.Controls.Add(Me.V4_Button1)
         Me.TabPage5.Controls.Add(Me.Label28)
         Me.TabPage5.Controls.Add(Me.Label29)
@@ -1079,6 +1105,7 @@ Partial Class CSGuideSetup
         '
         'TabPage6
         '
+        Me.TabPage6.Controls.Add(Me.V5_CheckBox1)
         Me.TabPage6.Controls.Add(Me.V5_Button1)
         Me.TabPage6.Controls.Add(Me.Label34)
         Me.TabPage6.Controls.Add(Me.V5_TextBox4)
@@ -1213,6 +1240,7 @@ Partial Class CSGuideSetup
         '
         'TabPage7
         '
+        Me.TabPage7.Controls.Add(Me.V6_CheckBox1)
         Me.TabPage7.Controls.Add(Me.V6_Button1)
         Me.TabPage7.Controls.Add(Me.Label40)
         Me.TabPage7.Controls.Add(Me.Label41)
@@ -1347,6 +1375,7 @@ Partial Class CSGuideSetup
         '
         'TabPage8
         '
+        Me.TabPage8.Controls.Add(Me.V7_CheckBox1)
         Me.TabPage8.Controls.Add(Me.V7_Button1)
         Me.TabPage8.Controls.Add(Me.Label46)
         Me.TabPage8.Controls.Add(Me.V7_TextBox4)
@@ -1481,6 +1510,7 @@ Partial Class CSGuideSetup
         '
         'TabPage9
         '
+        Me.TabPage9.Controls.Add(Me.V8_CheckBox1)
         Me.TabPage9.Controls.Add(Me.V8_Button1)
         Me.TabPage9.Controls.Add(Me.Label52)
         Me.TabPage9.Controls.Add(Me.Label53)
@@ -1643,15 +1673,101 @@ Partial Class CSGuideSetup
         '
         Me.ErrorProvider2.ContainerControl = Me
         '
-        'Gen_CheckBox2
+        'Label1
         '
-        Me.Gen_CheckBox2.AutoSize = True
-        Me.Gen_CheckBox2.Location = New System.Drawing.Point(17, 276)
-        Me.Gen_CheckBox2.Name = "Gen_CheckBox2"
-        Me.Gen_CheckBox2.Size = New System.Drawing.Size(120, 17)
-        Me.Gen_CheckBox2.TabIndex = 22
-        Me.Gen_CheckBox2.Text = "Show Hidden Menu"
-        Me.Gen_CheckBox2.UseVisualStyleBackColor = True
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(17, 232)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(78, 13)
+        Me.Label1.TabIndex = 23
+        Me.Label1.Text = "TMDb API Key"
+        '
+        'Gen_TextBox3
+        '
+        Me.Gen_TextBox3.Location = New System.Drawing.Point(163, 229)
+        Me.Gen_TextBox3.Name = "Gen_TextBox3"
+        Me.Gen_TextBox3.Size = New System.Drawing.Size(223, 20)
+        Me.Gen_TextBox3.TabIndex = 24
+        '
+        'V5_CheckBox1
+        '
+        Me.V5_CheckBox1.AutoSize = True
+        Me.V5_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V5_CheckBox1.Name = "V5_CheckBox1"
+        Me.V5_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V5_CheckBox1.TabIndex = 41
+        Me.V5_CheckBox1.Text = "Use TMDb"
+        Me.V5_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V8_CheckBox1
+        '
+        Me.V8_CheckBox1.AutoSize = True
+        Me.V8_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V8_CheckBox1.Name = "V8_CheckBox1"
+        Me.V8_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V8_CheckBox1.TabIndex = 42
+        Me.V8_CheckBox1.Text = "Use TMDb"
+        Me.V8_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V7_CheckBox1
+        '
+        Me.V7_CheckBox1.AutoSize = True
+        Me.V7_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V7_CheckBox1.Name = "V7_CheckBox1"
+        Me.V7_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V7_CheckBox1.TabIndex = 42
+        Me.V7_CheckBox1.Text = "Use TMDb"
+        Me.V7_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V6_CheckBox1
+        '
+        Me.V6_CheckBox1.AutoSize = True
+        Me.V6_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V6_CheckBox1.Name = "V6_CheckBox1"
+        Me.V6_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V6_CheckBox1.TabIndex = 42
+        Me.V6_CheckBox1.Text = "Use TMDb"
+        Me.V6_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V4_CheckBox1
+        '
+        Me.V4_CheckBox1.AutoSize = True
+        Me.V4_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V4_CheckBox1.Name = "V4_CheckBox1"
+        Me.V4_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V4_CheckBox1.TabIndex = 42
+        Me.V4_CheckBox1.Text = "Use TMDb"
+        Me.V4_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V3_CheckBox1
+        '
+        Me.V3_CheckBox1.AutoSize = True
+        Me.V3_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V3_CheckBox1.Name = "V3_CheckBox1"
+        Me.V3_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V3_CheckBox1.TabIndex = 42
+        Me.V3_CheckBox1.Text = "Use TMDb"
+        Me.V3_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V2_CheckBox1
+        '
+        Me.V2_CheckBox1.AutoSize = True
+        Me.V2_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V2_CheckBox1.Name = "V2_CheckBox1"
+        Me.V2_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V2_CheckBox1.TabIndex = 42
+        Me.V2_CheckBox1.Text = "Use TMDb"
+        Me.V2_CheckBox1.UseVisualStyleBackColor = True
+        '
+        'V1_CheckBox1
+        '
+        Me.V1_CheckBox1.AutoSize = True
+        Me.V1_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V1_CheckBox1.Name = "V1_CheckBox1"
+        Me.V1_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V1_CheckBox1.TabIndex = 42
+        Me.V1_CheckBox1.Text = "Use TMDb"
+        Me.V1_CheckBox1.UseVisualStyleBackColor = True
         '
         'CSGuideSetup
         '
@@ -1661,7 +1777,7 @@ Partial Class CSGuideSetup
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.TabControl1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Button_Save)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CSGuideSetup"
         Me.Text = "Clickfinder Simple Guide Setup"
@@ -1691,7 +1807,7 @@ Partial Class CSGuideSetup
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Button_Save As System.Windows.Forms.Button
     Friend WithEvents Gen_CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Gen_ComboBox1 As System.Windows.Forms.ComboBox
@@ -1844,4 +1960,14 @@ Partial Class CSGuideSetup
     Friend WithEvents V8_Button1 As System.Windows.Forms.Button
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Gen_CheckBox2 As Windows.Forms.CheckBox
+    Friend WithEvents Gen_TextBox3 As Windows.Forms.TextBox
+    Friend WithEvents Label1 As Windows.Forms.Label
+    Friend WithEvents V5_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V1_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V2_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V3_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V4_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V6_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V7_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents V8_CheckBox1 As Windows.Forms.CheckBox
 End Class

@@ -17,6 +17,16 @@ Namespace ClickfinderSimpleGuide
         Private m_viewDisplayName As String
         Private m_viewStartTime As String
         Private m_viewStartTimeOffSet As String
+        Private m_useTMDb As Boolean
+
+        Public Property UseTMDb() As Boolean
+            Get
+                Return m_useTMDb
+            End Get
+            Set(ByVal value As Boolean)
+                m_useTMDb = value
+            End Set
+        End Property
 
         Public Property OffSetMinute() As String
             Get
@@ -63,7 +73,9 @@ Namespace ClickfinderSimpleGuide
                     ByVal myStartTime As String,
                     ByVal myTvGroup As String,
                     ByVal myDisplayName As String,
-                    ByVal myStartTimeOffSet As String)
+                    ByVal myStartTimeOffSet As String,
+                    ByVal myUseTMDb As Boolean
+                       )
 
             m_viewName = myName
             m_viewType = myType
@@ -72,6 +84,7 @@ Namespace ClickfinderSimpleGuide
             m_viewTvGroup = myTvGroup
             m_viewDisplayName = myDisplayName
             m_viewStartTimeOffSet = myStartTimeOffSet
+            m_useTMDb = myUseTMDb
 
         End Sub
 

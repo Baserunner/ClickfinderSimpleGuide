@@ -1,9 +1,11 @@
 diff a/CSGuideWindow.vb b/CSGuideWindow.vb	(rejected hunks)
-@@ -13,7 +13,6 @@
- Imports TvDatabase.TvBusinessLayer
- Imports MediaPortal.GUI.Video
- Imports MediaPortal.Core
--Imports MediaPortal.Util
- ' for Movie Info End
- Imports System.Windows.Forms
+@@ -867,6 +867,9 @@
+                 Return _defaultBackgroundImage
+             End Try
+         End Function
++        Private Function getFanartFileNameAbsPath(ByVal myTVMovieProgram As TVMovieProgram) As String
++            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\" & getFanartFileName(myTVMovieProgram)))
++        End Function
+         Private Shared Sub FetchConfig(client As TMDbClient)
+             Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
  

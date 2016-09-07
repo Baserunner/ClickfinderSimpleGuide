@@ -3,22 +3,11 @@ Imports TvDatabase
 Imports TvPlugin
 Imports MediaPortal.Dialogs
 Imports MediaPortal.GUI.Library.GUIWindow
-Imports ClickfinderSimpleGuide.ClickfinderSimpleGuide
-Imports System.Drawing
-Imports Gentle.Framework
-Imports Gentle.Common
+
 Imports MediaPortal.Configuration
 Imports MediaPortal.Player
-Imports MediaPortal.Playlists
-Imports MediaPortal.TagReader
-Imports System.Threading
-Imports System.Globalization
-
-Imports enrichEPG
-Imports SQLite.NET
-Imports MediaPortal.Database
+Imports System.Text.RegularExpressions
 Imports enrichEPG.TvDatabase
-Imports enrichEPG.Database
 
 Namespace ClickfinderSimpleGuide
     Public Class CSGuideHelper
@@ -29,7 +18,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.91 tmdb"
+                Return "0.92 TMDb"
             End Get
         End Property
 #End Region
@@ -205,7 +194,35 @@ Namespace ClickfinderSimpleGuide
             End Try
         End Function
 
+        Friend Shared Function GetYearString(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = GetType.ToString
+            Dim _yearString As String = String.Empty
+            Try
+                If Not myTVMovieProgram.ReferencedProgram.OriginalAirDate < New Date(1900, 1, 1) Then
+                    If Not myTVMovieProgram.Country Is Nothing Then
+                        If Not myTVMovieProgram.Country.Equals("") Then
+                            _yearString = " (" & myTVMovieProgram.Country & " " & myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year & ")"
+                        End If
+                    End If
+                Else
+                    Dim _description = myTVMovieProgram.ReferencedProgram.Description
+                    If _description.Length > 100 Then
+                        Dim _pattern As String = ".*?Aus:\s+(?<year_string>.*?\s\d\d\d\d)"
+                        Dim _match = Regex.Match(_description.Substring(0, 100), _pattern)
+                        If _match.Success Then
+                            _yearString = " (" & _match.Groups("year_string").Value & ")"
+                        End If
+                    End If
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[CSGuideHelper] [{0}]: Err: {1} stack: {2}", _mName, ex.Message, ex.StackTrace))
 
+            End Try
+
+            Return _yearString
+
+        End Function
 
         Friend Shared Sub Notify(ByVal message As String, Optional ByVal image As String = "")
             Try
@@ -228,6 +245,20 @@ Namespace ClickfinderSimpleGuide
             Catch ex As Exception
                 MyLog.Error("[Helper]: [Notify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
+        End Sub
+        Public Shared Sub LoadFanart(backdrop As ImageSwapper, filename As String)
+            ' Activate Backdrop in Image Swapper
+            If Not backdrop.Active Then
+                backdrop.Active = True
+            End If
+
+            If String.IsNullOrEmpty(filename) OrElse Not System.IO.File.Exists(filename) Then
+                filename = String.Empty
+            End If
+
+            ' Assign Fanart filename to Image Loader
+            ' Will display fanart in backdrop or reset to default background
+            backdrop.Filename = filename
         End Sub
 
         Friend Shared ReadOnly Property ratingStar(ByVal Program As Program) As Integer
@@ -265,6 +296,20 @@ Namespace ClickfinderSimpleGuide
                                             )
             End Get
         End Property
+        Friend Shared Sub SetProperty(ByVal [property] As String, ByVal value As String)
+            If [property] Is Nothing Then
+                Return
+            End If
+
+            'If the value is empty always add a space
+            'otherwise the property will keep 
+            'displaying it's previous value
+            If [String].IsNullOrEmpty(value) Then
+                value = " "
+            End If
+
+            GUIPropertyManager.SetProperty([property], value)
+        End Sub
 
         Friend Shared ReadOnly Property Image(ByVal TvMovieProgram As TVMovieProgram) As String
             Get

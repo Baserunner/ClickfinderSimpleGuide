@@ -1,7 +1,7 @@
 ﻿Imports MediaPortal.GUI.Library
 Imports TvDatabase
 Imports Gentle.Framework
-Imports enrichEPG.TvDatabase
+
 Imports MediaPortal.Configuration
 Imports MediaPortal.Dialogs
 Imports System.Threading
@@ -10,12 +10,19 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 ' for Movie Info Start
 Imports MediaPortal.Video.Database
+Imports MediaPortal.Util
+Imports enrichEPG.TvDatabase
 Imports TvDatabase.TvBusinessLayer
 Imports MediaPortal.GUI.Video
-Imports MediaPortal.Core
-Imports MediaPortal.Util
 ' for Movie Info End
 Imports System.Windows.Forms
+Imports System.IO
+' for TMDB Search
+Imports TMDbLib.Client
+Imports TMDbLib.Objects.General
+Imports System.Xml
+Imports System.Diagnostics
+
 
 
 Namespace ClickfinderSimpleGuide
@@ -37,6 +44,8 @@ Namespace ClickfinderSimpleGuide
         <SkinControlAttribute(97)> Protected _buttonControlView7 As GUIButtonControl = Nothing
         <SkinControlAttribute(98)> Protected _buttonControlView8 As GUIButtonControl = Nothing
         <SkinControlAttribute(100)> Protected _buttonControlView0 As GUIButtonControl = Nothing
+        <SkinControlAttribute(60)> Protected FanartBackground As GUIImage = Nothing
+        <SkinControlAttribute(61)> Protected FanartBackground2 As GUIImage = Nothing
 
 
 #End Region
@@ -45,11 +54,14 @@ Namespace ClickfinderSimpleGuide
 #Region "Members"
 
         Friend Shared _ItemsCache As New List(Of TVMovieProgram)
+        Private Shared _TMDbCache As New Dictionary(Of String, CSGuideTMDBCacheItem3)
+        Private _cacheHander As CSGUideCacheHandler
         Friend Shared _CurrentCounter As Integer = 0
         Private _ThreadLoadItemsFromDatabase As Threading.Thread
         Private _ThreadNiceEPGList As Threading.Thread
+        Private _ThreadBuildTMDb As Threading.Thread
 
-        Private _LastFocusedIndex As Integer
+        Private _LastFocusedIndex As Integer = 0
         Private _LastFocusedControlID As Integer
         Private Shared _SelectedNiceEPGItemId As Integer
 
@@ -64,8 +76,8 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_EndTime As Date = Nothing
         Private Shared m_MinRuntime As Integer = 0
         Private Shared m_TvGroupFilter As String = String.Empty
-        Private Shared m_RemoveLocalMovies As Boolean
-        Private Shared m_RemoveLocalSeries As Boolean
+        'Private Shared m_RemoveLocalMovies As Boolean
+        'Private Shared m_RemoveLocalSeries As Boolean
         Private Shared m_channelNumber As Integer = 1
         Private Shared m_viewDisplayName As String = String.Empty
         Private Shared m_viewType As String = String.Empty
@@ -77,6 +89,12 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_actualViewNumber As Integer
         Private Shared m_previousViewNumber As Integer
         Private Shared m_HiddenMenuOpen As Boolean = False
+        Private Shared m_TMDbIsPossible As Boolean = False
+        Private Shared m_UseTMDb As Boolean = False
+        Private Shared m_tmdbClient As TMDbClient
+
+        Private Shared m_backdrop As ImageSwapper
+
 
 #End Region
 
@@ -98,6 +116,7 @@ Namespace ClickfinderSimpleGuide
             m_viewDisplayName = CSGuideSettings.View(i).DisplayName
             m_previousViewNumber = m_actualViewNumber
             m_actualViewNumber = i
+            m_UseTMDb = CSGuideSettings.View(i).UseTMDb
 
         End Sub
 
@@ -123,6 +142,14 @@ Namespace ClickfinderSimpleGuide
             Return "Clickfinder Simple Guide"
         End Function
 
+        Public Shared Property ActualViewNumber() As Integer
+            Get
+                Return m_actualViewNumber
+            End Get
+            Set(ByVal value As Integer)
+                m_actualViewNumber = value
+            End Set
+        End Property
 #End Region
 
 #Region "GUI Events"
@@ -131,8 +158,34 @@ Namespace ClickfinderSimpleGuide
             Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim _mClass As String = Me.GetType.Name
 
-            m_actualViewNumber = CSGuideSettings.StartView
-            SetViewProperties(m_actualViewNumber)
+            Try
+                If (Not String.IsNullOrEmpty(CSGuideSettings.TMDbAPIKey)) Then
+                    m_tmdbClient = New TMDbClient(CSGuideSettings.TMDbAPIKey)
+                    FetchConfig(m_tmdbClient)
+                    m_TMDbIsPossible = True
+                    _cacheHander = New CSGUideCacheHandler(m_tmdbClient)
+                Else
+                    MyLog.Info(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, _mName))
+                End If
+
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Problems with the TMDb-API-Key exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, _mName))
+                m_TMDbIsPossible = False
+            End Try
+            ' needed for the first call of this method
+            m_UseTMDb = m_UseTMDb And m_TMDbIsPossible
+
+            m_backdrop = New ImageSwapper
+            m_backdrop.PropertyOne = "#Fanart.1"
+            m_backdrop.PropertyTwo = "#Fanart.2"
+
+            m_backdrop.GUIImageOne = FanartBackground
+            m_backdrop.GUIImageTwo = FanartBackground2
+
+            _niceEPGList.Focus = True
+
+            'SetViewProperties(m_actualViewNumber)
             InitButtons()
             MyBase.OnPageLoad()
 
@@ -140,20 +193,13 @@ Namespace ClickfinderSimpleGuide
             MyLog.Info(String.Format("[{0}] [{1}]: --- Start ---", _mClass, _mName))
 
             GuiLayoutLoading()
-
-            _LastFocusedControlID = _niceEPGList.GetID
+            '_LastFocusedControlID = _niceEPGList.GetID
             _ItemsCache.Clear()
             AbortRunningThreads()
 
-            If _ItemsCache.Count = 0 Then
-                _ThreadLoadItemsFromDatabase = New Threading.Thread(AddressOf LoadItemsFromDatabase)
-                _ThreadLoadItemsFromDatabase.IsBackground = True
-                _ThreadLoadItemsFromDatabase.Start()
-            Else
-                _ThreadNiceEPGList = New Thread(AddressOf FillniceEPGList)
-                _ThreadNiceEPGList.IsBackground = True
-                _ThreadNiceEPGList.Start()
-            End If
+            _ThreadLoadItemsFromDatabase = New Threading.Thread(AddressOf LoadItemsFromDatabase)
+            _ThreadLoadItemsFromDatabase.IsBackground = True
+            _ThreadLoadItemsFromDatabase.Start()
 
             If m_chGroupChannelCache.Count = 0 Then
                 FillChGroupChannelCache()
@@ -679,6 +725,25 @@ Namespace ClickfinderSimpleGuide
                         End If
                     End If
                 End If
+                '''' TEST '''''
+                'Menu Button (q) -> Context Menu open
+                If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
+                    If action.m_key IsNot Nothing Then
+                        If action.m_key.KeyChar = 113 Then
+                            m_idProgram = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).idProgram
+                            If Not _TMDbCache.ContainsKey(m_idProgram) Then
+                                _cacheHander.AddItem(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId), _TMDbCache)
+                                ' to change ...
+                                Utils.DownLoadAndCacheImage(_TMDbCache.Item(m_idProgram).Misc.fanartURL _
+                                                            , _TMDbCache.Item(m_idProgram).Misc.absFanartPath)
+                            End If
+                            CSGuideWindowsTMDb.MovieInfo = _TMDbCache.Item(m_idProgram)
+                                CSGuideWindowsTMDb.TmdbClient = m_tmdbClient
+                                RememberLastFocusedItem()
+                                GUIWindowManager.ActivateWindow(730352, False)
+                            End If
+                        End If
+                End If
             End If
 
             MyBase.OnAction(action)
@@ -755,120 +820,95 @@ Namespace ClickfinderSimpleGuide
             Dim _groupFilter As New StringBuilder(
                 "(SELECT groupmap.idgroup FROM mptvdb.groupmap Inner " &
                 "join mptvdb.channelgroup ON groupmap.idgroup = channelgroup.idGroup " &
-                "WHERE groupmap.idchannel = program.idchannel and channelgroup.groupName = '#FilterTvGroup')")
-            'TvGroup Filter setzen
-            _groupFilter.Replace("#FilterTvGroup", TvGroupFilter)
+                "WHERE groupmap.idchannel = program.idchannel And channelgroup.groupName = '#FilterTvGroup')")
+                                'TvGroup Filter setzen
+                                _groupFilter.Replace("#FilterTvGroup", TvGroupFilter)
 
             Return _groupFilter.ToString
 
         End Function
-        Private Function GetYearString(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-            Dim _yearString As String = String.Empty
-            Try
-                If Not myTVMovieProgram.ReferencedProgram.OriginalAirDate < New Date(1900, 1, 1) Then
-                    If Not myTVMovieProgram.Country Is Nothing Then
-                        If Not myTVMovieProgram.Country.Equals("") Then
-                            _yearString = " (" & myTVMovieProgram.Country & " " & myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year & ")"
-                        End If
-                    End If
-                Else
-                    Dim _description = myTVMovieProgram.ReferencedProgram.Description
-                    If _description.Length > 100 Then
-                        Dim _pattern As String = ".*?Aus:\s+(?<year_string>.*?\s\d\d\d\d)"
-                        Dim _match = Regex.Match(_description.Substring(0, 100), _pattern)
-                        If _match.Success Then
-                            _yearString = " (" & _match.Groups("year_string").Value & ")"
-                        End If
-                    End If
-                End If
-            Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
 
-            End Try
-
-            Return _yearString
-
-        End Function
 
         Private Sub NiceEPGSetGUIProperties(ByVal myTVMovieProgram As TVMovieProgram)
-            SetProperty("#SettingLastUpdate", CSGuideSettings.TvMovieImportStatus)
-            SetProperty("#ChannelGroup", m_TvGroupFilter)
-            If m_viewType.Equals("Overview") Then
-                'SetProperty("#ItemsRightListLabel",
-                '                            m_StartTime.ToString("dddd, dd.MM") & " ~" & m_StartTime.ToString("HH:mm"))
-                SetProperty("#ItemsRightListLabel", "")
-                SetProperty("#EPGView", m_viewDisplayName)
+            CSGuideHelper.LoadFanart(m_backdrop, getFanartFileNameAbsPath(myTVMovieProgram))
+            CSGuideHelper.SetProperty("#SettingLastUpdate", CSGuideSettings.TvMovieImportStatus)
+            CSGuideHelper.SetProperty("#ChannelGroup", m_TvGroupFilter)
+            'CSGuideHelper.CSGuideHelper.SetProperty("#TMDbFanArt", getFanartFileName(myTVMovieProgram))
 
-                SetProperty("#ChannelName", "")
+            If m_viewType.Equals("Overview") Then
+                'CSGuideHelper.SetProperty("#ItemsRightListLabel",
+                '                            m_StartTime.ToString("dddd, dd.MM") & " ~" & m_StartTime.ToString("HH:mm"))
+                CSGuideHelper.SetProperty("#ItemsRightListLabel", "")
+                CSGuideHelper.SetProperty("#EPGView", m_viewDisplayName)
+
+                CSGuideHelper.SetProperty("#ChannelName", "")
             End If
 
             If myTVMovieProgram IsNot Nothing Then
-                'SetProperty("#DetailDescription", getAdaptedDescription(myTVMovieProgram.ReferencedProgram.Description))
-                SetProperty("#DetailDescription", myTVMovieProgram.ReferencedProgram.Description)
-                SetProperty("#DetailImage", CSGuideHelper.Image(myTVMovieProgram))
-                SetProperty("#DetailTitle", myTVMovieProgram.ReferencedProgram.Title)
-                SetProperty("#ShortDescription", myTVMovieProgram.ShortDescribtion)
+                'CSGuideHelper.SetProperty("#DetailDescription", getAdaptedDescription(myTVMovieProgram.ReferencedProgram.Description))
+                CSGuideHelper.SetProperty("#DetailDescription", myTVMovieProgram.ReferencedProgram.Description)
+                CSGuideHelper.SetProperty("#DetailImage", CSGuideHelper.Image(myTVMovieProgram))
+                CSGuideHelper.SetProperty("#DetailTitle", myTVMovieProgram.ReferencedProgram.Title)
+                CSGuideHelper.SetProperty("#ShortDescription", myTVMovieProgram.ShortDescribtion)
 
-                SetProperty("#DetailGenre", myTVMovieProgram.ReferencedProgram.Genre)
-                SetProperty("#MovieListTvMovieStar", CSGuideHelper.TvMovieStar(myTVMovieProgram))
-                SetProperty("#Duration", DateDiff(DateInterval.Minute, myTVMovieProgram.ReferencedProgram.StartTime, myTVMovieProgram.ReferencedProgram.EndTime) & " min")
+                CSGuideHelper.SetProperty("#DetailGenre", myTVMovieProgram.ReferencedProgram.Genre)
+                CSGuideHelper.SetProperty("#MovieListTvMovieStar", CSGuideHelper.TvMovieStar(myTVMovieProgram))
+                CSGuideHelper.SetProperty("#Duration", DateDiff(DateInterval.Minute, myTVMovieProgram.ReferencedProgram.StartTime, myTVMovieProgram.ReferencedProgram.EndTime) & " min")
 
                 If myTVMovieProgram.Dolby = True Then
-                    SetProperty("#DetailAudioImage", "Logos\audio\dolbydigital.png")
+                    CSGuideHelper.SetProperty("#DetailAudioImage", "Logos\audio\dolbydigital.png")
                 Else
-                    SetProperty("#DetailAudioImage", "Logos\audio\stereo.png")
+                    CSGuideHelper.SetProperty("#DetailAudioImage", "Logos\audio\stereo.png")
                 End If
 
                 If myTVMovieProgram.HDTV = True Then
-                    SetProperty("#DetailProgramFormat", "Logos\resolution\720p.png")
+                    CSGuideHelper.SetProperty("#DetailProgramFormat", "Logos\resolution\720p.png")
                 Else
-                    SetProperty("#DetailProgramFormat", "Logos\resolution\540.png")
+                    CSGuideHelper.SetProperty("#DetailProgramFormat", "Logos\resolution\540.png")
                 End If
 
-                SetProperty("#DetailFSK", CSGuideHelper.DetailFSK(myTVMovieProgram))
-                SetProperty("#DetailRatingFun", getRatingpercentage(myTVMovieProgram.Fun))
-                SetProperty("#DetailRatingAction", getRatingpercentage(myTVMovieProgram.Action))
-                SetProperty("#DetailRatingErotic", getRatingpercentage(myTVMovieProgram.Erotic))
-                SetProperty("#DetailRatingSuspense", getRatingpercentage(myTVMovieProgram.Tension))
-                SetProperty("#DetailRatingLevel", getRatingpercentage(myTVMovieProgram.Requirement))
-                SetProperty("#DetailRatingEmotions", getRatingpercentage(myTVMovieProgram.Feelings))
-                SetProperty("#SelectedProgramDates", myTVMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName & ": " &
+                CSGuideHelper.SetProperty("#DetailFSK", CSGuideHelper.DetailFSK(myTVMovieProgram))
+                CSGuideHelper.SetProperty("#DetailRatingFun", getRatingpercentage(myTVMovieProgram.Fun))
+                CSGuideHelper.SetProperty("#DetailRatingAction", getRatingpercentage(myTVMovieProgram.Action))
+                CSGuideHelper.SetProperty("#DetailRatingErotic", getRatingpercentage(myTVMovieProgram.Erotic))
+                CSGuideHelper.SetProperty("#DetailRatingSuspense", getRatingpercentage(myTVMovieProgram.Tension))
+                CSGuideHelper.SetProperty("#DetailRatingLevel", getRatingpercentage(myTVMovieProgram.Requirement))
+                CSGuideHelper.SetProperty("#DetailRatingEmotions", getRatingpercentage(myTVMovieProgram.Feelings))
+                CSGuideHelper.SetProperty("#SelectedProgramDates", myTVMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName & ": " &
                             myTVMovieProgram.ReferencedProgram.StartTime.ToString("dddd, dd.MM") &
                             " (" &
                             myTVMovieProgram.ReferencedProgram.StartTime.ToString("HH:mm") & " - " &
                             myTVMovieProgram.ReferencedProgram.EndTime.ToString("HH:mm") & ")")
                 If m_viewType.Equals("Single") Then
-                    'SetProperty("#ItemsRightListLabel",
+                    'CSGuideHelper.SetProperty("#ItemsRightListLabel",
                     '    myTVMovieProgram.ReferencedProgram.StartTime.ToString("dddd, dd.MM") &
                     '    " ~" &
                     'myTVMovieProgram.ReferencedProgram.StartTime.ToString("HH:mm") & " Uhr")
-                    SetProperty("#ItemsRightListLabel", "")
+                    CSGuideHelper.SetProperty("#ItemsRightListLabel", "")
 
-                    SetProperty("#EPGView", m_viewDisplayName)
-                    SetProperty("#ChannelName", myTVMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName)
+                    CSGuideHelper.SetProperty("#EPGView", m_viewDisplayName)
+                    CSGuideHelper.SetProperty("#ChannelName", myTVMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName)
                 End If
             Else
-                SetProperty("#DetailDescription", "")
-                SetProperty("#DetailImage", "")
-                SetProperty("#DetailTitle", "")
-                SetProperty("#ShortDescription", "")
-                SetProperty("#DetailGenre", "")
-                SetProperty("#MovieListTvMovieStar", "")
-                SetProperty("#Duration", "")
-                SetProperty("#DetailAudioImage", "")
-                SetProperty("#DetailAudioImage", "")
-                SetProperty("#DetailProgramFormat", "")
-                SetProperty("#DetailFSK", "")
-                SetProperty("#DetailRatingFun", "0")
-                SetProperty("#DetailRatingAction", "0")
-                SetProperty("#DetailRatingErotic", "0")
-                SetProperty("#DetailRatingSuspense", "0")
-                SetProperty("#DetailRatingLevel", "0")
-                SetProperty("#DetailRatingEmotions", "0")
-                SetProperty("#SelectedProgramDates", "")
-                SetProperty("#ChannelName", "Nichts gefunden")
+                CSGuideHelper.SetProperty("#DetailDescription", "")
+                CSGuideHelper.SetProperty("#DetailImage", "")
+                CSGuideHelper.SetProperty("#DetailTitle", "")
+                CSGuideHelper.SetProperty("#ShortDescription", "")
+                CSGuideHelper.SetProperty("#DetailGenre", "")
+                CSGuideHelper.SetProperty("#MovieListTvMovieStar", "")
+                CSGuideHelper.SetProperty("#Duration", "")
+                CSGuideHelper.SetProperty("#DetailAudioImage", "")
+                CSGuideHelper.SetProperty("#DetailAudioImage", "")
+                CSGuideHelper.SetProperty("#DetailProgramFormat", "")
+                CSGuideHelper.SetProperty("#DetailFSK", "")
+                CSGuideHelper.SetProperty("#DetailRatingFun", "0")
+                CSGuideHelper.SetProperty("#DetailRatingAction", "0")
+                CSGuideHelper.SetProperty("#DetailRatingErotic", "0")
+                CSGuideHelper.SetProperty("#DetailRatingSuspense", "0")
+                CSGuideHelper.SetProperty("#DetailRatingLevel", "0")
+                CSGuideHelper.SetProperty("#DetailRatingEmotions", "0")
+                CSGuideHelper.SetProperty("#SelectedProgramDates", "")
+                CSGuideHelper.SetProperty("#ChannelName", "Nichts gefunden")
             End If
         End Sub
         Private Function getAdaptedDescription(ByVal programDescription As String) As String
@@ -1002,6 +1042,13 @@ Namespace ClickfinderSimpleGuide
                     _ThreadNiceEPGList = New Thread(AddressOf FillniceEPGList)
                     _ThreadNiceEPGList.IsBackground = True
                     _ThreadNiceEPGList.Start()
+                    '' here muss der Cache gefüllt werden
+                    If m_UseTMDb Then
+                        _ThreadBuildTMDb = New Thread(AddressOf UpdateTMDbCache)
+                        _ThreadBuildTMDb.IsBackground = True
+                        _ThreadBuildTMDb.Start()
+                    End If
+
                 Else
                     _DataLoadingAnimation.Visible = False
                     NiceEPGSetGUIProperties(Nothing)
@@ -1016,7 +1063,17 @@ Namespace ClickfinderSimpleGuide
             End Try
 
         End Sub
-
+        Private Sub UpdateTMDbCache()
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+            Dim stopwatch As Diagnostics.Stopwatch = New Diagnostics.Stopwatch
+            stopwatch.Start()
+            MyLog.Debug(String.Format("[{0}] [{1}]: Updating TMDb-Cache for View {2} Start", _mClass, _mName, m_actualViewNumber))
+            _cacheHander.buildCache(_TMDbCache, _ItemsCache, CDate("03.09.2016"))
+            stopwatch.Stop()
+            MyLog.Debug(String.Format("[{0}] [{1}]: Updated TMDb-Cache ({2}) Items in {3} ms", _mClass, _mName _
+                                      , _TMDbCache.Count, stopwatch.ElapsedMilliseconds))
+        End Sub
         Private Sub FillniceEPGList()
             Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim _mClass As String = Me.GetType.Name
@@ -1037,7 +1094,7 @@ Namespace ClickfinderSimpleGuide
                         _ItemCounter = _ItemCounter + 1
                         Dim _TvMovieProgram As TVMovieProgram = _ItemsCache.Item(i)
 
-                        _getYearString = GetYearString(_TvMovieProgram)
+                        _getYearString = CSGuideHelper.GetYearString(_TvMovieProgram)
 
                         CSGuideHelper.AddListControlItem(_niceEPGList,
                                            _TvMovieProgram.idProgram,
@@ -1073,6 +1130,7 @@ Namespace ClickfinderSimpleGuide
 
                 SetCorrectListItemIndex()
                 NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
+
                 'GUIWindowManager.NeedRefresh()
 
             Catch ex As ThreadAbortException
@@ -1152,15 +1210,98 @@ Namespace ClickfinderSimpleGuide
         End Sub
         Private Sub RememberLastFocusedItem()
 
-            If _niceEPGList.IsFocused Then
-                _LastFocusedIndex = _niceEPGList.SelectedListItemIndex
-                _LastFocusedControlID = _niceEPGList.GetID
-            Else
-                _LastFocusedIndex = 0
-                _LastFocusedControlID = _niceEPGList.GetID
-            End If
+            'If _niceEPGList.IsFocused Then
+            '    _LastFocusedIndex = _niceEPGList.SelectedListItemIndex
+            '    _LastFocusedControlID = _niceEPGList.GetID
+            'Else
+            '    _LastFocusedIndex = 0
+            '    _LastFocusedControlID = _niceEPGList.GetID
+            'End If
 
         End Sub
+        Private Function getFanartFileNameAbsPath(ByVal myTVMovieProgram As TVMovieProgram) As String
+            If _TMDbCache.ContainsKey(myTVMovieProgram.idProgram) Then
+                Return getFanartFileName3(myTVMovieProgram)
+            Else
+                Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\hover_ClickfinderSimpleGuide.png"))
+            End If
+        End Function
+        Private Function getFanartFileName3(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+
+            Dim programID As Integer = myTVMovieProgram.idProgram
+            Dim backgroundImage As String = "hover_ClickfinderSimpleGuide.png"
+
+            Try
+                If _TMDbCache.ContainsKey(programID) Then
+                    Dim absFanartPath As String = _TMDbCache.Item(programID).Misc.absFanartPath
+                    Dim fanartURL As String = _TMDbCache.Item(programID).Misc.fanartURL
+
+                    If (Not String.IsNullOrEmpty(absFanartPath)) And (Not String.IsNullOrEmpty(fanartURL)) Then
+                        Utils.DownLoadAndCacheImage(fanartURL, absFanartPath)
+                        Return absFanartPath
+                    End If
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+            End Try
+            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\" & backgroundImage))
+        End Function
+
+        Private Function getFanartFileName2(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim _mClass As String = Me.GetType.Name
+
+            Dim programID As Integer = myTVMovieProgram.idProgram
+            Dim backgroundImage As String = "hover_ClickfinderSimpleGuide.png"
+            Try
+                If _TMDbCache.ContainsKey(programID) Then
+                    If Not IsNothing(_TMDbCache.Item(programID).movie) Then
+                        If Not _TMDbCache.Item(programID).movie.BackdropPath Is Nothing Then
+                            Dim _fanArtURL = m_tmdbClient.GetImageUrl("original", _TMDbCache.Item(programID).movie.BackdropPath).ToString()
+                            Dim _rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
+                            Dim _imageFilename As String = _rgx.Match(_fanArtURL).Groups(1).Value
+                            If Not String.IsNullOrEmpty(_imageFilename) Then
+                                Dim _absImagePath As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Fanart\"), _imageFilename)
+                                Dim _relImagePath As String = Path.Combine("CSG\Fanart\", _imageFilename)
+                                Utils.DownLoadAndCacheImage(_fanArtURL, _absImagePath)
+                                backgroundImage = _relImagePath
+                            End If
+                        End If
+                    End If
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+            End Try
+            Return backgroundImage
+        End Function
+
+
+        Private Shared Sub FetchConfig(client As TMDbClient)
+            Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
+
+            Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
+
+            If configXml.Exists AndAlso configXml.LastWriteTimeUtc >= DateTime.UtcNow.AddHours(-1) Then
+                Console.WriteLine("Using stored config")
+                Dim xml As String = File.ReadAllText(configXml.FullName, Encoding.Unicode)
+
+                Dim xmlDoc As New XmlDocument()
+                xmlDoc.LoadXml(xml)
+
+                client.SetConfig(Serializer.Deserialize(Of TMDbConfig)(xmlDoc))
+            Else
+                Console.WriteLine("Getting new config")
+                client.GetConfig()
+
+                Console.WriteLine("Storing config")
+                Dim xmlDoc As XmlDocument = Serializer.Serialize(client.Config)
+                File.WriteAllText(configXml.FullName, xmlDoc.OuterXml, Encoding.Unicode)
+            End If
+        End Sub
+
+
 
 #End Region
 #Region "Hidden Menu"
@@ -1390,32 +1531,19 @@ Namespace ClickfinderSimpleGuide
             Dim _ProgressBarThread As New Threading.Thread(AddressOf ShowLeftProgressBar)
             _ProgressBarThread.Start()
 
-            SetProperty("#CurrentPageLabel", "Lade")
+            CSGuideHelper.SetProperty("#CurrentPageLabel", "Lade")
 
             ' set to something - the skin only checks whether filled or not
             If CSGuideSettings.HiddenMenuMode Then
-                SetProperty("#ShowHiddenMenu", "Show")
+                CSGuideHelper.SetProperty("#ShowHiddenMenu", "Show")
             Else
-                SetProperty("#ShowHiddenMenu", "")
+                CSGuideHelper.SetProperty("#ShowHiddenMenu", "")
             End If
 
 
         End Sub
 
-        Private Sub SetProperty(ByVal [property] As String, ByVal value As String)
-            If [property] Is Nothing Then
-                Return
-            End If
 
-            'If the value is empty always add a space
-            'otherwise the property will keep 
-            'displaying it's previous value
-            If [String].IsNullOrEmpty(value) Then
-                value = " "
-            End If
-
-            GUIPropertyManager.SetProperty([property], value)
-        End Sub
 #End Region
 
 #Region "MovieInfo"

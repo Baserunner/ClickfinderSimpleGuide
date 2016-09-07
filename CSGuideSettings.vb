@@ -19,8 +19,16 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_clickfinderPath As String
         Private Shared m_TVMovieIsEnabled As String
         Private Shared m_TVMovieLastUpdate As String
+        Private Shared m_TMDbAPIKey As String
         Private Shared m_configFileName As String = "ClickfinderSimpleGuide.xml"
-
+        Friend Shared Property TMDbAPIKey() As String
+            Get
+                Return m_TMDbAPIKey
+            End Get
+            Set(ByVal value As String)
+                m_TMDbAPIKey = value
+            End Set
+        End Property
 
         Friend Shared Property TVMovieLastUpdate() As String
             Get
@@ -143,6 +151,7 @@ Namespace ClickfinderSimpleGuide
                 m_debugMode = _mySettings.GetValueAsBool("General", "DebugMode", True)
                 m_hiddenMenuMode = _mySettings.GetValueAsBool("General", "HiddenMenuMode", False)
                 m_clickfinderImagePath = _mySettings.GetValueAsString("General", "ClickfinderImagePath", "")
+                m_TMDbAPIKey = _mySettings.GetValueAsString("General", "TMDbAPIKey", "")
 
                 For i = 0 To 8
                     Dim _view As CSGuideView = New CSGuideView(
@@ -152,7 +161,10 @@ Namespace ClickfinderSimpleGuide
                                           _mySettings.GetValue("Views", "View" & i & "StartTime"),
                                           _mySettings.GetValue("Views", "View" & i & "TvGroup"),
                                           _mySettings.GetValue("Views", "View" & i & "DisplayName"),
-                                          _mySettings.GetValue("Views", "View" & i & "StartTimeOffset"))
+                                          _mySettings.GetValue("Views", "View" & i & "StartTimeOffset"),
+                                          _mySettings.GetValueAsBool("Views", "View" & i & "UseTMDb", False)
+                                          )
+
                     m_view(i) = _view
                 Next
             Else
@@ -173,6 +185,7 @@ Namespace ClickfinderSimpleGuide
                 _mySettings.SetValueAsBool("General", "DebugMode", m_debugMode)
                 _mySettings.SetValueAsBool("General", "HiddenMenuMode", m_hiddenMenuMode)
                 _mySettings.SetValue("General", "ClickfinderImagePath", m_clickfinderImagePath)
+                _mySettings.SetValue("General", "TMDbAPIKey", m_TMDbAPIKey)
 
                 For i = 0 To 8
                     _mySettings.SetValue("Views", "View" & i & "Name", m_view(i).Name)
@@ -182,6 +195,7 @@ Namespace ClickfinderSimpleGuide
                     _mySettings.SetValue("Views", "View" & i & "TvGroup", m_view(i).TvGroup)
                     _mySettings.SetValue("Views", "View" & i & "DisplayName", m_view(i).DisplayName)
                     _mySettings.SetValue("Views", "View" & i & "StartTimeOffset", m_view(i).OffSetMinute)
+                    _mySettings.SetValueAsBool("Views", "View" & i & "UseTMDb", m_view(i).UseTMDb)
                 Next
                 Return True
             Catch ex As Exception
@@ -204,6 +218,13 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}] StartView = {2}", _mClass, _mName, m_startView))
             MyLog.Debug(String.Format("[{0}] [{1}] DebugMode = {2}", _mClass, _mName, m_debugMode))
             MyLog.Debug(String.Format("[{0}] [{1}] HiddenMenuMode = {2}", _mClass, _mName, m_hiddenMenuMode))
+
+            If (String.IsNullOrEmpty(m_TMDbAPIKey)) Then
+                MyLog.Debug(String.Format("[{0}] [{1}] TMDb API Key is not set", _mClass, _mName))
+            Else
+                MyLog.Debug(String.Format("[{0}] [{1}] TMDb API Key is available", _mClass, _mName))
+            End If
+
             MyLog.Debug(String.Format("[{0}] [{1}] ------------------------", _mClass, _mName))
             For i = 0 To 8
                 MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "Name = {2}", _mClass, _mName, m_view(i).Name))
@@ -213,6 +234,7 @@ Namespace ClickfinderSimpleGuide
                 MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "TvGroup = {2}", _mClass, _mName, m_view(i).TvGroup))
                 MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "DisplayName = {2}", _mClass, _mName, m_view(i).DisplayName))
                 MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "StartTimeOffset = {2}", _mClass, _mName, m_view(i).OffSetMinute))
+                MyLog.Debug(String.Format("[{0}] [{1}] View" & i & "Use TMDb = {2}", _mClass, _mName, m_view(i).UseTMDb))
             Next
         End Sub
 
@@ -248,6 +270,7 @@ Namespace ClickfinderSimpleGuide
             m_debugMode = False
             m_hiddenMenuMode = False
             m_clickfinderImagePath = Path.GetDirectoryName(m_clickfinderPath) & "\Hyperlinks"
+            m_TMDbAPIKey = ""
 
             _view = New CSGuideView(
                                   "Single",
@@ -256,7 +279,8 @@ Namespace ClickfinderSimpleGuide
                                   "Now",
                                   "All Channels",
                                   "Single Channel",
-                                  "-90")
+                                  "-90",
+                                  False)
             m_view(0) = _view
             _view = New CSGuideView(
                                     "Now",
@@ -265,7 +289,8 @@ Namespace ClickfinderSimpleGuide
                                     "Now",
                                     "All Channels",
                                     "Jetzt",
-                                    "0")
+                                    "0",
+                                    False)
             m_view(1) = _view
 
             _view = New CSGuideView(
@@ -275,7 +300,7 @@ Namespace ClickfinderSimpleGuide
             "20:15",
             "All Channels",
             "Prime Time",
-            "0")
+            "0", False)
             m_view(2) = _view
 
             _view = New CSGuideView(
@@ -285,7 +310,7 @@ Namespace ClickfinderSimpleGuide
             "22:15",
             "All Channels",
            "Late",
-           "0")
+           "0", False)
             m_view(3) = _view
 
             _view = New CSGuideView(
@@ -295,7 +320,7 @@ Namespace ClickfinderSimpleGuide
             "00:00",
             "All Channels",
             "01:00 Nachts",
-            "1500")
+            "1500", False)
             m_view(4) = _view
 
             _view = New CSGuideView(
@@ -305,7 +330,7 @@ Namespace ClickfinderSimpleGuide
            "Now",
            "All Channels",
            "Filme",
-           "0")
+           "0", False)
             m_view(5) = _view
 
             _view = New CSGuideView(
@@ -315,7 +340,7 @@ Namespace ClickfinderSimpleGuide
            "Now",
            "All Channels",
            "Movie-Vorschau",
-           "0")
+           "0", False)
             m_view(6) = _view
 
             _view = New CSGuideView(
@@ -325,7 +350,7 @@ Namespace ClickfinderSimpleGuide
             "Now",
             "All Channels",
             "Star-Rating",
-            "0")
+            "0", False)
             m_view(7) = _view
 
             _view = New CSGuideView(
@@ -335,7 +360,7 @@ Namespace ClickfinderSimpleGuide
             "Now",
             "All Channels",
             "Tages-Tipps!",
-            "0")
+            "0", False)
             m_view(8) = _view
 
         End Sub

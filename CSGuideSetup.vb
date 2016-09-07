@@ -69,6 +69,8 @@ Public Class CSGuideSetup
 
         Gen_ComboBox1.Text = "View " & CSGuideSettings.StartView
         Gen_TextBox1.Text = CSGuideSettings.ClickfinderImagePath
+        Gen_TextBox3.Text = CSGuideSettings.TMDbAPIKey
+
         If CSGuideSettings.DebugMode Then
             Gen_CheckBox1.Checked = True
         Else
@@ -86,12 +88,14 @@ Public Class CSGuideSetup
         V0_ComboBox1.Text = CSGuideSettings.View(0).TvGroup
         V0_ComboBox2.Text = CSGuideSettings.View(0).Type
 
+
         V1_TextBox1.Text = CSGuideSettings.View(1).DisplayName
         V1_TextBox2.Text = CSGuideSettings.View(1).TimeString
         V1_TextBox3.Text = CSGuideSettings.View(1).SQL
         V1_TextBox4.Text = CSGuideSettings.View(1).OffSetMinute
         V1_ComboBox1.Text = CSGuideSettings.View(1).TvGroup
         V1_ComboBox2.Text = CSGuideSettings.View(1).Type
+        V1_CheckBox1.Checked = CSGuideSettings.View(1).UseTMDb
 
         V2_TextBox1.Text = CSGuideSettings.View(2).DisplayName
         V2_TextBox2.Text = CSGuideSettings.View(2).TimeString
@@ -99,6 +103,7 @@ Public Class CSGuideSetup
         V2_TextBox4.Text = CSGuideSettings.View(2).OffSetMinute
         V2_ComboBox1.Text = CSGuideSettings.View(2).TvGroup
         V2_ComboBox2.Text = CSGuideSettings.View(2).Type
+        V2_CheckBox1.Checked = CSGuideSettings.View(2).UseTMDb
 
         V3_TextBox1.Text = CSGuideSettings.View(3).DisplayName
         V3_TextBox2.Text = CSGuideSettings.View(3).TimeString
@@ -106,6 +111,7 @@ Public Class CSGuideSetup
         V3_TextBox4.Text = CSGuideSettings.View(3).OffSetMinute
         V3_ComboBox1.Text = CSGuideSettings.View(3).TvGroup
         V3_ComboBox2.Text = CSGuideSettings.View(3).Type
+        V3_CheckBox1.Checked = CSGuideSettings.View(3).UseTMDb
 
         V4_TextBox1.Text = CSGuideSettings.View(4).DisplayName
         V4_TextBox2.Text = CSGuideSettings.View(4).TimeString
@@ -113,6 +119,7 @@ Public Class CSGuideSetup
         V4_TextBox4.Text = CSGuideSettings.View(4).OffSetMinute
         V4_ComboBox1.Text = CSGuideSettings.View(4).TvGroup
         V4_ComboBox2.Text = CSGuideSettings.View(4).Type
+        V4_CheckBox1.Checked = CSGuideSettings.View(4).UseTMDb
 
         V5_TextBox1.Text = CSGuideSettings.View(5).DisplayName
         V5_TextBox2.Text = CSGuideSettings.View(5).TimeString
@@ -120,6 +127,7 @@ Public Class CSGuideSetup
         V5_TextBox4.Text = CSGuideSettings.View(5).OffSetMinute
         V5_ComboBox1.Text = CSGuideSettings.View(5).TvGroup
         V5_ComboBox2.Text = CSGuideSettings.View(5).Type
+        V5_CheckBox1.Checked = CSGuideSettings.View(5).UseTMDb
 
         V6_TextBox1.Text = CSGuideSettings.View(6).DisplayName
         V6_TextBox2.Text = CSGuideSettings.View(6).TimeString
@@ -127,6 +135,7 @@ Public Class CSGuideSetup
         V6_TextBox4.Text = CSGuideSettings.View(6).OffSetMinute
         V6_ComboBox1.Text = CSGuideSettings.View(6).TvGroup
         V6_ComboBox2.Text = CSGuideSettings.View(6).Type
+        V6_CheckBox1.Checked = CSGuideSettings.View(6).UseTMDb
 
         V7_TextBox1.Text = CSGuideSettings.View(7).DisplayName
         V7_TextBox2.Text = CSGuideSettings.View(7).TimeString
@@ -134,6 +143,7 @@ Public Class CSGuideSetup
         V7_TextBox4.Text = CSGuideSettings.View(7).OffSetMinute
         V7_ComboBox1.Text = CSGuideSettings.View(7).TvGroup
         V7_ComboBox2.Text = CSGuideSettings.View(7).Type
+        V7_CheckBox1.Checked = CSGuideSettings.View(7).UseTMDb
 
         V8_TextBox1.Text = CSGuideSettings.View(8).DisplayName
         V8_TextBox2.Text = CSGuideSettings.View(8).TimeString
@@ -141,6 +151,7 @@ Public Class CSGuideSetup
         V8_TextBox4.Text = CSGuideSettings.View(8).OffSetMinute
         V8_ComboBox1.Text = CSGuideSettings.View(8).TvGroup
         V8_ComboBox2.Text = CSGuideSettings.View(8).Type
+        V8_CheckBox1.Checked = CSGuideSettings.View(8).UseTMDb
 
         For Each _channelGroup In ChannelGroup.ListAll
             V0_ComboBox1.Items.Add(_channelGroup.GroupName)
@@ -155,11 +166,11 @@ Public Class CSGuideSetup
         Next
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button_Save_Click(sender As Object, e As EventArgs) Handles Button_Save.Click
 
         If IsValidationError Then
-            MessageBox.Show("Bitte Einträge überprüfen", "Validation Error", MessageBoxButtons.OK, _
-                             MessageBoxIcon.Exclamation, _
+            MessageBox.Show("Bitte Einträge überprüfen", "Validation Error", MessageBoxButtons.OK,
+                             MessageBoxIcon.Exclamation,
                              MessageBoxDefaultButton.Button1)
             Exit Sub
         End If
@@ -167,6 +178,7 @@ Public Class CSGuideSetup
         Dim _lastCharAsString As String = Gen_ComboBox1.Text.Last()
         CSGuideSettings.StartView = CInt(_lastCharAsString)
         CSGuideSettings.ClickfinderImagePath = Gen_TextBox1.Text
+        CSGuideSettings.TMDbAPIKey = Gen_TextBox3.Text
 
         If Gen_CheckBox1.Checked Then
             CSGuideSettings.DebugMode = True
@@ -193,6 +205,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(1).OffSetMinute = V1_TextBox4.Text
         CSGuideSettings.View(1).TvGroup = V1_ComboBox1.Text
         CSGuideSettings.View(1).Type = V1_ComboBox2.Text
+        CSGuideSettings.View(1).UseTMDb = V1_CheckBox1.Checked
 
         CSGuideSettings.View(2).DisplayName = V2_TextBox1.Text
         CSGuideSettings.View(2).TimeString = V2_TextBox2.Text
@@ -200,6 +213,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(2).OffSetMinute = V2_TextBox4.Text
         CSGuideSettings.View(2).TvGroup = V2_ComboBox1.Text
         CSGuideSettings.View(2).Type = V2_ComboBox2.Text
+        CSGuideSettings.View(2).UseTMDb = V2_CheckBox1.Checked
 
         CSGuideSettings.View(3).DisplayName = V3_TextBox1.Text
         CSGuideSettings.View(3).TimeString = V3_TextBox2.Text
@@ -207,6 +221,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(3).OffSetMinute = V3_TextBox4.Text
         CSGuideSettings.View(3).TvGroup = V3_ComboBox1.Text
         CSGuideSettings.View(3).Type = V3_ComboBox2.Text
+        CSGuideSettings.View(3).UseTMDb = V3_CheckBox1.Checked
 
         CSGuideSettings.View(4).DisplayName = V4_TextBox1.Text
         CSGuideSettings.View(4).TimeString = V4_TextBox2.Text
@@ -214,6 +229,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(4).OffSetMinute = V4_TextBox4.Text
         CSGuideSettings.View(4).TvGroup = V4_ComboBox1.Text
         CSGuideSettings.View(4).Type = V4_ComboBox2.Text
+        CSGuideSettings.View(4).UseTMDb = V4_CheckBox1.Checked
 
         CSGuideSettings.View(5).DisplayName = V5_TextBox1.Text
         CSGuideSettings.View(5).TimeString = V5_TextBox2.Text
@@ -221,6 +237,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(5).OffSetMinute = V5_TextBox4.Text
         CSGuideSettings.View(5).TvGroup = V5_ComboBox1.Text
         CSGuideSettings.View(5).Type = V5_ComboBox2.Text
+        CSGuideSettings.View(5).UseTMDb = V5_CheckBox1.Checked
 
         CSGuideSettings.View(6).DisplayName = V6_TextBox1.Text
         CSGuideSettings.View(6).TimeString = V6_TextBox2.Text
@@ -228,6 +245,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(6).OffSetMinute = V6_TextBox4.Text
         CSGuideSettings.View(6).TvGroup = V6_ComboBox1.Text
         CSGuideSettings.View(6).Type = V6_ComboBox2.Text
+        CSGuideSettings.View(6).UseTMDb = V6_CheckBox1.Checked
 
         CSGuideSettings.View(7).DisplayName = V7_TextBox1.Text
         CSGuideSettings.View(7).TimeString = V7_TextBox2.Text
@@ -235,6 +253,7 @@ Public Class CSGuideSetup
         CSGuideSettings.View(7).OffSetMinute = V7_TextBox4.Text
         CSGuideSettings.View(7).TvGroup = V7_ComboBox1.Text
         CSGuideSettings.View(7).Type = V7_ComboBox2.Text
+        CSGuideSettings.View(7).UseTMDb = V7_CheckBox1.Checked
 
         CSGuideSettings.View(8).DisplayName = V8_TextBox1.Text
         CSGuideSettings.View(8).TimeString = V8_TextBox2.Text
@@ -242,14 +261,15 @@ Public Class CSGuideSetup
         CSGuideSettings.View(8).OffSetMinute = V8_TextBox4.Text
         CSGuideSettings.View(8).TvGroup = V8_ComboBox1.Text
         CSGuideSettings.View(8).Type = V8_ComboBox2.Text
+        CSGuideSettings.View(8).UseTMDb = V8_CheckBox1.Checked
 
         If CSGuideSettings.saveToXml() Then
-            MsgBox("Successfully saved the Configuration", _
-               MsgBoxStyle.OkOnly Or MsgBoxStyle.Information, _
+            MsgBox("Successfully saved the Configuration",
+               MsgBoxStyle.OkOnly Or MsgBoxStyle.Information,
                "Saving Config")
-        Else            
-            MsgBox("Problems saving the Configuration - Check the Log", _
-                MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation, _
+        Else
+            MsgBox("Problems saving the Configuration - Check the Log",
+                MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation,
                 "Saving Config")
         End If
 
