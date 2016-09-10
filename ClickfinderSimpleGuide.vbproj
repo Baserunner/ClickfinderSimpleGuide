@@ -97,12 +97,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSGuideTMDBCacheItemMisc.vb" />
-    <Compile Include="CSGuideTMDBCacheItem3.vb" />
+    <Compile Include="CSGuideTMDBCacheItem.vb" />
     <Compile Include="Cornerstone.MP\AsyncImageResource.vb" />
     <Compile Include="Cornerstone.MP\ImageSwapper.vb" />
     <Compile Include="CSGuideCacheHandler.vb" />
-    <Compile Include="CSGuideTMDBCacheItem2.vb" />
-    <Compile Include="CSGuideTMDBCacheItem.vb" />
     <Compile Include="CSGuideView.vb" />
     <Compile Include="CSGuideSettings.vb" />
     <Compile Include="CSGuideHelper.vb" />

@@ -28,7 +28,6 @@ Imports System.Diagnostics
 Namespace ClickfinderSimpleGuide
     Public Class CSGuideWindow
         Inherits GUIWindow
-        Implements IMDB.IProgress
 
 #Region "Skin Controls"
 
@@ -54,9 +53,10 @@ Namespace ClickfinderSimpleGuide
 #Region "Members"
 
         Friend Shared _ItemsCache As New List(Of TVMovieProgram)
-        Private Shared _TMDbCache As New Dictionary(Of String, CSGuideTMDBCacheItem3)
-        Private _cacheHander As CSGUideCacheHandler
-        Friend Shared _CurrentCounter As Integer = 0
+        Private Shared _TMDbCache As New Dictionary(Of String, CSGuideTMDBCacheItem)
+        Private _cacheHander As CSGuideCacheHandler
+        Private _mClass As String
+        'Friend Shared _CurrentCounter As Integer = 0
         Private _ThreadLoadItemsFromDatabase As Threading.Thread
         Private _ThreadNiceEPGList As Threading.Thread
         Private _ThreadBuildTMDb As Threading.Thread
@@ -83,17 +83,17 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_viewType As String = String.Empty
         'Private Shared m_CategorieView As CategorieView = CategorieView.none
 
-        Private Shadows m_chGroupChannelCache As New Dictionary(Of String, IList(Of Integer))
-        Private Shared m_idProgram As Integer = 0
-        Private Shared m_IntervalHour As Integer = 29 '29 meint bis 05:00 Uhr morgens den nächsten Tag
-        Private Shared m_actualViewNumber As Integer
-        Private Shared m_previousViewNumber As Integer
-        Private Shared m_HiddenMenuOpen As Boolean = False
-        Private Shared m_TMDbIsPossible As Boolean = False
-        Private Shared m_UseTMDb As Boolean = False
-        Private Shared m_tmdbClient As TMDbClient
+        Private Shadows _chGroupChannelCache As New Dictionary(Of String, IList(Of Integer))
+        Private Shared _idProgram As Integer = 0
+        Private Shared _IntervalHour As Integer = 29 '29 meint bis 05:00 Uhr morgens den nächsten Tag
+        Private Shared _actualViewNumber As Integer
+        Private Shared _previousViewNumber As Integer
+        Private Shared _HiddenMenuOpen As Boolean = False
+        Private Shared _TMDbIsPossible As Boolean = False
+        Private Shared _UseTMDb As Boolean = False
+        Private Shared _tmdbClient As TMDbClient
 
-        Private Shared m_backdrop As ImageSwapper
+        Private _backdrop As ImageSwapper
 
 
 #End Region
@@ -114,9 +114,9 @@ Namespace ClickfinderSimpleGuide
                 m_TvGroupFilter = CSGuideSettings.View(i).TvGroup
             End If
             m_viewDisplayName = CSGuideSettings.View(i).DisplayName
-            m_previousViewNumber = m_actualViewNumber
-            m_actualViewNumber = i
-            m_UseTMDb = CSGuideSettings.View(i).UseTMDb
+            _previousViewNumber = _actualViewNumber
+            _actualViewNumber = i
+            _UseTMDb = CSGuideSettings.View(i).UseTMDb And _TMDbIsPossible
 
         End Sub
 
@@ -144,10 +144,10 @@ Namespace ClickfinderSimpleGuide
 
         Public Shared Property ActualViewNumber() As Integer
             Get
-                Return m_actualViewNumber
+                Return _actualViewNumber
             End Get
             Set(ByVal value As Integer)
-                m_actualViewNumber = value
+                _actualViewNumber = value
             End Set
         End Property
 #End Region
@@ -155,72 +155,81 @@ Namespace ClickfinderSimpleGuide
 #Region "GUI Events"
 
         Protected Overrides Sub OnPageLoad()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            If _ItemsCache.Count = 0 Then
+                InitWindow()
+            End If
+            _backdrop = New ImageSwapper
+            _backdrop.PropertyOne = "#Fanart.1"
+            _backdrop.PropertyTwo = "#Fanart.2"
 
+            _backdrop.GUIImageOne = FanartBackground
+            _backdrop.GUIImageTwo = FanartBackground2
+            MyBase.OnPageLoad()
+            _ThreadNiceEPGList = New Thread(AddressOf FillniceEPGList)
+            _ThreadNiceEPGList.IsBackground = True
+            _ThreadNiceEPGList.Start()
+            _niceEPGList.Focus = True
+            GUIWindowManager.NeedRefresh()
+        End Sub
+
+        Protected Overrides Sub OnPageDestroy(ByVal new_windowId As Integer)
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            'Dim _mClass As String = Me.GetType.Name
+
+            MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, mName, new_windowId))
+
+            AbortRunningThreads()
+            MyBase.OnPageDestroy(new_windowId)
+            Dispose()
+            AllocResources()
+        End Sub
+        Public Sub InitWindow()
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+
+            _mClass = [GetType].Name
             Try
                 If (Not String.IsNullOrEmpty(CSGuideSettings.TMDbAPIKey)) Then
-                    m_tmdbClient = New TMDbClient(CSGuideSettings.TMDbAPIKey)
-                    FetchConfig(m_tmdbClient)
-                    m_TMDbIsPossible = True
-                    _cacheHander = New CSGUideCacheHandler(m_tmdbClient)
+                    _tmdbClient = New TMDbClient(CSGuideSettings.TMDbAPIKey)
+                    FetchConfig(_tmdbClient)
+                    _TMDbIsPossible = True
+                    _cacheHander = New CSGuideCacheHandler(_tmdbClient)
                 Else
-                    MyLog.Info(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, _mName))
+                    MyLog.Info(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, mName))
                 End If
 
             Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Problems with the TMDb-API-Key exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                MyLog.Error(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, _mName))
-                m_TMDbIsPossible = False
+                MyLog.Error(String.Format("[{0}] [{1}]: Problems with the TMDb-API-Key exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: No TMDb Info will be fetched", _mClass, mName))
+                _TMDbIsPossible = False
             End Try
             ' needed for the first call of this method
-            m_UseTMDb = m_UseTMDb And m_TMDbIsPossible
+            SetViewProperties(CSGuideSettings.StartView)
+            _previousViewNumber = CSGuideSettings.StartView
 
-            m_backdrop = New ImageSwapper
-            m_backdrop.PropertyOne = "#Fanart.1"
-            m_backdrop.PropertyTwo = "#Fanart.2"
-
-            m_backdrop.GUIImageOne = FanartBackground
-            m_backdrop.GUIImageTwo = FanartBackground2
-
-            _niceEPGList.Focus = True
 
             'SetViewProperties(m_actualViewNumber)
             InitButtons()
             MyBase.OnPageLoad()
 
             GUIWindowManager.NeedRefresh()
-            MyLog.Info(String.Format("[{0}] [{1}]: --- Start ---", _mClass, _mName))
+            MyLog.Info(String.Format("[{0}] [{1}]: --- Start ---", _mClass, mName))
 
             GuiLayoutLoading()
             '_LastFocusedControlID = _niceEPGList.GetID
-            _ItemsCache.Clear()
+            ' _ItemsCache.Clear()
             AbortRunningThreads()
 
             _ThreadLoadItemsFromDatabase = New Threading.Thread(AddressOf LoadItemsFromDatabase)
             _ThreadLoadItemsFromDatabase.IsBackground = True
             _ThreadLoadItemsFromDatabase.Start()
 
-            If m_chGroupChannelCache.Count = 0 Then
+            If _chGroupChannelCache.Count = 0 Then
                 FillChGroupChannelCache()
             End If
         End Sub
-
-        Protected Overrides Sub OnPageDestroy(ByVal new_windowId As Integer)
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-
-            MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, _mName, new_windowId))
-            RememberLastFocusedItem()
-            AbortRunningThreads()
-            MyBase.OnPageDestroy(new_windowId)
-            Dispose()
-            AllocResources()
-        End Sub
-
         Public Overrides Sub OnAction(ByVal action As MediaPortal.GUI.Library.Action)
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            'Dim _mClass As String = Me.GetType.Name
 
             If GUIWindowManager.ActiveWindow = GetID Then
 
@@ -233,7 +242,7 @@ Namespace ClickfinderSimpleGuide
                         _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex - 1).ItemId
                         _PageProgress.Percentage = 100 * ((_niceEPGList.SelectedListItemIndex - 1) / _niceEPGList.Count)
                     End If
-                    RememberLastFocusedItem()
+
 
                     Try
                         If _niceEPGList.IsFocused = True Then
@@ -242,7 +251,7 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Move up : exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move up : exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
 
 
@@ -258,7 +267,7 @@ Namespace ClickfinderSimpleGuide
                         _PageProgress.Percentage = 100 * ((_niceEPGList.SelectedListItemIndex - 8) / _niceEPGList.Count)
                     End If
 
-                    RememberLastFocusedItem()
+
 
                     Try
                         If _niceEPGList.IsFocused = True Then
@@ -267,7 +276,7 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Page up - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page up - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
@@ -281,7 +290,7 @@ Namespace ClickfinderSimpleGuide
                         _PageProgress.Percentage = 100 * ((_niceEPGList.SelectedListItemIndex + 1) / (_niceEPGList.Count - 1))
                     End If
 
-                    RememberLastFocusedItem()
+
 
                     Try
                         If _niceEPGList.IsFocused = True Then
@@ -289,7 +298,7 @@ Namespace ClickfinderSimpleGuide
                             m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
                         End If
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Move down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move down - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
 
                     End Try
                 End If
@@ -304,7 +313,7 @@ Namespace ClickfinderSimpleGuide
                         _PageProgress.Percentage = 100 * ((_niceEPGList.SelectedListItemIndex + 8) / _niceEPGList.Count)
                     End If
 
-                    RememberLastFocusedItem()
+
 
                     Try
                         If _niceEPGList.IsFocused = True Then
@@ -313,28 +322,29 @@ Namespace ClickfinderSimpleGuide
                         End If
 
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Page down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page down - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
                 'Next Item (F8) -> lade den nächsten Tag
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_NEXT_ITEM Then
-                    m_previousViewNumber = m_actualViewNumber
+                    _previousViewNumber = _actualViewNumber
                     ' wenn die previous View Single ist, ist schon alles geladen
                     ' das heißt es genügt, wenn der korrekte Item angezeigt wird
-                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                    If CSGuideSettings.View(_previousViewNumber).Type.Equals("Single") Then
                         m_StartTimePreviousItem = m_StartTimePreviousItem.AddDays(1)
                         SetCorrectListItemIndex()
                         NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Else
                         m_StartTime = m_StartTime.AddDays(1)
 
-                        RememberLastFocusedItem()
+
 
                         _ItemsCache.Clear()
                         AbortRunningThreads()
 
                         _ThreadLoadItemsFromDatabase = New Thread(AddressOf LoadItemsFromDatabase)
+
                         _ThreadLoadItemsFromDatabase.IsBackground = True
                         _ThreadLoadItemsFromDatabase.Start()
                     End If
@@ -343,14 +353,14 @@ Namespace ClickfinderSimpleGuide
 
                 'Prev. Item (F7) -> einen Tag zurück
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_PREV_ITEM Then
-                    m_previousViewNumber = m_actualViewNumber
-                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                    _previousViewNumber = _actualViewNumber
+                    If CSGuideSettings.View(_previousViewNumber).Type.Equals("Single") Then
                         m_StartTimePreviousItem = m_StartTimePreviousItem.AddDays(-1)
                         SetCorrectListItemIndex()
                         NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Else
                         m_StartTime = m_StartTime.AddDays(-1)
-                        RememberLastFocusedItem()
+
 
                         _ItemsCache.Clear()
 
@@ -366,14 +376,14 @@ Namespace ClickfinderSimpleGuide
 
                 'Forward (F6) -> eine Stunde vor
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_FORWARD Then
-                    m_previousViewNumber = m_actualViewNumber
-                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                    _previousViewNumber = _actualViewNumber
+                    If CSGuideSettings.View(_previousViewNumber).Type.Equals("Single") Then
                         m_StartTimePreviousItem = m_StartTimePreviousItem.AddMinutes(60)
                         SetCorrectListItemIndex()
                         NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Else
                         m_StartTime = m_StartTime.AddMinutes(60)
-                        RememberLastFocusedItem()
+
 
                         _ItemsCache.Clear()
                         AbortRunningThreads()
@@ -388,15 +398,15 @@ Namespace ClickfinderSimpleGuide
 
                 'Rewind (F5) -> eine Stunde zurück
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_REWIND Then
-                    m_previousViewNumber = m_actualViewNumber
-                    If CSGuideSettings.View(m_previousViewNumber).Type.Equals("Single") Then
+                    _previousViewNumber = _actualViewNumber
+                    If CSGuideSettings.View(_previousViewNumber).Type.Equals("Single") Then
                         m_StartTimePreviousItem = m_StartTimePreviousItem.AddMinutes(-60)
                         SetCorrectListItemIndex()
                         NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Else
 
                         m_StartTime = m_StartTime.AddMinutes(-60)
-                        RememberLastFocusedItem()
+
 
                         _ItemsCache.Clear()
                         AbortRunningThreads()
@@ -555,17 +565,26 @@ Namespace ClickfinderSimpleGuide
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 57 Then
-                            'Get the channel number of the program selected
-                            _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
-                            Try
-                                If _niceEPGList.IsFocused = True Then
-                                    RememberLastFocusedItem()
-                                    OnGetIMDBInfo(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                            _idProgram = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).idProgram
+                            Dim title As String = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.Title
+                            If Not _TMDbCache.ContainsKey(_idProgram) Then
+                                _cacheHander.AddItem(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId), _TMDbCache)
+                                ' Try to persist the Cache, only if the cache build is not running
+                                If Not _ThreadBuildTMDb.IsAlive Then
+                                    _cacheHander.persistCache(_TMDbCache)
                                 End If
-                            Catch ex As Exception
-                                MyLog.Error("[Move (9) is pressed]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
-                            End Try
-                            Return
+                            End If
+                            If _TMDbCache.Item(_idProgram).movie Is Nothing Then
+                                CSGuideHelper.ShowNotify("No TMDb Entry for " & title)
+                            Else
+                                If Not File.Exists(_TMDbCache.Item(_idProgram).Misc.absFanartPath) Then
+                                    Utils.DownLoadAndCacheImage(_TMDbCache.Item(_idProgram).Misc.fanartURL _
+                                                                , _TMDbCache.Item(_idProgram).Misc.absFanartPath)
+                                End If
+                                CSGuideWindowsTMDb.MovieInfo = _TMDbCache.Item(_idProgram)
+                                CSGuideWindowsTMDb.TmdbClient = _tmdbClient
+                                GUIWindowManager.ActivateWindow(730352, False)
+                            End If
 
                         End If
                     End If
@@ -578,16 +597,16 @@ Namespace ClickfinderSimpleGuide
                             SetViewProperties(0)
 
                             'Get the channel number of the program selected
-                            _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
+                            '_SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
 
-                            Try
-                                '   If _niceEPGList.IsFocused = True Then
-                                m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
-                                m_idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
-                                '  End If
-                            Catch ex As Exception
-                                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                            End Try
+                            'Try
+                            '    '   If _niceEPGList.IsFocused = True Then
+                            m_channelNumber = Program.Retrieve(_SelectedNiceEPGItemId).ReferencedChannel.ChannelNumber
+                            _idProgram = Program.Retrieve(_SelectedNiceEPGItemId).IdProgram
+                            '    '  End If
+                            'Catch ex As Exception
+                            '    MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+                            'End Try
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -602,10 +621,10 @@ Namespace ClickfinderSimpleGuide
 
                 'Move right: Forward is pressed -> one channel group forward
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_RIGHT Then
-                    If m_HiddenMenuOpen Then
-                        m_HiddenMenuOpen = False
+                    If _HiddenMenuOpen Then
+                        _HiddenMenuOpen = False
                     Else
-                        m_previousViewNumber = m_actualViewNumber
+                        _previousViewNumber = _actualViewNumber
                         If m_viewType.Equals("Overview") Then
                             m_TvGroupFilter = GetNextChannelGroup(m_TvGroupFilter, 1)
 
@@ -619,15 +638,16 @@ Namespace ClickfinderSimpleGuide
                         Else
                             m_channelNumber = GetNextChannelNumber(1)
 
-                            Try
-                                If _niceEPGList.IsFocused = True Then
-                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                                End If
+                            'Try
+                            '    If _niceEPGList.IsFocused = True Then
 
-                            Catch ex As Exception
-                                MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                            End Try
+                            '        NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                            m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                            '    End If
+
+                            'Catch ex As Exception
+                            '    MyLog.Error(String.Format("[{0}] [{1}]: Move right - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+                            'End Try
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -643,7 +663,8 @@ Namespace ClickfinderSimpleGuide
 
                 'Move left -> one channel group back
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_LEFT Then
-                    m_previousViewNumber = m_actualViewNumber
+                    _previousViewNumber = _actualViewNumber
+
                     If m_viewType.Equals("Overview") Then
                         'if "All Channels" AND HiddenMenu Mode then open hidden Menu
                         If Not (m_TvGroupFilter.Equals("All Channels") And CSGuideSettings.HiddenMenuMode) Then
@@ -657,21 +678,21 @@ Namespace ClickfinderSimpleGuide
                             _ThreadLoadItemsFromDatabase.Start()
                             Return
                         Else
-                            m_HiddenMenuOpen = True
+                            _HiddenMenuOpen = True
                         End If
                     Else
                         'if "Channel Number = 1 AND HiddenMenu Mode the open hidden Menu
                         If Not (m_channelNumber = 1 And CSGuideSettings.HiddenMenuMode) Then
                             m_channelNumber = GetNextChannelNumber(0)
-                            Try
-                                If _niceEPGList.IsFocused = True Then
-                                    NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
-                                    m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
-                                End If
+                            'Try
+                            '    If _niceEPGList.IsFocused = True Then
+                            NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId))
+                            m_StartTimePreviousItem = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).ReferencedProgram.StartTime
+                            '    End If
 
-                            Catch ex As Exception
-                                MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-                            End Try
+                            'Catch ex As Exception
+                            '    MyLog.Error(String.Format("[{0}] [{1}]: Move left - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+                            'End Try
 
                             _ItemsCache.Clear()
                             AbortRunningThreads()
@@ -681,7 +702,7 @@ Namespace ClickfinderSimpleGuide
                             _ThreadLoadItemsFromDatabase.Start()
                             Return
                         Else
-                            m_HiddenMenuOpen = True
+                            _HiddenMenuOpen = True
                         End If
                     End If
                 End If
@@ -691,7 +712,7 @@ Namespace ClickfinderSimpleGuide
                     Try
                         If _niceEPGList.IsFocused = True Then CSGuideHelper.StartTv(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Play Button - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Play Button - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
 
                     End Try
                 End If
@@ -712,7 +733,7 @@ Namespace ClickfinderSimpleGuide
 
                 'Menu Button (F9) -> Context Menu open
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_CONTEXT_MENU Then
-                    RememberLastFocusedItem()
+
                     If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
                 End If
 
@@ -720,7 +741,7 @@ Namespace ClickfinderSimpleGuide
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 121 Then
-                            RememberLastFocusedItem()
+
                             If _niceEPGList.IsFocused = True Then ShowItemsContextMenu(_niceEPGList.SelectedListItem.ItemId)
                         End If
                     End If
@@ -730,19 +751,9 @@ Namespace ClickfinderSimpleGuide
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED Then
                     If action.m_key IsNot Nothing Then
                         If action.m_key.KeyChar = 113 Then
-                            m_idProgram = TVMovieProgram.Retrieve(_SelectedNiceEPGItemId).idProgram
-                            If Not _TMDbCache.ContainsKey(m_idProgram) Then
-                                _cacheHander.AddItem(TVMovieProgram.Retrieve(_SelectedNiceEPGItemId), _TMDbCache)
-                                ' to change ...
-                                Utils.DownLoadAndCacheImage(_TMDbCache.Item(m_idProgram).Misc.fanartURL _
-                                                            , _TMDbCache.Item(m_idProgram).Misc.absFanartPath)
-                            End If
-                            CSGuideWindowsTMDb.MovieInfo = _TMDbCache.Item(m_idProgram)
-                                CSGuideWindowsTMDb.TmdbClient = m_tmdbClient
-                                RememberLastFocusedItem()
-                                GUIWindowManager.ActivateWindow(730352, False)
-                            End If
+                            'TEST AERA
                         End If
+                    End If
                 End If
             End If
 
@@ -763,45 +774,45 @@ Namespace ClickfinderSimpleGuide
             End If
             If control Is _buttonControlView1 Then
                 SendKeys.Send("1")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView2 Then
                 SendKeys.Send("2")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView3 Then
                 SendKeys.Send("3")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView4 Then
                 SendKeys.Send("4")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView5 Then
                 SendKeys.Send("5")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView6 Then
                 SendKeys.Send("6")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView7 Then
                 SendKeys.Send("7")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView8 Then
                 SendKeys.Send("8")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
             If control Is _buttonControlView0 Then
                 SendKeys.Send("0")
-                m_HiddenMenuOpen = False
+                _HiddenMenuOpen = False
             End If
 
         End Sub
 
         Private Sub Action_SelectItem()
-            RememberLastFocusedItem()
+
             If _niceEPGList.IsFocused = True Then CSGuideHelper.StartTv(Program.Retrieve(_niceEPGList.SelectedListItem.ItemId))
         End Sub
 
@@ -821,8 +832,8 @@ Namespace ClickfinderSimpleGuide
                 "(SELECT groupmap.idgroup FROM mptvdb.groupmap Inner " &
                 "join mptvdb.channelgroup ON groupmap.idgroup = channelgroup.idGroup " &
                 "WHERE groupmap.idchannel = program.idchannel And channelgroup.groupName = '#FilterTvGroup')")
-                                'TvGroup Filter setzen
-                                _groupFilter.Replace("#FilterTvGroup", TvGroupFilter)
+            'TvGroup Filter setzen
+            _groupFilter.Replace("#FilterTvGroup", TvGroupFilter)
 
             Return _groupFilter.ToString
 
@@ -830,7 +841,7 @@ Namespace ClickfinderSimpleGuide
 
 
         Private Sub NiceEPGSetGUIProperties(ByVal myTVMovieProgram As TVMovieProgram)
-            CSGuideHelper.LoadFanart(m_backdrop, getFanartFileNameAbsPath(myTVMovieProgram))
+            CSGuideHelper.LoadFanart(_backdrop, getFanartFileNameAbsPath(myTVMovieProgram))
             CSGuideHelper.SetProperty("#SettingLastUpdate", CSGuideSettings.TvMovieImportStatus)
             CSGuideHelper.SetProperty("#ChannelGroup", m_TvGroupFilter)
             'CSGuideHelper.CSGuideHelper.SetProperty("#TMDbFanArt", getFanartFileName(myTVMovieProgram))
@@ -954,12 +965,12 @@ Namespace ClickfinderSimpleGuide
                 ' The Add the list to a hashtable
                 ' For example you receive
                 ' m_chGroupChannelCache("AllChannels", [1,2,3,5,8])
-                m_chGroupChannelCache.Add(ChannelGroup.Retrieve(_channelGroupId).GroupName, _channelList)
+                _chGroupChannelCache.Add(ChannelGroup.Retrieve(_channelGroupId).GroupName, _channelList)
             Next
         End Sub
         Private Function GetNextChannelNumber(ByVal order As Integer) As Integer
             ' order = 1 forward, order = 0 backward
-            Dim _channelNumberList = m_chGroupChannelCache(m_TvGroupFilter)
+            Dim _channelNumberList = _chGroupChannelCache(m_TvGroupFilter)
             Select Case order
                 Case 1
                     For i = 0 To _channelNumberList.Count - 1
@@ -986,7 +997,7 @@ Namespace ClickfinderSimpleGuide
         End Function
         Private Function GetNextChannelGroup(ByVal currentChannelGroup As String, order As Integer) As String
             ' order = 1 forward, order = 0 backward
-            Dim _channelGroupList = m_chGroupChannelCache.Keys
+            Dim _channelGroupList = _chGroupChannelCache.Keys
             Dim _currentGroupIndex As Integer
 
             For _currentGroupIndex = 0 To _channelGroupList.Count - 1
@@ -1013,15 +1024,15 @@ Namespace ClickfinderSimpleGuide
         End Function
 
         Private Sub LoadItemsFromDatabase()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = Me.GetType.Name
             Try
                 Dim _timer As Date = Date.Now
                 Dim _totaltimer As Date = Date.Now
 
                 GuiLayoutLoading()
                 _ItemsCache.Clear()
-                _CurrentCounter = 0
+                ' _CurrentCounter = 0
 
                 'SQL String bauen
                 Dim _SqlStringBuilder As New StringBuilder(m_SqlString)
@@ -1032,10 +1043,10 @@ Namespace ClickfinderSimpleGuide
                 '_SqlStringBuilder.Replace("#IntervalDay", m_IntervalHour)
 
                 _SqlStringBuilder.Replace(" * ", " TVMovieProgram.idProgram, TVMovieProgram.Action, TVMovieProgram.Actors, TVMovieProgram.BildDateiname, TVMovieProgram.Country, TVMovieProgram.Cover, TVMovieProgram.Describtion, TVMovieProgram.Dolby, TVMovieProgram.EpisodeImage, TVMovieProgram.Erotic, TVMovieProgram.FanArt, TVMovieProgram.Feelings, TVMovieProgram.FileName, TVMovieProgram.Fun, TVMovieProgram.HDTV, TVMovieProgram.idEpisode, TVMovieProgram.idMovingPictures, TVMovieProgram.idSeries, TVMovieProgram.idVideo, TVMovieProgram.KurzKritik, TVMovieProgram.local, TVMovieProgram.Regie, TVMovieProgram.Requirement, TVMovieProgram.SeriesPosterImage, TVMovieProgram.ShortDescribtion, TVMovieProgram.Tension, TVMovieProgram.TVMovieBewertung ")
-                MyLog.Debug(String.Format("[{0}] [{1}]: Executing: {2} ", _mClass, _mName, _SqlStringBuilder.ToString))
+                MyLog.Debug(String.Format("[{0}] [{1}]: Executing: {2} ", _mClass, mName, _SqlStringBuilder.ToString))
                 Dim _SQLstate As SqlStatement = Broker.GetStatement(_SqlStringBuilder.ToString)
                 Dim _ItemsOnLoad As List(Of TVMovieProgram) = ObjectFactory.GetCollection(GetType(TVMovieProgram), _SQLstate.Execute())
-                MyLog.Info(String.Format("[{0}] [{1}]: Received {2} records in {3}sec", _mClass, _mName, _ItemsOnLoad.Count, (DateTime.Now - _timer).TotalSeconds))
+                MyLog.Info(String.Format("[{0}] [{1}]: Received {2} records in {3}sec", _mClass, mName, _ItemsOnLoad.Count, (DateTime.Now - _timer).TotalSeconds))
 
                 If _ItemsOnLoad.Count > 0 Then
                     _ItemsCache = _ItemsOnLoad
@@ -1043,7 +1054,7 @@ Namespace ClickfinderSimpleGuide
                     _ThreadNiceEPGList.IsBackground = True
                     _ThreadNiceEPGList.Start()
                     '' here muss der Cache gefüllt werden
-                    If m_UseTMDb Then
+                    If _UseTMDb Then
                         _ThreadBuildTMDb = New Thread(AddressOf UpdateTMDbCache)
                         _ThreadBuildTMDb.IsBackground = True
                         _ThreadBuildTMDb.Start()
@@ -1055,28 +1066,28 @@ Namespace ClickfinderSimpleGuide
                 End If
 
             Catch ex As ThreadAbortException
-                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
+                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, mName))
             Catch ex As GentleException
-                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
 
         End Sub
         Private Sub UpdateTMDbCache()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = Me.GetType.Name
             Dim stopwatch As Diagnostics.Stopwatch = New Diagnostics.Stopwatch
             stopwatch.Start()
-            MyLog.Debug(String.Format("[{0}] [{1}]: Updating TMDb-Cache for View {2} Start", _mClass, _mName, m_actualViewNumber))
-            _cacheHander.buildCache(_TMDbCache, _ItemsCache, CDate("03.09.2016"))
+            MyLog.Debug(String.Format("[{0}] [{1}]: Updating TMDb-Cache for View {2} Start", _mClass, mName, _actualViewNumber))
+            _cacheHander.buildCache(_TMDbCache, _ItemsCache)
             stopwatch.Stop()
-            MyLog.Debug(String.Format("[{0}] [{1}]: Updated TMDb-Cache ({2}) Items in {3} ms", _mClass, _mName _
+            MyLog.Debug(String.Format("[{0}] [{1}]: Updated TMDb-Cache ({2}) Items in {3} ms", _mClass, mName _
                                       , _TMDbCache.Count, stopwatch.ElapsedMilliseconds))
         End Sub
         Private Sub FillniceEPGList()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = Me.GetType.Name
 
             Dim _timer As Date = Date.Now
             Dim _ItemCounter As Integer = 0
@@ -1105,18 +1116,18 @@ Namespace ClickfinderSimpleGuide
                                            CSGuideHelper.RecordingStatus(_TvMovieProgram.ReferencedProgram))
 
                     Catch ex As ThreadAbortException
-                        MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, mName))
                     Catch ex As GentleException
-                        MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 Next
 
                 _DataLoadingAnimation.Visible = False
                 _niceEPGList.Visible = True
 
-                MyLog.Info(String.Format("[{0}] [{1}]: Thread finished in {2}s", _mClass, _mName, (DateTime.Now - _timer).TotalSeconds))
+                MyLog.Info(String.Format("[{0}] [{1}]: Thread finished in {2}s", _mClass, mName, (DateTime.Now - _timer).TotalSeconds))
 
                 GUIListControl.SelectItemControl(GetID, _LastFocusedControlID, _LastFocusedIndex)
                 GUIListControl.FocusControl(GetID, _LastFocusedControlID)
@@ -1125,20 +1136,21 @@ Namespace ClickfinderSimpleGuide
 
                 If _niceEPGList.SelectedListItem Is Nothing Then
                     _niceEPGList.SelectedItem = 0
-                    MyLog.Debug(String.Format("[{0}] [{1}]: _niceEPGList.SelectedListItem is Nothing", _mClass, _mName))
+                    MyLog.Debug(String.Format("[{0}] [{1}]: _niceEPGList.SelectedListItem is Nothing", _mClass, mName))
                 End If
 
                 SetCorrectListItemIndex()
                 NiceEPGSetGUIProperties(TVMovieProgram.Retrieve(_niceEPGList.SelectedListItem.ItemId))
 
+
                 'GUIWindowManager.NeedRefresh()
 
             Catch ex As ThreadAbortException
-                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, _mName))
+                MyLog.Error(String.Format("[{0}] [{1}]: Thread aborted", _mClass, mName))
             Catch ex As GentleException
-                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: GentleException err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
         End Sub
 
@@ -1148,20 +1160,20 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Private Sub AbortRunningThreads()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = Me.GetType.Name
 
             Try
                 If _ThreadLoadItemsFromDatabase.IsAlive = True Then
                     _ThreadLoadItemsFromDatabase.Abort()
-                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadLoadItemsFromDatabase aborted", _mClass, _mName))
+                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadLoadItemsFromDatabase aborted", _mClass, mName))
                 End If
                 If _ThreadNiceEPGList.IsAlive = True Then
                     _ThreadNiceEPGList.Abort()
-                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, _mName))
+                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, mName))
                 End If
             Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
         End Sub
 
@@ -1174,10 +1186,10 @@ Namespace ClickfinderSimpleGuide
 
 
             ' First start searching the prgram id - this is possible if previous EPGView is not SingleChannel
-            If (CSGuideSettings.View(m_previousViewNumber).Type <> "Single") Then
-                If m_idProgram <> 0 Then
+            If (CSGuideSettings.View(_previousViewNumber).Type <> "Single") Then
+                If _idProgram <> 0 Then
                     For i = 0 To _niceEPGList.Count - 1
-                        If _niceEPGList.Item(i).ItemId = m_idProgram Then
+                        If _niceEPGList.Item(i).ItemId = _idProgram Then
                             _niceEPGList.SelectedListItemIndex = i
                             m_StartTimePreviousItem = TVMovieProgram.Retrieve(_niceEPGList.Item(i).ItemId).ReferencedProgram.StartTime
                             Exit Sub
@@ -1206,29 +1218,20 @@ Namespace ClickfinderSimpleGuide
             Else
                 _niceEPGList.SelectedListItemIndex = 0
             End If
-
+            _SelectedNiceEPGItemId = _niceEPGList.Item(_niceEPGList.SelectedListItemIndex).ItemId
         End Sub
-        Private Sub RememberLastFocusedItem()
 
-            'If _niceEPGList.IsFocused Then
-            '    _LastFocusedIndex = _niceEPGList.SelectedListItemIndex
-            '    _LastFocusedControlID = _niceEPGList.GetID
-            'Else
-            '    _LastFocusedIndex = 0
-            '    _LastFocusedControlID = _niceEPGList.GetID
-            'End If
-
-        End Sub
         Private Function getFanartFileNameAbsPath(ByVal myTVMovieProgram As TVMovieProgram) As String
-            If _TMDbCache.ContainsKey(myTVMovieProgram.idProgram) Then
-                Return getFanartFileName3(myTVMovieProgram)
-            Else
-                Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\hover_ClickfinderSimpleGuide.png"))
+            If Not myTVMovieProgram Is Nothing Then
+                If _TMDbCache.ContainsKey(myTVMovieProgram.idProgram) Then
+                    Return getFanartFileName3(myTVMovieProgram)
+                End If
             End If
+            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\hover_ClickfinderSimpleGuide.png"))
         End Function
         Private Function getFanartFileName3(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            ' Dim _mClass As String = Me.GetType.Name
 
             Dim programID As Integer = myTVMovieProgram.idProgram
             Dim backgroundImage As String = "hover_ClickfinderSimpleGuide.png"
@@ -1239,47 +1242,20 @@ Namespace ClickfinderSimpleGuide
                     Dim fanartURL As String = _TMDbCache.Item(programID).Misc.fanartURL
 
                     If (Not String.IsNullOrEmpty(absFanartPath)) And (Not String.IsNullOrEmpty(fanartURL)) Then
-                        Utils.DownLoadAndCacheImage(fanartURL, absFanartPath)
+                        If Not File.Exists(absFanartPath) Then
+                            Utils.DownLoadAndCacheImage(fanartURL, absFanartPath)
+                        End If
                         Return absFanartPath
                     End If
                 End If
             Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
             Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\" & backgroundImage))
         End Function
 
-        Private Function getFanartFileName2(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-
-            Dim programID As Integer = myTVMovieProgram.idProgram
-            Dim backgroundImage As String = "hover_ClickfinderSimpleGuide.png"
-            Try
-                If _TMDbCache.ContainsKey(programID) Then
-                    If Not IsNothing(_TMDbCache.Item(programID).movie) Then
-                        If Not _TMDbCache.Item(programID).movie.BackdropPath Is Nothing Then
-                            Dim _fanArtURL = m_tmdbClient.GetImageUrl("original", _TMDbCache.Item(programID).movie.BackdropPath).ToString()
-                            Dim _rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
-                            Dim _imageFilename As String = _rgx.Match(_fanArtURL).Groups(1).Value
-                            If Not String.IsNullOrEmpty(_imageFilename) Then
-                                Dim _absImagePath As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Fanart\"), _imageFilename)
-                                Dim _relImagePath As String = Path.Combine("CSG\Fanart\", _imageFilename)
-                                Utils.DownLoadAndCacheImage(_fanArtURL, _absImagePath)
-                                backgroundImage = _relImagePath
-                            End If
-                        End If
-                    End If
-                End If
-            Catch ex As Exception
-                MyLog.Error(String.Format("[{0}] [{1}]: Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
-            End Try
-            Return backgroundImage
-        End Function
-
-
         Private Shared Sub FetchConfig(client As TMDbClient)
-            Dim configXml As New FileInfo("C:\ProgramData\Team MediaPortal\MediaPortal TV Server\enrichEPG\config.xml")
+            Dim configXml As New FileInfo(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbLibConfig.xml")))
 
             Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
 
@@ -1424,7 +1400,7 @@ Namespace ClickfinderSimpleGuide
             line91.Dispose()
             'ID 17
             Dim line10 As New GUIListItem
-            Select Case CSGuideSettings.View(m_actualViewNumber).Type
+            Select Case CSGuideSettings.View(_actualViewNumber).Type
                 Case "Overview"
                     line10.Label = "(Pfeil rechts): Eine Kanalgruppe vorwärts"
                 Case "Single"
@@ -1434,7 +1410,7 @@ Namespace ClickfinderSimpleGuide
             line10.Dispose()
             'ID 18
             Dim line11 As New GUIListItem
-            Select Case CSGuideSettings.View(m_actualViewNumber).Type
+            Select Case CSGuideSettings.View(_actualViewNumber).Type
                 Case "Overview"
                     line11.Label = "(Pfeil links): Eine Kanalgruppe rückwärts"
                 Case "Single"
@@ -1546,252 +1522,7 @@ Namespace ClickfinderSimpleGuide
 
 #End Region
 
-#Region "MovieInfo"
 
-        Protected Function GetKeyboard(ByRef strLine As String) As Boolean
-            Dim keyboard As VirtualKeyboard = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_VIRTUAL_KEYBOARD)), VirtualKeyboard)
-            If keyboard Is Nothing Then
-                Return False
-            End If
-            keyboard.Reset()
-            keyboard.Text = strLine
-            keyboard.DoModal(GetID)
-            If keyboard.IsConfirmed Then
-                strLine = keyboard.Text
-                Return True
-            End If
-            Return False
-        End Function
-
-        Private Sub OnGetIMDBInfo(ByVal myTVMovieProgram As TVMovieProgram)
-            Dim _movieDetails As IMDBMovie = New IMDBMovie()
-            Dim _currentProgram As Program = myTVMovieProgram.ReferencedProgram
-            _movieDetails.SearchString = myTVMovieProgram.ReferencedProgram.Title
-
-            If IMDBFetcher.GetInfoFromIMDB(Me, _movieDetails, False, False) Then
-                Dim dbLayer As New TvBusinessLayer()
-
-                Dim progs As IList(Of Program) = dbLayer.GetProgramExists(Channel.Retrieve(_currentProgram.IdChannel), _currentProgram.StartTime, _currentProgram.EndTime)
-                If progs IsNot Nothing AndAlso progs.Count > 0 Then
-                    Dim prog As Program = DirectCast(progs(0), Program)
-                    prog.Description = _movieDetails.Plot
-                    ' prog.Genre = movieDetails.Genre;
-                    prog.StarRating = CInt(_movieDetails.Rating)
-                    prog.Persist()
-                End If
-                Dim videoInfo As GUIVideoInfo = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_VIDEO_INFO)), GUIVideoInfo)
-                videoInfo.AllocResources()
-                videoInfo.Movie = _movieDetails
-                Dim btnPlay As GUIButtonControl = DirectCast(videoInfo.GetControl(2), GUIButtonControl)
-                If btnPlay IsNot Nothing Then
-                    btnPlay.Visible = False
-                End If
-                Dim btnCast As GUICheckButton = DirectCast(videoInfo.GetControl(4), GUICheckButton)
-                If btnCast IsNot Nothing Then
-                    btnCast.Visible = False
-                End If
-                Dim btnWatched As GUICheckButton = DirectCast(videoInfo.GetControl(6), GUICheckButton)
-                If btnWatched IsNot Nothing Then
-                    btnWatched.Visible = False
-                End If
-                GUIWindowManager.ActivateWindow(CInt(Window.WINDOW_VIDEO_INFO))
-            Else
-                Log.Info("IMDB Fetcher: Nothing found")
-            End If
-        End Sub
-
-        Public Function OnDisableCancel(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnDisableCancel
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            If pDlgProgress.IsInstance(fetcher) Then
-                pDlgProgress.DisableCancel(True)
-            End If
-            Return True
-        End Function
-
-        Public Sub OnProgress(line1 As String, line2 As String, line3 As String, percent As Integer) Implements IMDB.IProgress.OnProgress
-            If Not GUIWindowManager.IsRouted Then
-                Return
-            End If
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            pDlgProgress.ShowProgressBar(True)
-            pDlgProgress.SetLine(1, line1)
-            pDlgProgress.SetLine(2, line2)
-            If percent > 0 Then
-                pDlgProgress.SetPercentage(percent)
-            End If
-            pDlgProgress.Progress()
-        End Sub
-
-        Public Function OnSearchStarting(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnSearchStarting
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            ' show dialog that we're busy querying www.imdb.com
-            pDlgProgress.Reset()
-            pDlgProgress.SetHeading(GUILocalizeStrings.[Get](197))
-            pDlgProgress.SetLine(1, fetcher.MovieName)
-            pDlgProgress.SetLine(2, String.Empty)
-            pDlgProgress.SetObject(fetcher)
-            pDlgProgress.StartModal(GUIWindowManager.ActiveWindow)
-            Return True
-        End Function
-
-        Public Function OnSearchStarted(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnSearchStarted
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            pDlgProgress.SetObject(fetcher)
-            pDlgProgress.DoModal(GUIWindowManager.ActiveWindow)
-            If pDlgProgress.IsCanceled Then
-                Return False
-            End If
-            Return True
-        End Function
-
-        Public Function OnSearchEnd(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnSearchEnd
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            If (pDlgProgress IsNot Nothing) AndAlso (pDlgProgress.IsInstance(fetcher)) Then
-                pDlgProgress.Close()
-            End If
-            Return True
-        End Function
-
-        Public Function OnMovieNotFound(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnMovieNotFound
-            Log.Info("IMDB Fetcher: OnMovieNotFound")
-            ' show dialog...
-            Dim pDlgOK As GUIDialogOK = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_OK)), GUIDialogOK)
-            pDlgOK.SetHeading(195)
-            pDlgOK.SetLine(1, fetcher.MovieName)
-            pDlgOK.SetLine(2, String.Empty)
-            pDlgOK.DoModal(GUIWindowManager.ActiveWindow)
-            Return True
-        End Function
-
-        Public Function OnDetailsStarting(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnDetailsStarting
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            ' show dialog that we're downloading the movie info
-            pDlgProgress.Reset()
-            pDlgProgress.SetHeading(GUILocalizeStrings.[Get](198))
-            'pDlgProgress.SetLine(0, strMovieName);
-            pDlgProgress.SetLine(1, fetcher.MovieName)
-            pDlgProgress.SetLine(2, String.Empty)
-            pDlgProgress.SetObject(fetcher)
-            pDlgProgress.StartModal(GUIWindowManager.ActiveWindow)
-            Return True
-        End Function
-
-        Public Function OnDetailsStarted(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnDetailsStarted
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            pDlgProgress.SetObject(fetcher)
-            pDlgProgress.DoModal(GUIWindowManager.ActiveWindow)
-            If pDlgProgress.IsCanceled Then
-                Return False
-            End If
-            Return True
-        End Function
-
-        Public Function OnDetailsEnd(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnDetailsEnd
-            Dim pDlgProgress As GUIDialogProgress = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_PROGRESS)), GUIDialogProgress)
-            If (pDlgProgress IsNot Nothing) AndAlso (pDlgProgress.IsInstance(fetcher)) Then
-                pDlgProgress.Close()
-            End If
-            Return True
-        End Function
-
-        Public Function OnActorsStarting(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnActorsStarting
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnActorsStarted(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnActorsStarted
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnActorsEnd(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnActorsEnd
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnActorInfoStarting(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnActorInfoStarting
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnSelectActor(fetcher As IMDBFetcher, ByRef selected As Integer) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnSelectActor
-            ' won't occure
-            selected = 0
-            Return True
-        End Function
-
-        Public Function OnDetailsNotFound(fetcher As IMDBFetcher) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnDetailsNotFound
-            Log.Info("IMDB Fetcher: OnDetailsNotFound")
-            ' show dialog...
-            Dim pDlgOK As GUIDialogOK = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_OK)), GUIDialogOK)
-            ' show dialog...
-            pDlgOK.SetHeading(195)
-            pDlgOK.SetLine(1, fetcher.MovieName)
-            pDlgOK.SetLine(2, String.Empty)
-            pDlgOK.DoModal(GUIWindowManager.ActiveWindow)
-            Return False
-        End Function
-
-        Public Function OnRequestMovieTitle(fetcher As IMDBFetcher, ByRef movieName As String) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnRequestMovieTitle
-            movieName = fetcher.MovieName
-            If GetKeyboard(movieName) Then
-                If movieName = String.Empty Then
-                    Return False
-                End If
-                Return True
-            End If
-            movieName = String.Empty
-            Return False
-        End Function
-
-        Public Function OnSelectMovie(fetcher As IMDBFetcher, ByRef selectedMovie As Integer) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnSelectMovie
-
-            Dim pDlgSelect As GUIDialogSelect = DirectCast(GUIWindowManager.GetWindow(CInt(Window.WINDOW_DIALOG_SELECT)), GUIDialogSelect)
-            ' more then 1 movie found
-            ' ask user to select 1
-            pDlgSelect.Reset()
-            pDlgSelect.SetHeading(196)
-            'select movie
-            For i As Integer = 0 To fetcher.Count - 1
-                pDlgSelect.Add(fetcher(i).Title)
-            Next
-            pDlgSelect.EnableButton(True)
-            pDlgSelect.SetButtonLabel(413)
-            ' manual
-            pDlgSelect.DoModal(GUIWindowManager.ActiveWindow)
-
-            ' and wait till user selects one
-            selectedMovie = pDlgSelect.SelectedLabel
-            If pDlgSelect.IsButtonPressed Then
-                Return True
-            End If
-            If selectedMovie = -1 Then
-                Return False
-            End If
-            Return True
-        End Function
-
-        Public Function OnScanStart(total As Integer) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnScanStart
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnScanEnd() As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnScanEnd
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnScanIterating(count As Integer) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnScanIterating
-            ' won't occure
-            Return True
-        End Function
-
-        Public Function OnScanIterated(count As Integer) As Boolean Implements MediaPortal.Video.Database.IMDB.IProgress.OnScanIterated
-            ' won't occure
-            Return True
-        End Function
-
-#End Region
 
     End Class
 End Namespace

@@ -1,40 +1,50 @@
-﻿Imports TMDbLib.Objects.Search
-Imports TMDbLib.Objects.Movies
+﻿Imports TMDbLib.Objects.Movies
 
 Public Class CSGuideTMDBCacheItem
-    Private m_movie As SearchMovie
-    Private m_credit As Credits
+    Private _movie As Movie
+    Private _credit As Credits
+    Private _misc As CSGuideTMDBCacheItemMisc
+    Private _updateDate As Date
 
-    Private m_updateDate As Date
-    Public Property updateDate() As Date
+    Public Property Misc() As CSGuideTMDBCacheItemMisc
         Get
-            Return m_updateDate
+            Return _misc
         End Get
-        Set(ByVal value As Date)
-            m_updateDate = value
+        Set(ByVal value As CSGuideTMDBCacheItemMisc)
+            _misc = value
         End Set
     End Property
-    Public Property movie() As SearchMovie
+
+    Public Property updateDate() As Date
         Get
-            Return m_movie
+            Return _updateDate
         End Get
-        Set(ByVal value As SearchMovie)
-            m_movie = value
+        Set(ByVal value As Date)
+            _updateDate = value
+        End Set
+    End Property
+    Public Property movie() As Movie
+        Get
+            Return _movie
+        End Get
+        Set(ByVal value As Movie)
+            _movie = value
         End Set
     End Property
 
     Public Property credit() As Credits
         Get
-            Return m_credit
+            Return _credit
         End Get
         Set(ByVal value As Credits)
-            m_credit = value
+            _credit = value
         End Set
     End Property
-    Public Sub New(ByVal updateDate As Date, ByVal movie As SearchMovie, ByVal credit As Credits)
-        m_updateDate = updateDate
-        m_movie = movie
-        m_credit = credit
+    Public Sub New(ByVal updateDate As Date, ByVal movie As Movie, ByVal credit As Credits, ByVal misc As CSGuideTMDBCacheItemMisc)
+        _updateDate = updateDate
+        _movie = movie
+        _credit = credit
+        _misc = misc
 
     End Sub
 End Class

@@ -3,6 +3,7 @@ Imports System.Xml
 Imports System.Text
 
 Imports MediaPortal.Configuration
+Imports MediaPortal.Util
 
 Imports enrichEPG.TvDatabase
 
@@ -15,34 +16,36 @@ Imports TMDbLib.Objects.Search
 Namespace ClickfinderSimpleGuide
 
 
-    Public Class CSGUideCacheHandler
-        Private _cacheFile As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSG\CSGuideTMDbCache.xml"))
-        Private _lastUpdateFilename As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSG\CSGuideTMDbCache_lastUpdate.txt"))
+    Public Class CSGuideCacheHandler
+        Private _cacheFile As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache.json"))
+        Private _lastUpdateFilename As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache_lastUpdate.txt"))
         Private _tmdbClient As TMDbClient
         Private _lastCacheUpdate As New Dictionary(Of String, Date)
         Private _cacheUpdateDict As New Dictionary(Of String, Date)
+        Private _mClass As String
+
 
         Public Sub New(ByRef tmdbClient As TMDbClient)
+            _mClass = [GetType].Name
             _tmdbClient = tmdbClient
             _cacheUpdateDict.Item("TMDbCache") = Date.Now
         End Sub
 
-        Public Sub buildCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem3),
-                          ByVal itemsCache As List(Of TVMovieProgram), ByVal oldestEntryDate As Date)
+        Public Sub buildCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem),
+                          ByVal itemsCache As List(Of TVMovieProgram))
 
             ' 1. Check if Cache-File already exists
             If File.Exists(_cacheFile) Then
-                tmdbCache = JsonConvert.DeserializeObject(Of Dictionary(Of String, CSGuideTMDBCacheItem3))(File.ReadAllText(_cacheFile))
+                tmdbCache = JsonConvert.DeserializeObject(Of Dictionary(Of String, CSGuideTMDBCacheItem))(File.ReadAllText(_cacheFile))
                 ' 2. Remove the old entried
-                removeOldEntries(oldestEntryDate, tmdbCache)
+                removeOldEntries(tmdbCache)
             End If
 
             ' 3: Check if Cache needs update (should be only updated once a day)
             If cacheNeedsUpdate("TMDbCache") Then
                 ' 4: Update the CacheItems
                 If updateCache(tmdbCache, itemsCache) Then
-                    Dim myJasonCache As String = JsonConvert.SerializeObject(tmdbCache, Newtonsoft.Json.Formatting.Indented)
-                    File.WriteAllText(_cacheFile, myJasonCache)
+                    persistCache(tmdbCache)
                 End If
                 '5: Write the lastUpdate-Date in a File            
                 Dim myJasonCache2 As String = JsonConvert.SerializeObject(_cacheUpdateDict, Newtonsoft.Json.Formatting.Indented)
@@ -51,6 +54,16 @@ Namespace ClickfinderSimpleGuide
 
 
         End Sub
+        Public Sub persistCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Try
+                File.WriteAllText(_cacheFile, JsonConvert.SerializeObject(tmdbCache, Newtonsoft.Json.Formatting.Indented))
+                MyLog.Info(String.Format("[{0}] [{1}]: Persisting TMDb Cache", _mClass, mName))
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+            End Try
+        End Sub
+
         Private Function cacheNeedsUpdate(cacheName As String) As Boolean
 
             If File.Exists(_lastUpdateFilename) Then
@@ -63,22 +76,39 @@ Namespace ClickfinderSimpleGuide
             End If
             Return True
         End Function
-        Private Sub removeOldEntries(oldestEntryDate As Date, ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem3))
+        Private Sub removeOldEntries(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
             For Each key As String In New List(Of String)(tmdbCache.Keys)
-                If oldestEntryDate > tmdbCache(key).updateDate Then
+                ' alle Einträge von vorgestern löschen
+                If Date.Today.AddDays(-1) > tmdbCache(key).updateDate Then
+                    Utils.FileDelete(tmdbCache(key).Misc.absFanartPath)
+                    Utils.FileDelete(tmdbCache(key).Misc.absPosterPath)
                     tmdbCache.Remove(key)
                 End If
             Next
-        End Sub
-        Public Function updateCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem3), ByRef itemsCache As List(Of TVMovieProgram)) As Boolean
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+            ' 
+            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor")), 7)
+            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster")), 3)
+            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart")), 3)
 
-            Dim movieFound As SearchMovie = Nothing
-            Dim credit As Credits = Nothing
+        End Sub
+        Private Sub imageCleaner(ByVal fileDir As String, ByVal daysOld As Integer)
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim directory As New IO.DirectoryInfo(fileDir)
+            For Each file As IO.FileInfo In directory.GetFiles
+                If (Now - file.CreationTime).Days > daysOld Then file.Delete()
+            Next
+            MyLog.Info(String.Format("[{0}] [{1}]: Deleted {2} files in {3}", _mClass, mName, directory.GetFiles.Count, fileDir))
+        End Sub
+
+        Public Function updateCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem), ByRef itemsCache As List(Of TVMovieProgram)) As Boolean
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+
+
+            'Dim movieFound As SearchMovie = Nothing
+            'Dim credit As Credits = Nothing
             Dim updated As Boolean = False
             Dim tvmProgram As TVMovieProgram
-            Dim movieGerman As Movie = Nothing
+            ' Dim movieGerman As Movie = Nothing
 
             FetchConfig(_tmdbClient)
 
@@ -88,9 +118,8 @@ Namespace ClickfinderSimpleGuide
             Next
             Return updated
         End Function
-        Public Function AddItem(ByVal tvmProgram As TVMovieProgram, ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem3)) As Boolean
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
+        Public Function AddItem(ByVal tvmProgram As TVMovieProgram, ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem)) As Boolean
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim title As String
             Dim year As Integer
             Dim movieFound As SearchMovie = Nothing
@@ -104,7 +133,7 @@ Namespace ClickfinderSimpleGuide
             Try
                 If tmdbCache.ContainsKey(tvmProgram.idProgram) Then
                     'Console.WriteLine(title & " (" & year & ") already cached")
-                    MyLog.Debug(String.Format("[{0}] [{1}]: {2}({3}) already cached", _mClass, _mName, title, year))
+                    MyLog.Debug(String.Format("[{0}] [{1}]: {2}({3}) already cached", _mClass, mName, title, year))
                     Return False
                 End If
             Catch
@@ -121,10 +150,10 @@ Namespace ClickfinderSimpleGuide
                 credit = Nothing
             End If
             'Console.WriteLine("Caching " & title & " (" & year & "), Key: " & tvmProgram.idProgram)
-            MyLog.Debug(String.Format("[{0}] [{1}]: Caching {2}({3})", _mClass, _mName, title, year))
+            MyLog.Debug(String.Format("[{0}] [{1}]: Caching {2}({3})", _mClass, mName, title, year))
             Try
                 'tmdbCache.Add(tvmProgram.idProgram, New CSGuideTMDBCacheItem(Date.Today(), movieFound, credit))
-                tmdbCache.Add(tvmProgram.idProgram, New CSGuideTMDBCacheItem3(Date.Today(), movieGerman, credit, misc))
+                tmdbCache.Add(tvmProgram.idProgram, New CSGuideTMDBCacheItem(Date.Today(), movieGerman, credit, misc))
             Catch
             End Try
             Return True
@@ -141,7 +170,7 @@ Namespace ClickfinderSimpleGuide
                 artURL = _tmdbClient.GetImageUrl("original", movie.BackdropPath).ToString()
                 imageFilename = rgx.Match(artURL).Groups(1).Value
                 If Not String.IsNullOrEmpty(imageFilename) Then
-                    misc.absFanartPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Fanart\"), imageFilename)
+                    misc.absFanartPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart\"), imageFilename)
                     misc.relFanartPath = Path.Combine("CSG\Fanart\", imageFilename)
                     misc.fanartURL = _tmdbClient.GetImageUrl("original", movie.BackdropPath).ToString()
                 End If
@@ -150,7 +179,7 @@ Namespace ClickfinderSimpleGuide
                 artURL = _tmdbClient.GetImageUrl("original", movie.PosterPath).ToString()
                 imageFilename = rgx.Match(artURL).Groups(1).Value
                 If Not String.IsNullOrEmpty(imageFilename) Then
-                    misc.absPosterPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Poster\"), imageFilename)
+                    misc.absPosterPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster\"), imageFilename)
                     misc.relPosterPath = Path.Combine("CSG\Poster\", imageFilename)
                     misc.posterURL = _tmdbClient.GetImageUrl("original", movie.PosterPath).ToString()
                 End If
@@ -160,7 +189,7 @@ Namespace ClickfinderSimpleGuide
         End Function
 
         Private Shared Sub FetchConfig(client As TMDbClient)
-            Dim configXml As New FileInfo(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSG\CSGuideTMDbLibConfig.xml")))
+            Dim configXml As New FileInfo(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbLibConfig.xml")))
 
             Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
 

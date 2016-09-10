@@ -168,11 +168,11 @@ Namespace ClickfinderSimpleGuide
             Try
                 Dim dlgContext As GUIDialogOK = CType(GUIWindowManager.GetWindow(CType(GUIWindow.Window.WINDOW_DIALOG_OK, Integer)), GUIDialogOK)
                 dlgContext.Reset()
-                dlgContext.SetHeading("Warnung")
+                dlgContext.SetHeading("Information")
                 dlgContext.SetLine(1, Message)
 
                 dlgContext.DoModal(GUIWindowManager.ActiveWindow)
-                GUIWindowManager.CloseCurrentWindow()
+                'GUIWindowManager.CloseCurrentWindow()
 
                 dlgContext.Dispose()
                 dlgContext.AllocResources()

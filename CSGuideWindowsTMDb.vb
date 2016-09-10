@@ -43,15 +43,13 @@ Namespace ClickfinderSimpleGuide
 #End Region
 #Region "Members"
 
-        Private Shared _backdrop As ImageSwapper
-        Private Shared _counter As Integer
-        Private Shared _filename As String
-        Private Shared _movieInfo As CSGuideTMDBCacheItem3
+        Private _backdrop As ImageSwapper
+        Private _counter As Integer
+        Private _filename As String
+        Private Shared _movieInfo As CSGuideTMDBCacheItem
         Private Shared _tmdbClient As TMDbClient
-
-        Private Shared _SelectedListCastItemId As Integer
-
-        Private m_castList As New ArrayList
+        Private _SelectedListCastItemId As Integer
+        Private _castList As New ArrayList
 
         Public Shared Property TmdbClient() As TMDbClient
             Get
@@ -62,11 +60,11 @@ Namespace ClickfinderSimpleGuide
             End Set
         End Property
 
-        Public Shared Property MovieInfo() As CSGuideTMDBCacheItem3
+        Public Shared Property MovieInfo() As CSGuideTMDBCacheItem
             Get
                 Return _movieInfo
             End Get
-            Set(ByVal value As CSGuideTMDBCacheItem3)
+            Set(ByVal value As CSGuideTMDBCacheItem)
                 _movieInfo = value
             End Set
         End Property
@@ -250,8 +248,18 @@ Namespace ClickfinderSimpleGuide
             Next
             CSGuideHelper.SetProperty("#country", stringHelper)
             stringHelper = ""
-            CSGuideHelper.SetProperty("#budget", String.Format("{0:N0}", _movieInfo.movie.Budget))
-            CSGuideHelper.SetProperty("#revenue", String.Format("{0:N0}", _movieInfo.movie.Revenue))
+            If _movieInfo.movie.Budget = 0 Then
+                CSGuideHelper.SetProperty("#budget", "unbekannt")
+            Else
+                CSGuideHelper.SetProperty("#budget", String.Format("{0:N0}", _movieInfo.movie.Budget))
+            End If
+
+            If _movieInfo.movie.Revenue = 0 Then
+                CSGuideHelper.SetProperty("#revenue", "unbekannt")
+            Else
+                CSGuideHelper.SetProperty("#revenue", String.Format("{0:N0}", _movieInfo.movie.Revenue))
+            End If
+
             CSGuideHelper.SetProperty("#runtime", _movieInfo.movie.Runtime & " min")
             CSGuideHelper.SetProperty("#orginalTitle", _movieInfo.movie.OriginalTitle)
             CSGuideHelper.SetProperty("#popularity", _movieInfo.movie.Popularity)
@@ -272,28 +280,28 @@ Namespace ClickfinderSimpleGuide
         End Sub
         Private Function getAbsActorThumbPath(url As String) As String
             Dim rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
-            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\Media\CSG\Actor\"), rgx.Match(url).Groups(1).Value)
+            Return Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor\"), rgx.Match(url).Groups(1).Value)
         End Function
         Private Sub SetCastListItems()
 
             Try
-                m_castList.Clear()
+                _castList.Clear()
 
-                If m_castList IsNot Nothing Then
-                    m_castList.Clear()
+                If _castList IsNot Nothing Then
+                    _castList.Clear()
                 Else
                     Return
                 End If
 
                 For Each myCast In _movieInfo.credit.Cast
-                    m_castList.Add(myCast)
+                    _castList.Add(myCast)
                 Next
 
-                If m_castList.Count = 0 Then
+                If _castList.Count = 0 Then
                     Return
                 End If
 
-                For Each cast As Cast In m_castList
+                For Each cast As Cast In _castList
                     'temp = actor.Split(splitter)
                     Dim item As New GUIListItem()
                     item.ItemId = cast.Id

@@ -1,4 +1,10 @@
-﻿Public Class CSGuideTMDBCacheItemMisc
+﻿''' <summary>
+''' Just a helper to include forgotten strings or numbers that need to be cached
+''' </summary>
+
+
+
+Public Class CSGuideTMDBCacheItemMisc
     Public absFanartPath As String
     Public relFanartPath As String
     Public absPosterPath As String
