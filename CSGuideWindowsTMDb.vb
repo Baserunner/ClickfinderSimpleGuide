@@ -33,7 +33,9 @@ Namespace ClickfinderSimpleGuide
 
         Public Overloads Overrides Function Init() As Boolean
             'Beim initialisieren des Plugin den Screen laden
-
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            _mClass = Me.GetType.Name
+            MyLog.Debug(String.Format("[{0}] [{1}]: Called", _mClass, mName))
             Return Load(GUIGraphicsContext.Skin + "\ClickfinderSimpleGuideTMDb.xml")
         End Function
 
@@ -50,6 +52,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared _tmdbClient As TMDbClient
         Private _SelectedListCastItemId As Integer
         Private _castList As New ArrayList
+        Private _mClass As String
 
         Public Shared Property TmdbClient() As TMDbClient
             Get
@@ -72,6 +75,7 @@ Namespace ClickfinderSimpleGuide
 #Region "GUI Events"
 
         Protected Overrides Sub OnPageLoad()
+            _mClass = Me.GetType.Name
             _backdrop = New ImageSwapper
             _counter = 0
             _backdrop.PropertyOne = "#Fanart.1"
@@ -96,9 +100,8 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Public Overrides Sub OnAction(ByVal action As MediaPortal.GUI.Library.Action)
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-            Dim _filename As String = Nothing
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim filename As String = Nothing
 
             If GUIWindowManager.ActiveWindow = GetID Then
 
@@ -114,7 +117,7 @@ Namespace ClickfinderSimpleGuide
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Move down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move down - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
@@ -130,7 +133,7 @@ Namespace ClickfinderSimpleGuide
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Move up - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Move up - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
                 'Page down                
@@ -145,7 +148,7 @@ Namespace ClickfinderSimpleGuide
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Page down - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page down - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
 
@@ -161,7 +164,7 @@ Namespace ClickfinderSimpleGuide
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
-                        MyLog.Error(String.Format("[{0}] [{1}]: Page up - Err: {2} stack: {3}", _mClass, _mName, ex.Message, ex.StackTrace))
+                        MyLog.Error(String.Format("[{0}] [{1}]: Page up - Err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
                     End Try
                 End If
             End If
@@ -170,9 +173,8 @@ Namespace ClickfinderSimpleGuide
 
 
         Protected Overrides Sub OnPreviousWindow()
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim _mClass As String = Me.GetType.Name
-            MyLog.Debug(String.Format("[{0}] [{1}]: Calling myBase.OnPreviousWindow", _mClass, _mName))
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            MyLog.Debug(String.Format("[{0}] [{1}]: Calling myBase.OnPreviousWindow", _mClass, mName))
             MyBase.OnPreviousWindow()
         End Sub
 
@@ -263,7 +265,7 @@ Namespace ClickfinderSimpleGuide
             CSGuideHelper.SetProperty("#runtime", _movieInfo.movie.Runtime & " min")
             CSGuideHelper.SetProperty("#orginalTitle", _movieInfo.movie.OriginalTitle)
             CSGuideHelper.SetProperty("#popularity", _movieInfo.movie.Popularity)
-            CSGuideHelper.SetProperty("#votes", _movieInfo.movie.VoteCount)
+            CSGuideHelper.SetProperty("#votes", "(" & _movieInfo.movie.VoteCount & " Votes)")
             CSGuideHelper.SetProperty("#releaseDate", _movieInfo.movie.ReleaseDate)
             CSGuideHelper.SetProperty("#rating", _movieInfo.movie.VoteAverage)
 

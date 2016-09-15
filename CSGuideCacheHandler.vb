@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Xml
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 Imports MediaPortal.Configuration
 Imports MediaPortal.Util
@@ -18,21 +19,19 @@ Namespace ClickfinderSimpleGuide
 
     Public Class CSGuideCacheHandler
         Private _cacheFile As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache.json"))
-        Private _lastUpdateFilename As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache_lastUpdate.txt"))
+        Private _lastUpdateFilename As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache_lastUpdate.json"))
         Private _tmdbClient As TMDbClient
         Private _lastCacheUpdate As New Dictionary(Of String, Date)
-        Private _cacheUpdateDict As New Dictionary(Of String, Date)
         Private _mClass As String
 
 
         Public Sub New(ByRef tmdbClient As TMDbClient)
             _mClass = [GetType].Name
             _tmdbClient = tmdbClient
-            _cacheUpdateDict.Item("TMDbCache") = Date.Now
         End Sub
 
         Public Sub buildCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem),
-                          ByVal itemsCache As List(Of TVMovieProgram))
+                          ByVal itemsCache As List(Of TVMovieProgram), viewName As String)
 
             ' 1. Check if Cache-File already exists
             If File.Exists(_cacheFile) Then
@@ -42,13 +41,13 @@ Namespace ClickfinderSimpleGuide
             End If
 
             ' 3: Check if Cache needs update (should be only updated once a day)
-            If cacheNeedsUpdate("TMDbCache") Then
+            If cacheNeedsUpdate(viewName) Then
                 ' 4: Update the CacheItems
                 If updateCache(tmdbCache, itemsCache) Then
                     persistCache(tmdbCache)
                 End If
                 '5: Write the lastUpdate-Date in a File            
-                Dim myJasonCache2 As String = JsonConvert.SerializeObject(_cacheUpdateDict, Newtonsoft.Json.Formatting.Indented)
+                Dim myJasonCache2 As String = JsonConvert.SerializeObject(_lastCacheUpdate, Newtonsoft.Json.Formatting.Indented)
                 File.WriteAllText(_lastUpdateFilename, myJasonCache2)
             End If
 
@@ -68,7 +67,10 @@ Namespace ClickfinderSimpleGuide
 
             If File.Exists(_lastUpdateFilename) Then
                 _lastCacheUpdate = JsonConvert.DeserializeObject(Of Dictionary(Of String, Date))(File.ReadAllText(_lastUpdateFilename))
-                If _lastCacheUpdate.Item(cacheName).Date < Date.Today Then
+                If Not _lastCacheUpdate.ContainsKey(cacheName) Then
+                    _lastCacheUpdate.Add(cacheName, Date.Now)
+                    Return True
+                ElseIf _lastCacheUpdate.Item(cacheName).Date < Date.Today Then
                     Return True
                 Else
                     Return False
@@ -76,29 +78,29 @@ Namespace ClickfinderSimpleGuide
             End If
             Return True
         End Function
+        Private Function getLastCacheUpdate() As Dictionary(Of String, Date)
+            Dim returnDict As Dictionary(Of String, Date) = Nothing
+            If File.Exists(_lastUpdateFilename) Then
+                returnDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Date))(File.ReadAllText(_lastUpdateFilename))
+            End If
+            Return returnDict
+        End Function
         Private Sub removeOldEntries(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
             For Each key As String In New List(Of String)(tmdbCache.Keys)
-                ' alle Einträge von vorgestern löschen
-                If Date.Today.AddDays(-1) > tmdbCache(key).updateDate Then
+
+                If Date.Today > tmdbCache(key).keepUntilDate Then
                     Utils.FileDelete(tmdbCache(key).Misc.absFanartPath)
                     Utils.FileDelete(tmdbCache(key).Misc.absPosterPath)
                     tmdbCache.Remove(key)
                 End If
             Next
-            ' 
-            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor")), 7)
-            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster")), 3)
-            imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart")), 3)
+            ' to ensure that old entries are deleted
+            CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor")), 14)
+            CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster")), 14)
+            CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart")), 14)
 
         End Sub
-        Private Sub imageCleaner(ByVal fileDir As String, ByVal daysOld As Integer)
-            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
-            Dim directory As New IO.DirectoryInfo(fileDir)
-            For Each file As IO.FileInfo In directory.GetFiles
-                If (Now - file.CreationTime).Days > daysOld Then file.Delete()
-            Next
-            MyLog.Info(String.Format("[{0}] [{1}]: Deleted {2} files in {3}", _mClass, mName, directory.GetFiles.Count, fileDir))
-        End Sub
+
 
         Public Function updateCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem), ByRef itemsCache As List(Of TVMovieProgram)) As Boolean
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
@@ -126,12 +128,14 @@ Namespace ClickfinderSimpleGuide
             Dim credit As Credits = Nothing
             Dim misc As New CSGuideTMDBCacheItemMisc
             Dim updated As Boolean = False
+            Dim keepUntil As Date
 
             Dim movieGerman As Movie = Nothing
             title = tvmProgram.ReferencedProgram.Title
             year = tvmProgram.ReferencedProgram.OriginalAirDate.Year
+            keepUntil = tvmProgram.ReferencedProgram.EndTime.AddDays(1)
             Try
-                If tmdbCache.ContainsKey(tvmProgram.idProgram) Then
+                If tmdbCache.ContainsKey(tvmProgram.ReferencedProgram.Title) Then
                     'Console.WriteLine(title & " (" & year & ") already cached")
                     MyLog.Debug(String.Format("[{0}] [{1}]: {2}({3}) already cached", _mClass, mName, title, year))
                     Return False
@@ -139,7 +143,7 @@ Namespace ClickfinderSimpleGuide
             Catch
             End Try
 
-            Dim results As SearchContainer(Of SearchMovie) = _tmdbClient.SearchMovieAsync(title, 0, False, year).Result
+            Dim results As SearchContainer(Of SearchMovie) = _tmdbClient.SearchMovieAsync(adaptTitleToSearch(title), 0, False, year).Result
             If results IsNot Nothing AndAlso results.Results.Count <> 0 Then
                 movieFound = results.Results.First()
                 movieGerman = _tmdbClient.GetMovieAsync(movieFound.Id, "de").Result
@@ -153,10 +157,22 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}]: Caching {2}({3})", _mClass, mName, title, year))
             Try
                 'tmdbCache.Add(tvmProgram.idProgram, New CSGuideTMDBCacheItem(Date.Today(), movieFound, credit))
-                tmdbCache.Add(tvmProgram.idProgram, New CSGuideTMDBCacheItem(Date.Today(), movieGerman, credit, misc))
+                tmdbCache.Add(tvmProgram.ReferencedProgram.Title, New CSGuideTMDBCacheItem(keepUntil, movieGerman, credit, misc))
             Catch
             End Try
             Return True
+        End Function
+
+        Private Function adaptTitleToSearch(title As String) As String
+            Dim returnString As String
+
+            returnString = Regex.Replace(title, "I\s*$", "1")
+            returnString = Regex.Replace(title, "II\s*$", "2")
+            returnString = Regex.Replace(title, "III\s*$", "3")
+            returnString = Regex.Replace(title, "IV\s*$", "4")
+            returnString = Regex.Replace(title, "V\s*$", "5")
+            returnString = Regex.Replace(title, "VI\s*$", "6")
+            Return returnString
         End Function
 
         Private Function getMiscPart(ByVal movie As Movie, ByVal tvmProgram As TVMovieProgram) As CSGuideTMDBCacheItemMisc

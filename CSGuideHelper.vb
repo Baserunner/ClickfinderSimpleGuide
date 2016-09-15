@@ -18,7 +18,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.92 TMDb"
+                Return "0.93 Beta"
             End Get
         End Property
 #End Region
@@ -259,6 +259,18 @@ Namespace ClickfinderSimpleGuide
             ' Assign Fanart filename to Image Loader
             ' Will display fanart in backdrop or reset to default background
             backdrop.Filename = filename
+        End Sub
+        Public Shared Sub imageCleaner(ByVal fileDir As String, Optional ByVal daysOld As Integer = -1)
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim directory As New IO.DirectoryInfo(fileDir)
+            Dim deleteCounter As Integer = 0
+            For Each file As IO.FileInfo In directory.GetFiles("*.jpg")
+                If (Now - file.CreationTime).Days > daysOld Then
+                    file.Delete()
+                    deleteCounter = deleteCounter + 1
+                End If
+            Next
+            MyLog.Info(String.Format("[Helper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
         End Sub
 
         Friend Shared ReadOnly Property ratingStar(ByVal Program As Program) As Integer

@@ -30,6 +30,8 @@ Partial Class CSGuideSetup
         Me.Gen_ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.Gen_TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Gen_CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Gen_Label1A = New System.Windows.Forms.Label()
@@ -60,6 +62,7 @@ Partial Class CSGuideSetup
         Me.Label4 = New System.Windows.Forms.Label()
         Me.V0_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.V1_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V1_Button1 = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -74,6 +77,7 @@ Partial Class CSGuideSetup
         Me.V1_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V1_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
+        Me.V2_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V2_Button1 = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
@@ -88,6 +92,7 @@ Partial Class CSGuideSetup
         Me.V2_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V2_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.V3_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V3_Button1 = New System.Windows.Forms.Button()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Label23 = New System.Windows.Forms.Label()
@@ -102,6 +107,7 @@ Partial Class CSGuideSetup
         Me.V3_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V3_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.V4_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V4_Button1 = New System.Windows.Forms.Button()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label29 = New System.Windows.Forms.Label()
@@ -116,6 +122,7 @@ Partial Class CSGuideSetup
         Me.V4_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V4_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage6 = New System.Windows.Forms.TabPage()
+        Me.V5_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V5_Button1 = New System.Windows.Forms.Button()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.V5_TextBox4 = New System.Windows.Forms.TextBox()
@@ -130,6 +137,7 @@ Partial Class CSGuideSetup
         Me.V5_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V5_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage7 = New System.Windows.Forms.TabPage()
+        Me.V6_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V6_Button1 = New System.Windows.Forms.Button()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Label41 = New System.Windows.Forms.Label()
@@ -144,6 +152,7 @@ Partial Class CSGuideSetup
         Me.V6_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V6_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage8 = New System.Windows.Forms.TabPage()
+        Me.V7_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V7_Button1 = New System.Windows.Forms.Button()
         Me.Label46 = New System.Windows.Forms.Label()
         Me.V7_TextBox4 = New System.Windows.Forms.TextBox()
@@ -158,6 +167,7 @@ Partial Class CSGuideSetup
         Me.V7_ComboBox2 = New System.Windows.Forms.ComboBox()
         Me.V7_TextBox3 = New System.Windows.Forms.TextBox()
         Me.TabPage9 = New System.Windows.Forms.TabPage()
+        Me.V8_CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.V8_Button1 = New System.Windows.Forms.Button()
         Me.Label52 = New System.Windows.Forms.Label()
         Me.Label53 = New System.Windows.Forms.Label()
@@ -177,16 +187,7 @@ Partial Class CSGuideSetup
         Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ErrorProvider2 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Gen_TextBox3 = New System.Windows.Forms.TextBox()
-        Me.V5_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V8_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V7_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V6_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V4_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V3_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V2_CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.V1_CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Gen_Button3 = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage10.SuspendLayout()
@@ -259,6 +260,7 @@ Partial Class CSGuideSetup
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Gen_Button3)
         Me.TabPage1.Controls.Add(Me.Gen_TextBox3)
         Me.TabPage1.Controls.Add(Me.Label1)
         Me.TabPage1.Controls.Add(Me.Gen_CheckBox2)
@@ -287,6 +289,22 @@ Partial Class CSGuideSetup
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "General"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'Gen_TextBox3
+        '
+        Me.Gen_TextBox3.Location = New System.Drawing.Point(163, 229)
+        Me.Gen_TextBox3.Name = "Gen_TextBox3"
+        Me.Gen_TextBox3.Size = New System.Drawing.Size(223, 20)
+        Me.Gen_TextBox3.TabIndex = 24
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(17, 232)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(78, 13)
+        Me.Label1.TabIndex = 23
+        Me.Label1.Text = "TMDb API Key"
         '
         'Gen_CheckBox2
         '
@@ -347,7 +365,7 @@ Partial Class CSGuideSetup
         '
         'Gen_Button2
         '
-        Me.Gen_Button2.Location = New System.Drawing.Point(390, 200)
+        Me.Gen_Button2.Location = New System.Drawing.Point(390, 199)
         Me.Gen_Button2.Name = "Gen_Button2"
         Me.Gen_Button2.Size = New System.Drawing.Size(75, 23)
         Me.Gen_Button2.TabIndex = 16
@@ -586,6 +604,16 @@ Partial Class CSGuideSetup
         Me.TabPage2.Text = "View 1"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
+        'V1_CheckBox1
+        '
+        Me.V1_CheckBox1.AutoSize = True
+        Me.V1_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V1_CheckBox1.Name = "V1_CheckBox1"
+        Me.V1_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V1_CheckBox1.TabIndex = 42
+        Me.V1_CheckBox1.Text = "Use TMDb"
+        Me.V1_CheckBox1.UseVisualStyleBackColor = True
+        '
         'V1_Button1
         '
         Me.V1_Button1.BackColor = System.Drawing.Color.Red
@@ -720,6 +748,16 @@ Partial Class CSGuideSetup
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "View 2"
         Me.TabPage3.UseVisualStyleBackColor = True
+        '
+        'V2_CheckBox1
+        '
+        Me.V2_CheckBox1.AutoSize = True
+        Me.V2_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V2_CheckBox1.Name = "V2_CheckBox1"
+        Me.V2_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V2_CheckBox1.TabIndex = 42
+        Me.V2_CheckBox1.Text = "Use TMDb"
+        Me.V2_CheckBox1.UseVisualStyleBackColor = True
         '
         'V2_Button1
         '
@@ -856,6 +894,16 @@ Partial Class CSGuideSetup
         Me.TabPage4.Text = "View 3"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
+        'V3_CheckBox1
+        '
+        Me.V3_CheckBox1.AutoSize = True
+        Me.V3_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V3_CheckBox1.Name = "V3_CheckBox1"
+        Me.V3_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V3_CheckBox1.TabIndex = 42
+        Me.V3_CheckBox1.Text = "Use TMDb"
+        Me.V3_CheckBox1.UseVisualStyleBackColor = True
+        '
         'V3_Button1
         '
         Me.V3_Button1.BackColor = System.Drawing.Color.Red
@@ -990,6 +1038,16 @@ Partial Class CSGuideSetup
         Me.TabPage5.TabIndex = 4
         Me.TabPage5.Text = "View 4"
         Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'V4_CheckBox1
+        '
+        Me.V4_CheckBox1.AutoSize = True
+        Me.V4_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V4_CheckBox1.Name = "V4_CheckBox1"
+        Me.V4_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V4_CheckBox1.TabIndex = 42
+        Me.V4_CheckBox1.Text = "Use TMDb"
+        Me.V4_CheckBox1.UseVisualStyleBackColor = True
         '
         'V4_Button1
         '
@@ -1126,6 +1184,16 @@ Partial Class CSGuideSetup
         Me.TabPage6.Text = "View 5"
         Me.TabPage6.UseVisualStyleBackColor = True
         '
+        'V5_CheckBox1
+        '
+        Me.V5_CheckBox1.AutoSize = True
+        Me.V5_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V5_CheckBox1.Name = "V5_CheckBox1"
+        Me.V5_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V5_CheckBox1.TabIndex = 41
+        Me.V5_CheckBox1.Text = "Use TMDb"
+        Me.V5_CheckBox1.UseVisualStyleBackColor = True
+        '
         'V5_Button1
         '
         Me.V5_Button1.BackColor = System.Drawing.Color.Red
@@ -1260,6 +1328,16 @@ Partial Class CSGuideSetup
         Me.TabPage7.TabIndex = 6
         Me.TabPage7.Text = "View 6"
         Me.TabPage7.UseVisualStyleBackColor = True
+        '
+        'V6_CheckBox1
+        '
+        Me.V6_CheckBox1.AutoSize = True
+        Me.V6_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V6_CheckBox1.Name = "V6_CheckBox1"
+        Me.V6_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V6_CheckBox1.TabIndex = 42
+        Me.V6_CheckBox1.Text = "Use TMDb"
+        Me.V6_CheckBox1.UseVisualStyleBackColor = True
         '
         'V6_Button1
         '
@@ -1396,6 +1474,16 @@ Partial Class CSGuideSetup
         Me.TabPage8.Text = "View 7"
         Me.TabPage8.UseVisualStyleBackColor = True
         '
+        'V7_CheckBox1
+        '
+        Me.V7_CheckBox1.AutoSize = True
+        Me.V7_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V7_CheckBox1.Name = "V7_CheckBox1"
+        Me.V7_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V7_CheckBox1.TabIndex = 42
+        Me.V7_CheckBox1.Text = "Use TMDb"
+        Me.V7_CheckBox1.UseVisualStyleBackColor = True
+        '
         'V7_Button1
         '
         Me.V7_Button1.BackColor = System.Drawing.Color.Red
@@ -1530,6 +1618,16 @@ Partial Class CSGuideSetup
         Me.TabPage9.TabIndex = 8
         Me.TabPage9.Text = "View 8"
         Me.TabPage9.UseVisualStyleBackColor = True
+        '
+        'V8_CheckBox1
+        '
+        Me.V8_CheckBox1.AutoSize = True
+        Me.V8_CheckBox1.Location = New System.Drawing.Point(363, 139)
+        Me.V8_CheckBox1.Name = "V8_CheckBox1"
+        Me.V8_CheckBox1.Size = New System.Drawing.Size(78, 17)
+        Me.V8_CheckBox1.TabIndex = 42
+        Me.V8_CheckBox1.Text = "Use TMDb"
+        Me.V8_CheckBox1.UseVisualStyleBackColor = True
         '
         'V8_Button1
         '
@@ -1673,101 +1771,15 @@ Partial Class CSGuideSetup
         '
         Me.ErrorProvider2.ContainerControl = Me
         '
-        'Label1
+        'Gen_Button3
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(17, 232)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(78, 13)
-        Me.Label1.TabIndex = 23
-        Me.Label1.Text = "TMDb API Key"
-        '
-        'Gen_TextBox3
-        '
-        Me.Gen_TextBox3.Location = New System.Drawing.Point(163, 229)
-        Me.Gen_TextBox3.Name = "Gen_TextBox3"
-        Me.Gen_TextBox3.Size = New System.Drawing.Size(223, 20)
-        Me.Gen_TextBox3.TabIndex = 24
-        '
-        'V5_CheckBox1
-        '
-        Me.V5_CheckBox1.AutoSize = True
-        Me.V5_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V5_CheckBox1.Name = "V5_CheckBox1"
-        Me.V5_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V5_CheckBox1.TabIndex = 41
-        Me.V5_CheckBox1.Text = "Use TMDb"
-        Me.V5_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V8_CheckBox1
-        '
-        Me.V8_CheckBox1.AutoSize = True
-        Me.V8_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V8_CheckBox1.Name = "V8_CheckBox1"
-        Me.V8_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V8_CheckBox1.TabIndex = 42
-        Me.V8_CheckBox1.Text = "Use TMDb"
-        Me.V8_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V7_CheckBox1
-        '
-        Me.V7_CheckBox1.AutoSize = True
-        Me.V7_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V7_CheckBox1.Name = "V7_CheckBox1"
-        Me.V7_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V7_CheckBox1.TabIndex = 42
-        Me.V7_CheckBox1.Text = "Use TMDb"
-        Me.V7_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V6_CheckBox1
-        '
-        Me.V6_CheckBox1.AutoSize = True
-        Me.V6_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V6_CheckBox1.Name = "V6_CheckBox1"
-        Me.V6_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V6_CheckBox1.TabIndex = 42
-        Me.V6_CheckBox1.Text = "Use TMDb"
-        Me.V6_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V4_CheckBox1
-        '
-        Me.V4_CheckBox1.AutoSize = True
-        Me.V4_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V4_CheckBox1.Name = "V4_CheckBox1"
-        Me.V4_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V4_CheckBox1.TabIndex = 42
-        Me.V4_CheckBox1.Text = "Use TMDb"
-        Me.V4_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V3_CheckBox1
-        '
-        Me.V3_CheckBox1.AutoSize = True
-        Me.V3_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V3_CheckBox1.Name = "V3_CheckBox1"
-        Me.V3_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V3_CheckBox1.TabIndex = 42
-        Me.V3_CheckBox1.Text = "Use TMDb"
-        Me.V3_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V2_CheckBox1
-        '
-        Me.V2_CheckBox1.AutoSize = True
-        Me.V2_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V2_CheckBox1.Name = "V2_CheckBox1"
-        Me.V2_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V2_CheckBox1.TabIndex = 42
-        Me.V2_CheckBox1.Text = "Use TMDb"
-        Me.V2_CheckBox1.UseVisualStyleBackColor = True
-        '
-        'V1_CheckBox1
-        '
-        Me.V1_CheckBox1.AutoSize = True
-        Me.V1_CheckBox1.Location = New System.Drawing.Point(363, 139)
-        Me.V1_CheckBox1.Name = "V1_CheckBox1"
-        Me.V1_CheckBox1.Size = New System.Drawing.Size(78, 17)
-        Me.V1_CheckBox1.TabIndex = 42
-        Me.V1_CheckBox1.Text = "Use TMDb"
-        Me.V1_CheckBox1.UseVisualStyleBackColor = True
+        Me.Gen_Button3.BackColor = System.Drawing.Color.SkyBlue
+        Me.Gen_Button3.Location = New System.Drawing.Point(390, 228)
+        Me.Gen_Button3.Name = "Gen_Button3"
+        Me.Gen_Button3.Size = New System.Drawing.Size(89, 23)
+        Me.Gen_Button3.TabIndex = 25
+        Me.Gen_Button3.Text = "Delete Cache"
+        Me.Gen_Button3.UseVisualStyleBackColor = False
         '
         'CSGuideSetup
         '
@@ -1970,4 +1982,5 @@ Partial Class CSGuideSetup
     Friend WithEvents V6_CheckBox1 As Windows.Forms.CheckBox
     Friend WithEvents V7_CheckBox1 As Windows.Forms.CheckBox
     Friend WithEvents V8_CheckBox1 As Windows.Forms.CheckBox
+    Friend WithEvents Gen_Button3 As Windows.Forms.Button
 End Class

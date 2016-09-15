@@ -470,4 +470,14 @@ Public Class CSGuideSetup
         System.Diagnostics.Process.Start("http://www.ewe-software.de/download.html#tvmovieclickfinder")
         'System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
     End Sub
+
+    Private Sub Gen_Button3_Click(sender As Object, e As EventArgs) Handles Gen_Button3.Click
+        Dim cacheFile As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache.json"))
+        Dim lastUpdateFilename As String = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbCache_lastUpdate.json"))
+        Utils.FileDelete(cacheFile)
+        Utils.FileDelete(lastUpdateFilename)
+        CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor")))
+        CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster")))
+        CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart")))
+    End Sub
 End Class
