@@ -94,13 +94,14 @@ Der Rest dürfte bekannt sein.
 
 ## Screenshots
 ### Plugin
-![Filme View](https://cloud.githubusercontent.com/assets/8837272/16706541/2b7c1eba-45b1-11e6-9624-8bd57f721551.png)
-![TagesTipps View](https://cloud.githubusercontent.com/assets/8837272/16693731/db7e7e00-4536-11e6-8173-fc147322f2cc.png)
+![TagesTipps View](https://cloud.githubusercontent.com/assets/8837272/18563645/b9ff4d9e-7b88-11e6-90a3-3c588b08caa6.png)
+![TMDb Plot](https://cloud.githubusercontent.com/assets/8837272/18563728/11010fb0-7b89-11e6-8eed-a3760f1adf09.png)
+![TMDb Besetzung](https://cloud.githubusercontent.com/assets/8837272/18563802/5828a8a8-7b89-11e6-8c7d-c99d6d72708e.png)
 ![Single Channel View](https://cloud.githubusercontent.com/assets/8837272/16706449/228d3428-45ad-11e6-8d94-12c9056d13d3.png)
 
 ### Configuration
 <div align="center">
-        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694176/1768ffce-4539-11e6-90fe-faf02ab84ce5.png" alt="Config general" title="Config general"</img>
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/18563927/b1eef018-7b89-11e6-8246-81112adeba9d.png" alt="Config general" title="Config general"</img>
         <img height="0" width="8px">
-        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/16694201/36f4299a-4539-11e6-8166-a7c0c2fd2627.png" alt="Config View 5" title="Config View 5"></img>
+        <img width="45%" src="https://cloud.githubusercontent.com/assets/8837272/18563958/cce33b68-7b89-11e6-94af-d605a6698c44.png" alt="Config View 5" title="Config View 5"></img>
 </div>
