@@ -27,7 +27,19 @@ Die Views 1-8 sind über das Setup Programm konfigurierbar. Prinzipiell können di
 Ursprünglich hatte ich das Plugin als Kategorie vom ProgramGuide Plugin geplant. Leider hatte ich Probleme damit, weshalb ich Funktionen, die ich nicht nutze, ausgebaut habe. Irgendwann habe ich daraus ein eigenständiges Plugin gebaut.
 Das *Clickfinder Simple Guide Plugin* hat bei weitem nicht die Funktionalität des *Clickfinder Program Guides*. Wer Serien, Video, Moving-Picture Unterstützung erwartet, wird von diesem Plugin entäuscht sein. Deswegen auch der Name *Simple Guide*.
 
-Derzeit wird der *Titan Skin* unterstützt.
+Seid der Version 0.93 gibt es verbesserte TMDb-Anzeigen. Wer diese nutzen möchte, muss sich einen (kostenlosen) TMDb-API-Key holen ([TMDb API FAQ](https://www.themoviedb.org/faq/api), Section "How do I apply for an API key?") und ihn in der Configuration eintragen.
+
+Das Plugin nutzt einen Cache, um die Anzahl der TMDb-Requests zu minimieren und die Steuerung so schnell wie möglich zu halten. Welche Views gecached werden, wird über das Feld "Use TMDb" im jeweiligen View-Screen der Konfiguration gesteuert.
+Natürlich macht es für die Filme-View, Default ist sie auf View 5, am meisten Sinn.
+Der Cache wird, sobald er für eine View komplett durchlaufen ist, erst wieder am nächsten Tag upgedated. 
+
+Es werden nur 40 TMDb-API Requests alle 10 sec. erlaubt. Bitte achtet darauf, dass ihr keine Views mit sehr vielen Program-Items cached. 
+Am Besten erstmal mit der Filme-View anfangen. Bei mir dauert das Cachen dieser View ungefähr 10 sec. 
+
+Der Cache selber befindet sich im Verzeichnis *%programdata%\Team MediaPortal\MediaPortal\skin\\<skin_name>\Media\CSGuide\CSGuideTMDbCache.json*. Das Cachefile ist "human-readable". Wer dort weitere Informationen findet, der er in seinem Skin einbauen möchte, kann sich bei mir melden.
+
+Es werden nur die Texte im voraus gecached. Die Hintergrundbilder, Actors und Posters werden erst dann heruntergeladen und gecached, wenn das entsprechende Program-Item aufgerufen wird. 
+
 ## Installation
 [Hier](https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/mpe1) befindet sich das .mpe1 File. 
 (Auf das .mpe1 klicken, *View Raw* ruft den *Öffnen/Speichern-Dialog* auf)
@@ -52,7 +64,7 @@ Der Rest dürfte bekannt sein.
 
 **(8)**: Ruft View 8 auf (Default ist die Übersicht "Tagestipps") *(funktioniert nicht bei allen Installationen)*
 
-**(9)**: Ruft TMDB/IMDB Informationen vom jeweiligen Programm ab
+**(9)**: Ruft TMDb Informationen vom jeweiligen Programm ab
 
 **(0)**: Ruft die Einzelkanal View auf
 

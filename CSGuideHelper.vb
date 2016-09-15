@@ -270,7 +270,7 @@ Namespace ClickfinderSimpleGuide
                     deleteCounter = deleteCounter + 1
                 End If
             Next
-            MyLog.Info(String.Format("[Helper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
+            MyLog.Debug(String.Format("[Helper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
         End Sub
 
         Friend Shared ReadOnly Property ratingStar(ByVal Program As Program) As Integer

@@ -183,10 +183,7 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, mName, new_windowId))
 
             AbortRunningThreads()
-            If _ThreadBuildTMDb.IsAlive = True Then
-                _ThreadBuildTMDb.Abort()
-                MyLog.Debug(String.Format("[{0}] [{1}]: _ThreadBuildTMDb aborted", _mClass, mName))
-            End If
+
             MyBase.OnPageDestroy(new_windowId)
             Dispose()
             AllocResources()
@@ -1190,10 +1187,13 @@ Namespace ClickfinderSimpleGuide
                     _ThreadFillProgramList.Abort()
                     MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, mName))
                 End If
-                If _ThreadBuildTMDb.IsAlive = True Then
-                    _ThreadBuildTMDb.Abort()
-                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadBuildTMDb aborted", _mClass, mName))
+                If _UseTMDb Then ' to avoid exception
+                    If _ThreadBuildTMDb.IsAlive = True Then
+                        _ThreadBuildTMDb.Abort()
+                        MyLog.Debug(String.Format("[{0}] [{1}]: ThreadBuildTMDb aborted", _mClass, mName))
+                    End If
                 End If
+
             Catch ex As Exception
                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
