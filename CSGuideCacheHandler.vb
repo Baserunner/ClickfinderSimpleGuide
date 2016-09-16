@@ -32,25 +32,28 @@ Namespace ClickfinderSimpleGuide
 
         Public Sub buildCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem),
                           ByVal itemsCache As List(Of TVMovieProgram), viewName As String)
-
-            ' 1. Check if Cache-File already exists
-            If File.Exists(_cacheFile) Then
-                tmdbCache = JsonConvert.DeserializeObject(Of Dictionary(Of String, CSGuideTMDBCacheItem))(File.ReadAllText(_cacheFile))
-                ' 2. Remove the old entried
-                removeOldEntries(tmdbCache)
-            End If
-
-            ' 3: Check if Cache needs update (should be only updated once a day)
-            If cacheNeedsUpdate(viewName) Then
-                ' 4: Update the CacheItems
-                If updateCache(tmdbCache, itemsCache) Then
-                    persistCache(tmdbCache)
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Try
+                ' 1. Check if Cache-File already exists
+                If File.Exists(_cacheFile) Then
+                    tmdbCache = JsonConvert.DeserializeObject(Of Dictionary(Of String, CSGuideTMDBCacheItem))(File.ReadAllText(_cacheFile))
+                    ' 2. Remove the old entried
+                    removeOldEntries(tmdbCache)
                 End If
-                '5: Write the lastUpdate-Date in a File            
-                Dim myJasonCache2 As String = JsonConvert.SerializeObject(_lastCacheUpdate, Newtonsoft.Json.Formatting.Indented)
-                File.WriteAllText(_lastUpdateFilename, myJasonCache2)
-            End If
 
+                ' 3: Check if Cache needs update (should be only updated once a day)
+                If cacheNeedsUpdate(viewName) Then
+                    ' 4: Update the CacheItems
+                    If updateCache(tmdbCache, itemsCache) Then
+                        persistCache(tmdbCache)
+                    End If
+                    '5: Write the lastUpdate-Date in a File            
+                    Dim myJasonCache2 As String = JsonConvert.SerializeObject(_lastCacheUpdate, Newtonsoft.Json.Formatting.Indented)
+                    File.WriteAllText(_lastUpdateFilename, myJasonCache2)
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
+            End Try
 
         End Sub
         Public Sub persistCache(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
@@ -68,9 +71,10 @@ Namespace ClickfinderSimpleGuide
             If File.Exists(_lastUpdateFilename) Then
                 _lastCacheUpdate = JsonConvert.DeserializeObject(Of Dictionary(Of String, Date))(File.ReadAllText(_lastUpdateFilename))
                 If Not _lastCacheUpdate.ContainsKey(cacheName) Then
-                    _lastCacheUpdate.Add(cacheName, Date.Now)
+                    _lastCacheUpdate.Add(cacheName, Date.Today)
                     Return True
                 ElseIf _lastCacheUpdate.Item(cacheName).Date < Date.Today Then
+                    _lastCacheUpdate.Item(cacheName) = Date.Today
                     Return True
                 Else
                     Return False

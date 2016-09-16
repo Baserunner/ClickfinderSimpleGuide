@@ -457,7 +457,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <Major>0</Major>
       <Minor>9</Minor>
       <Build>3</Build>
-      <Revision>0</Revision>
+      <Revision>1</Revision>
     </Version>
     <ExtensionDescription>This plugin is an EPG plugin based on Scroungers Clickfinder Program Guide. Its intention is to provide EPG information at one glance with handy navigation options.Requires "TV Movie EPG Import++" version 1.6.4.2.</ExtensionDescription>
     <VersionDescription />
@@ -465,7 +465,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <OnlineLocation />
     <ReleaseDate>2016-07-02T20:58:06</ReleaseDate>
     <Tags />
-    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v093.mpe1</Location>
+    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v0931.mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -714,7 +714,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\ConfigIcons\CSG_Setup.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{1d74a2eb-ddb3-45a0-995a-7c64befff841}-CSG_Setup.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{012840e1-fdee-46a5-a3e1-edc4d7e8ac0f}-CSG_Setup.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

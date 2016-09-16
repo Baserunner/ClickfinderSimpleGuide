@@ -18,7 +18,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.93"
+                Return "0.931"
             End Get
         End Property
 #End Region
