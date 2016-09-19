@@ -114,21 +114,14 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.window.xml</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{bc29dabb-625d-4a2a-930d-69fce3c51558}-ClickfinderSimpleGuide.window.xml</ZipFileName>
-              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.window.xml</DestinationFilename>
-            </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
+              <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{b2586a79-ad8d-414e-853a-20f9a94b5576}-ClickfinderSimpleGuide.xml</ZipFileName>
               <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.xml</DestinationFilename>
             </FileItem>
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+              <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{ba9254bc-8698-4585-a49a-ec98fb133f40}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
               <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
             </FileItem>
@@ -457,7 +450,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <Major>0</Major>
       <Minor>9</Minor>
       <Build>3</Build>
-      <Revision>1</Revision>
+      <Revision>2</Revision>
     </Version>
     <ExtensionDescription>This plugin is an EPG plugin based on Scroungers Clickfinder Program Guide. Its intention is to provide EPG information at one glance with handy navigation options.Requires "TV Movie EPG Import++" version 1.6.4.2.</ExtensionDescription>
     <VersionDescription />
@@ -465,7 +458,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
     <OnlineLocation />
     <ReleaseDate>2016-07-02T20:58:06</ReleaseDate>
     <Tags />
-    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v0931.mpe1</Location>
+    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v0932.mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -594,21 +587,14 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.window.xml</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{bc29dabb-625d-4a2a-930d-69fce3c51558}-ClickfinderSimpleGuide.window.xml</ZipFileName>
-        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.window.xml</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
+        <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{b2586a79-ad8d-414e-853a-20f9a94b5576}-ClickfinderSimpleGuide.xml</ZipFileName>
         <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+        <LocalFileName>C:\ProgramData\Team MediaPortal\MediaPortal\skin\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{ba9254bc-8698-4585-a49a-ec98fb133f40}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
         <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
       </FileItem>
@@ -714,7 +700,7 @@ Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\..\ConfigIcons\CSG_Setup.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{012840e1-fdee-46a5-a3e1-edc4d7e8ac0f}-CSG_Setup.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{91451a1e-43ba-45d0-9f07-3c6cd3fc4a5b}-CSG_Setup.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

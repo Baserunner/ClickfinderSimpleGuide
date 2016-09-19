@@ -1153,10 +1153,12 @@ Namespace ClickfinderSimpleGuide
                 If _ProgramList.SelectedListItem Is Nothing Then
                     _ProgramList.SelectedItem = 0
                     MyLog.Debug(String.Format("[{0}] [{1}]: _ProgramList.SelectedListItem is Nothing", _mClass, mName))
+                Else
+                    SetCorrectListItemIndex()
+                    SetGUIProperties(TVMovieProgram.Retrieve(_ProgramList.SelectedListItem.ItemId))
                 End If
 
-                SetCorrectListItemIndex()
-                SetGUIProperties(TVMovieProgram.Retrieve(_ProgramList.SelectedListItem.ItemId))
+
                 _ProgramList.IsFocused = True
 
                 ' GUIWindowManager.NeedRefresh()

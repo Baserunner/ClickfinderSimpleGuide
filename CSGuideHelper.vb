@@ -18,7 +18,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.931"
+                Return "0.932"
             End Get
         End Property
 #End Region
@@ -55,7 +55,7 @@ Namespace ClickfinderSimpleGuide
                 lItem.Dispose()
 
             Catch ex As Exception
-                MyLog.Error("[Helper]: [AddListControlItem]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [AddListControlItem]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
 
         End Sub
@@ -69,7 +69,7 @@ Namespace ClickfinderSimpleGuide
                 End If
 
             Catch ex As Exception
-                MyLog.Error("[Helper]: [MySqlDate]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [MySqlDate]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
                 Return ""
             End Try
         End Function
@@ -80,7 +80,7 @@ Namespace ClickfinderSimpleGuide
                 TvPlugin.TVProgramInfo.CurrentProgram = Program
                 GUIWindowManager.ActivateWindow(CInt(Window.WINDOW_TV_PROGRAM_INFO))
             Catch ex As Exception
-                MyLog.Error("[Helper]: [LoadTVProgramInfo]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [LoadTVProgramInfo]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
 
         End Sub
@@ -95,7 +95,7 @@ Namespace ClickfinderSimpleGuide
                 MPDialogOK("Erinnerung:", Erinnerung.Title, Erinnerung.StartTime & " - " & Erinnerung.EndTime, Erinnerung.ReferencedChannel.DisplayName)
 
             Catch ex As Exception
-                MyLog.Error("[Helper]: [SetNotify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [SetNotify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
                 ShowNotify(ex.Message)
             End Try
         End Sub
@@ -117,7 +117,7 @@ Namespace ClickfinderSimpleGuide
                 End If
 
             Catch ex As Exception
-                MyLog.Error("[Helper]: [StartTv]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [StartTv]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
                 ShowNotify(ex.Message)
             End Try
         End Sub
@@ -135,7 +135,7 @@ Namespace ClickfinderSimpleGuide
                 dlg.Dispose()
                 dlg.AllocResources()
             Catch ex As Exception
-                MyLog.Error("[Helper]: [StartTv]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper]: [StartTv]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
 
         End Sub
@@ -160,7 +160,7 @@ Namespace ClickfinderSimpleGuide
                     Return
                 End If
             Catch ex As Exception
-                MyLog.Error("[Helper] [CheckConnectionState]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [CheckConnectionState]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
         End Sub
 
@@ -177,7 +177,7 @@ Namespace ClickfinderSimpleGuide
                 dlgContext.Dispose()
                 dlgContext.AllocResources()
             Catch ex As Exception
-                MyLog.Error("[Helper]: [ShowNotify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [ShowNotify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
         End Sub
 
@@ -186,10 +186,10 @@ Namespace ClickfinderSimpleGuide
             'Prüfen ob TvServer online ist
             Try
                 Dim _server As IList(Of Server) = Server.ListAll
-                MyLog.Debug("TvServer found: {0}", _server(0).HostName)
+                MyLog.Debug("[CSGuideHelper] [TvServerConnected]: TvServer found: {0}", _server(0).HostName)
                 Return True
             Catch ex As Exception
-                MyLog.Error("Server not found")
+                MyLog.Error("[CSGuideHelper] [TvServerConnected]: Server not found")
                 Return False
             End Try
         End Function
@@ -243,7 +243,7 @@ Namespace ClickfinderSimpleGuide
                 dlgContext.Dispose()
                 dlgContext.AllocResources()
             Catch ex As Exception
-                MyLog.Error("[Helper]: [Notify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
+                MyLog.Error("[CSGuideHelper] [Notify]: exception err: {0} stack: {1}", ex.Message, ex.StackTrace)
             End Try
         End Sub
         Public Shared Sub LoadFanart(backdrop As ImageSwapper, filename As String)
@@ -270,7 +270,7 @@ Namespace ClickfinderSimpleGuide
                     deleteCounter = deleteCounter + 1
                 End If
             Next
-            MyLog.Debug(String.Format("[Helper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
+            MyLog.Debug(String.Format("[CSGuideHelper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
         End Sub
 
         Friend Shared ReadOnly Property ratingStar(ByVal Program As Program) As Integer
@@ -377,7 +377,7 @@ Namespace ClickfinderSimpleGuide
                             End If
                         End If
                     Case Else
-                        MyLog.Warn("[Layout] [Image]: No Image found")
+                        MyLog.Warn("[CSGuideHelper] [Image]: No Image found")
                         Return ""
 
                 End Select
