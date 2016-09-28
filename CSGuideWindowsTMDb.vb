@@ -273,12 +273,18 @@ Namespace ClickfinderSimpleGuide
 
         Private Sub SetActorGUIProperties()
             Dim person As Person = _tmdbClient.GetPersonAsync(_SelectedListCastItemId).Result
-            Dim myURL As String = _tmdbClient.GetImageUrl("original", person.ProfilePath).ToString()
-            Utils.DownLoadAndCacheImage(myURL, getAbsActorThumbPath(myURL))
-            CSGuideHelper.SetProperty("#thumb", getAbsActorThumbPath(myURL))
-            CSGuideHelper.SetProperty("#birthday", person.Birthday)
-            CSGuideHelper.SetProperty("#placeOfBirth", person.PlaceOfBirth)
-            CSGuideHelper.SetProperty("#biography", person.Biography)
+            CSGuideHelper.SetProperty("#thumb", "")
+            CSGuideHelper.SetProperty("#birthday", "unbekannt")
+            CSGuideHelper.SetProperty("#placeOfBirth", "unbekannt")
+            CSGuideHelper.SetProperty("#biography", "")
+            If Not person Is Nothing Then
+                Dim myURL As String = _tmdbClient.GetImageUrl("original", person.ProfilePath).ToString()
+                Utils.DownLoadAndCacheImage(myURL, getAbsActorThumbPath(myURL))
+                CSGuideHelper.SetProperty("#thumb", getAbsActorThumbPath(myURL))
+                If Not person.Birthday Is Nothing Then CSGuideHelper.SetProperty("#birthday", person.Birthday)
+                If Not person.PlaceOfBirth Is Nothing Then CSGuideHelper.SetProperty("#placeOfBirth", person.PlaceOfBirth)
+                If Not person.Biography Is Nothing Then CSGuideHelper.SetProperty("#biography", person.Biography)
+            End If
         End Sub
         Private Function getAbsActorThumbPath(url As String) As String
             Dim rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")

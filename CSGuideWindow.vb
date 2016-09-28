@@ -1098,8 +1098,8 @@ Namespace ClickfinderSimpleGuide
             MyLog.Info(String.Format("[{0}] [{1}]: Updating TMDb-Cache View {2} Start", _mClass, mName, _actualViewNumber))
             _cacheHander.buildCache(_TMDbCache, _ItemsCache, CSGuideSettings.View(_actualViewNumber).DisplayName)
             stopwatch.Stop()
-            MyLog.Info(String.Format("[{0}] [{1}]: Updated TMDb-Cache View {2}: {3} Items in {4} ms", _mClass, mName,
-                                      _actualViewNumber, _TMDbCache.Count, stopwatch.ElapsedMilliseconds))
+            MyLog.Info(String.Format("[{0}] [{1}]: Updated TMDb-Cache View {2} in {3} ms", _mClass, mName,
+                                      _actualViewNumber, stopwatch.ElapsedMilliseconds))
         End Sub
         Private Sub FillProgramList()
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
@@ -1108,6 +1108,7 @@ Namespace ClickfinderSimpleGuide
             Dim timer As Date = Date.Now
             Dim ItemCounter As Integer = 0
             Dim getYearString As String = ""
+            Dim getEpisodeString As String = ""
 
             _ProgramList.Visible = False
             _ProgramList.AllocResources() 'was macht das?
@@ -1122,11 +1123,12 @@ Namespace ClickfinderSimpleGuide
                         Dim _TvMovieProgram As TVMovieProgram = _ItemsCache.Item(i)
 
                         getYearString = CSGuideHelper.GetYearString(_TvMovieProgram)
+                        getEpisodeString = CSGuideHelper.GetEpisodeString(_TvMovieProgram)
 
                         CSGuideHelper.AddListControlItem(_ProgramList,
                                            _TvMovieProgram.idProgram,
                                            _TvMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName,
-                                           _TvMovieProgram.ReferencedProgram.Title & getYearString, ,
+                                           _TvMovieProgram.ReferencedProgram.Title & getEpisodeString & getYearString, ,
                                            CSGuideHelper.TimeLabel(_TvMovieProgram),
                                            Config.GetFile(Config.Dir.Thumbs, "tv\logos\") & Replace(_TvMovieProgram.ReferencedProgram.ReferencedChannel.DisplayName, "/", "_") & ".png", ,
                                            CSGuideHelper.RecordingStatus(_TvMovieProgram.ReferencedProgram))

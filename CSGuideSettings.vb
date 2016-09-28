@@ -19,7 +19,8 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_clickfinderPath As String
         Private Shared m_TVMovieIsEnabled As String
         Private Shared m_TVMovieLastUpdate As String
-        Private Shared m_TMDbAPIKey As String
+        'Private Shared m_TMDbAPIKey As String = "xxx"
+        Private Shared m_TMDbAPIKey As String = "b791cd5a2442ab1e01348a207969a17f"
         Private Shared m_configFileName As String = "ClickfinderSimpleGuide.xml"
         Friend Shared Property TMDbAPIKey() As String
             Get

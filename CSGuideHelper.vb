@@ -18,7 +18,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "0.932"
+                Return "v0.9.4.0"
             End Get
         End Property
 #End Region
@@ -194,15 +194,30 @@ Namespace ClickfinderSimpleGuide
             End Try
         End Function
 
+        Friend Shared Function GetEpisodeString(ByVal myTVMovieProgram As TVMovieProgram) As String
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim episodeString As String = String.Empty
+            Try
+                If Not String.IsNullOrEmpty(myTVMovieProgram.ReferencedProgram.SeriesNum) Then
+                    episodeString = " [" & myTVMovieProgram.ReferencedProgram.SeriesNum & "." &
+                                    myTVMovieProgram.ReferencedProgram.EpisodeNum & " " &
+                                    myTVMovieProgram.ReferencedProgram.EpisodeName & "]"
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[CSGuideHelper] [{0}]: Err: {1} stack: {2}", mName, ex.Message, ex.StackTrace))
+            End Try
+            Return episodeString
+        End Function
+
         Friend Shared Function GetYearString(ByVal myTVMovieProgram As TVMovieProgram) As String
-            Dim _mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             ' Dim _mClass As String = GetType.ToString
-            Dim _yearString As String = String.Empty
+            Dim yearString As String = String.Empty
             Try
                 If Not myTVMovieProgram.ReferencedProgram.OriginalAirDate < New Date(1900, 1, 1) Then
                     If Not myTVMovieProgram.Country Is Nothing Then
                         If Not myTVMovieProgram.Country.Equals("") Then
-                            _yearString = " (" & myTVMovieProgram.Country & " " & myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year & ")"
+                            yearString = " (" & myTVMovieProgram.Country & " " & myTVMovieProgram.ReferencedProgram.OriginalAirDate.Year & ")"
                         End If
                     End If
                 Else
@@ -211,16 +226,16 @@ Namespace ClickfinderSimpleGuide
                         Dim _pattern As String = ".*?Aus:\s+(?<year_string>.*?\s\d\d\d\d)"
                         Dim _match = Regex.Match(_description.Substring(0, 100), _pattern)
                         If _match.Success Then
-                            _yearString = " (" & _match.Groups("year_string").Value & ")"
+                            yearString = " (" & _match.Groups("year_string").Value & ")"
                         End If
                     End If
                 End If
             Catch ex As Exception
-                MyLog.Error(String.Format("[CSGuideHelper] [{0}]: Err: {1} stack: {2}", _mName, ex.Message, ex.StackTrace))
+                MyLog.Error(String.Format("[CSGuideHelper] [{0}]: Err: {1} stack: {2}", mName, ex.Message, ex.StackTrace))
 
             End Try
 
-            Return _yearString
+            Return yearString
 
         End Function
 

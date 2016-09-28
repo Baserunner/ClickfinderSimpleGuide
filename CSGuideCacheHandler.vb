@@ -14,6 +14,8 @@ Imports TMDbLib.Client
 Imports TMDbLib.Objects.General
 Imports TMDbLib.Objects.Movies
 Imports TMDbLib.Objects.Search
+Imports System.Threading
+
 Namespace ClickfinderSimpleGuide
 
 
@@ -23,6 +25,7 @@ Namespace ClickfinderSimpleGuide
         Private _tmdbClient As TMDbClient
         Private _lastCacheUpdate As New Dictionary(Of String, Date)
         Private _mClass As String
+        Private _cacheLimit As Integer = 40
 
 
         Public Sub New(ByRef tmdbClient As TMDbClient)
@@ -51,6 +54,8 @@ Namespace ClickfinderSimpleGuide
                     Dim myJasonCache2 As String = JsonConvert.SerializeObject(_lastCacheUpdate, Newtonsoft.Json.Formatting.Indented)
                     File.WriteAllText(_lastUpdateFilename, myJasonCache2)
                 End If
+            Catch ex As ThreadAbortException
+                MyLog.Info(String.Format("[{0}] [{1}]: Cache Builder Thread aborted", _mClass, mName))
             Catch ex As Exception
                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
@@ -67,19 +72,23 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Private Function cacheNeedsUpdate(cacheName As String) As Boolean
-
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             If File.Exists(_lastUpdateFilename) Then
                 _lastCacheUpdate = JsonConvert.DeserializeObject(Of Dictionary(Of String, Date))(File.ReadAllText(_lastUpdateFilename))
                 If Not _lastCacheUpdate.ContainsKey(cacheName) Then
                     _lastCacheUpdate.Add(cacheName, Date.Today)
+                    MyLog.Debug(String.Format("[{0}] [{1}]: Cache needs update", _mClass, mName))
                     Return True
                 ElseIf _lastCacheUpdate.Item(cacheName).Date < Date.Today Then
                     _lastCacheUpdate.Item(cacheName) = Date.Today
+                    MyLog.Debug(String.Format("[{0}] [{1}]: Cache needs update", _mClass, mName))
                     Return True
                 Else
+                    MyLog.Debug(String.Format("[{0}] [{1}]: No cache update necessary", _mClass, mName))
                     Return False
                 End If
             End If
+            MyLog.Debug(String.Format("[{0}] [{1}]: Cache needs update", _mClass, mName))
             Return True
         End Function
         Private Function getLastCacheUpdate() As Dictionary(Of String, Date)
@@ -121,14 +130,24 @@ Namespace ClickfinderSimpleGuide
             'Dim credit As Credits = Nothing
             Dim updated As Boolean = False
             Dim tvmProgram As TVMovieProgram
+            Dim cacheLimitCounter As Integer = 0
             ' Dim movieGerman As Movie = Nothing
 
             FetchConfig(_tmdbClient)
+            Try
+                For Each tvmProgram In itemsCache
+                    cacheLimitCounter += 1
+                    If Not AddItem(tvmProgram, tmdbCache) Then Continue For
+                    If cacheLimitCounter > _cacheLimit Then
+                        MyLog.Debug(String.Format("[{0}] [{1}]: Cache Limit reached", _mClass, mName))
+                        Exit For
+                    End If
+                    updated = True
+                Next
+            Catch ex As InvalidOperationException
+                MyLog.Debug(String.Format("[{0}] [{1}]: InvalidOperationException", _mClass, mName))
+            End Try
 
-            For Each tvmProgram In itemsCache
-                If Not AddItem(tvmProgram, tmdbCache) Then Continue For
-                updated = True
-            Next
             Return updated
         End Function
         Public Function AddItem(ByVal tvmProgram As TVMovieProgram, ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem)) As Boolean

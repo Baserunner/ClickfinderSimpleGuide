@@ -69,7 +69,7 @@ Public Class CSGuideSetup
 
         Gen_ComboBox1.Text = "View " & CSGuideSettings.StartView
         Gen_TextBox1.Text = CSGuideSettings.ClickfinderImagePath
-        Gen_TextBox3.Text = CSGuideSettings.TMDbAPIKey
+        'Gen_TextBox3.Text = CSGuideSettings.TMDbAPIKey
 
         If CSGuideSettings.DebugMode Then
             Gen_CheckBox1.Checked = True
@@ -178,7 +178,7 @@ Public Class CSGuideSetup
         Dim _lastCharAsString As String = Gen_ComboBox1.Text.Last()
         CSGuideSettings.StartView = CInt(_lastCharAsString)
         CSGuideSettings.ClickfinderImagePath = Gen_TextBox1.Text
-        CSGuideSettings.TMDbAPIKey = Gen_TextBox3.Text
+        'CSGuideSettings.TMDbAPIKey = Gen_TextBox3.Text
 
         If Gen_CheckBox1.Checked Then
             CSGuideSettings.DebugMode = True
