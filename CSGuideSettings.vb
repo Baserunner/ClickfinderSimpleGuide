@@ -152,7 +152,7 @@ Namespace ClickfinderSimpleGuide
                 m_debugMode = _mySettings.GetValueAsBool("General", "DebugMode", True)
                 m_hiddenMenuMode = _mySettings.GetValueAsBool("General", "HiddenMenuMode", False)
                 m_clickfinderImagePath = _mySettings.GetValueAsString("General", "ClickfinderImagePath", "")
-                m_TMDbAPIKey = _mySettings.GetValueAsString("General", "TMDbAPIKey", "")
+                'm_TMDbAPIKey = _mySettings.GetValueAsString("General", "TMDbAPIKey", "")
 
                 For i = 0 To 8
                     Dim _view As CSGuideView = New CSGuideView(
@@ -186,7 +186,7 @@ Namespace ClickfinderSimpleGuide
                 _mySettings.SetValueAsBool("General", "DebugMode", m_debugMode)
                 _mySettings.SetValueAsBool("General", "HiddenMenuMode", m_hiddenMenuMode)
                 _mySettings.SetValue("General", "ClickfinderImagePath", m_clickfinderImagePath)
-                _mySettings.SetValue("General", "TMDbAPIKey", m_TMDbAPIKey)
+                '_mySettings.SetValue("General", "TMDbAPIKey", m_TMDbAPIKey)
 
                 For i = 0 To 8
                     _mySettings.SetValue("Views", "View" & i & "Name", m_view(i).Name)
@@ -271,7 +271,7 @@ Namespace ClickfinderSimpleGuide
             m_debugMode = False
             m_hiddenMenuMode = False
             m_clickfinderImagePath = Path.GetDirectoryName(m_clickfinderPath) & "\Hyperlinks"
-            m_TMDbAPIKey = ""
+            'm_TMDbAPIKey = ""
 
             _view = New CSGuideView(
                                   "Single",
