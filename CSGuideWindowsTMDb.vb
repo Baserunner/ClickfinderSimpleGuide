@@ -13,12 +13,12 @@ Namespace ClickfinderSimpleGuide
         Inherits GUIWindow
 
 #Region "Skin Controls"
-        <SkinControlAttribute(60)> Protected FanartBackground As GUIImage = Nothing
-        <SkinControlAttribute(61)> Protected FanartBackground2 As GUIImage = Nothing
-        <SkinControlAttribute(901)> Protected btnPlot As GUICheckButton = Nothing
-        <SkinControlAttribute(902)> Protected btnCast As GUICheckButton = Nothing
-        <SkinControlAttribute(20)> Protected tbPlotArea As GUITextScrollUpControl = Nothing
-        <SkinControlAttribute(24)> Protected listCast As GUIListControl = Nothing
+        <SkinControlAttribute(60)> Protected _FanartBackground As GUIImage = Nothing
+        <SkinControlAttribute(61)> Protected _FanartBackground2 As GUIImage = Nothing
+        <SkinControlAttribute(901)> Protected _btnPlot As GUICheckButton = Nothing
+        <SkinControlAttribute(902)> Protected _btnCast As GUICheckButton = Nothing
+        <SkinControlAttribute(20)> Protected _tbPlotArea As GUITextScrollUpControl = Nothing
+        <SkinControlAttribute(24)> Protected _listCast As GUIListControl = Nothing
 
 #End Region
 #Region "GUI Properties"
@@ -81,12 +81,12 @@ Namespace ClickfinderSimpleGuide
             _backdrop.PropertyOne = "#Fanart.1"
             _backdrop.PropertyTwo = "#Fanart.2"
 
-            _backdrop.GUIImageOne = FanartBackground
-            _backdrop.GUIImageTwo = FanartBackground2
+            _backdrop.GUIImageOne = _FanartBackground
+            _backdrop.GUIImageTwo = _FanartBackground2
             LoadFanart(_backdrop, _movieInfo.Misc.absFanartPath)
             'Init the GUI controls
-            btnPlot.Selected = True
-            listCast.IsVisible = False
+            _btnPlot.Selected = True
+            _listCast.IsVisible = False
             '
             SetPlotGUIProperties()
             SetCastListItems()
@@ -107,13 +107,13 @@ Namespace ClickfinderSimpleGuide
 
                 'Move down                
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN Then
-                    If listCast.SelectedListItem.ItemId = listCast.Item(listCast.Count - 1).ItemId Then
-                        _SelectedListCastItemId = listCast.Item(0).ItemId
+                    If _listCast.SelectedListItem.ItemId = _listCast.Item(_listCast.Count - 1).ItemId Then
+                        _SelectedListCastItemId = _listCast.Item(0).ItemId
                     Else
-                        _SelectedListCastItemId = listCast.Item(listCast.SelectedListItemIndex + 1).ItemId
+                        _SelectedListCastItemId = _listCast.Item(_listCast.SelectedListItemIndex + 1).ItemId
                     End If
                     Try
-                        If listCast.IsFocused = True Then
+                        If _listCast.IsFocused = True Then
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
@@ -123,13 +123,13 @@ Namespace ClickfinderSimpleGuide
 
                 'Move up                
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP Then
-                    If listCast.SelectedListItem.ItemId = listCast.Item(0).ItemId Then
-                        _SelectedListCastItemId = listCast.Item(listCast.Count - 1).ItemId
+                    If _listCast.SelectedListItem.ItemId = _listCast.Item(0).ItemId Then
+                        _SelectedListCastItemId = _listCast.Item(_listCast.Count - 1).ItemId
                     Else
-                        _SelectedListCastItemId = listCast.Item(listCast.SelectedListItemIndex - 1).ItemId
+                        _SelectedListCastItemId = _listCast.Item(_listCast.SelectedListItemIndex - 1).ItemId
                     End If
                     Try
-                        If listCast.IsFocused = True Then
+                        If _listCast.IsFocused = True Then
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
@@ -138,13 +138,13 @@ Namespace ClickfinderSimpleGuide
                 End If
                 'Page down                
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_PAGE_DOWN Then
-                    If listCast.SelectedListItem.ItemId + 10 > listCast.Item(listCast.Count - 1).ItemId Then
-                        _SelectedListCastItemId = listCast.Item(listCast.Count - 1).ItemId
+                    If _listCast.SelectedListItem.ItemId + 10 > _listCast.Item(_listCast.Count - 1).ItemId Then
+                        _SelectedListCastItemId = _listCast.Item(_listCast.Count - 1).ItemId
                     Else
-                        _SelectedListCastItemId = listCast.Item(listCast.SelectedListItemIndex + 10).ItemId
+                        _SelectedListCastItemId = _listCast.Item(_listCast.SelectedListItemIndex + 10).ItemId
                     End If
                     Try
-                        If listCast.IsFocused = True Then
+                        If _listCast.IsFocused = True Then
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
@@ -154,13 +154,13 @@ Namespace ClickfinderSimpleGuide
 
                 'Page up                
                 If action.wID = MediaPortal.GUI.Library.Action.ActionType.ACTION_PAGE_UP Then
-                    If listCast.SelectedListItemIndex - 10 < 0 Then
-                        _SelectedListCastItemId = listCast.Item(0).ItemId
+                    If _listCast.SelectedListItemIndex - 10 < 0 Then
+                        _SelectedListCastItemId = _listCast.Item(0).ItemId
                     Else
-                        _SelectedListCastItemId = listCast.Item(listCast.SelectedListItemIndex - 10).ItemId
+                        _SelectedListCastItemId = _listCast.Item(_listCast.SelectedListItemIndex - 10).ItemId
                     End If
                     Try
-                        If listCast.IsFocused = True Then
+                        If _listCast.IsFocused = True Then
                             SetActorGUIProperties()
                         End If
                     Catch ex As Exception
@@ -184,22 +184,22 @@ Namespace ClickfinderSimpleGuide
             ' Plot button
             If controlId = 901 Then
 
-                btnCast.Selected = False
-                If tbPlotArea IsNot Nothing Then tbPlotArea.IsVisible = True
-                If listCast IsNot Nothing Then listCast.IsVisible = False
+                _btnCast.Selected = False
+                If _tbPlotArea IsNot Nothing Then _tbPlotArea.IsVisible = True
+                If _listCast IsNot Nothing Then _listCast.IsVisible = False
                 SetPlotGUIProperties()
 
             End If
 
             ' Cast button
             If controlId = 902 Then
-                btnPlot.Selected = False
-                If tbPlotArea IsNot Nothing Then tbPlotArea.IsVisible = False
-                If listCast IsNot Nothing Then
-                    listCast.IsVisible = True
-                    btnCast.Focus = False
-                    listCast.Focus = True
-                    _SelectedListCastItemId = listCast.Item(0).ItemId
+                _btnPlot.Selected = False
+                If _tbPlotArea IsNot Nothing Then _tbPlotArea.IsVisible = False
+                If _listCast IsNot Nothing Then
+                    _listCast.IsVisible = True
+                    _btnCast.Focus = False
+                    _listCast.Focus = True
+                    _SelectedListCastItemId = _listCast.Item(0).ItemId
                     SetActorGUIProperties()
                 End If
             End If
@@ -272,19 +272,25 @@ Namespace ClickfinderSimpleGuide
         End Sub
 
         Private Sub SetActorGUIProperties()
-            Dim person As Person = _tmdbClient.GetPersonAsync(_SelectedListCastItemId).Result
-            CSGuideHelper.SetProperty("#thumb", "")
-            CSGuideHelper.SetProperty("#birthday", "unbekannt")
-            CSGuideHelper.SetProperty("#placeOfBirth", "unbekannt")
-            CSGuideHelper.SetProperty("#biography", "")
-            If Not person Is Nothing Then
-                Dim myURL As String = _tmdbClient.GetImageUrl("original", person.ProfilePath).ToString()
-                Utils.DownLoadAndCacheImage(myURL, getAbsActorThumbPath(myURL))
-                CSGuideHelper.SetProperty("#thumb", getAbsActorThumbPath(myURL))
-                If Not person.Birthday Is Nothing Then CSGuideHelper.SetProperty("#birthday", person.Birthday)
-                If Not person.PlaceOfBirth Is Nothing Then CSGuideHelper.SetProperty("#placeOfBirth", person.PlaceOfBirth)
-                If Not person.Biography Is Nothing Then CSGuideHelper.SetProperty("#biography", person.Biography)
-            End If
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Try
+                Dim person As Person = _tmdbClient.GetPersonAsync(_SelectedListCastItemId).Result
+                CSGuideHelper.SetProperty("#thumb", "")
+                CSGuideHelper.SetProperty("#birthday", "unbekannt")
+                CSGuideHelper.SetProperty("#placeOfBirth", "unbekannt")
+                CSGuideHelper.SetProperty("#biography", "")
+                If Not person Is Nothing Then
+                    Dim myURL As String = _tmdbClient.GetImageUrl("original", person.ProfilePath).ToString()
+                    Utils.DownLoadAndCacheImage(myURL, getAbsActorThumbPath(myURL))
+                    CSGuideHelper.SetProperty("#thumb", getAbsActorThumbPath(myURL))
+                    If Not person.Birthday Is Nothing Then CSGuideHelper.SetProperty("#birthday", person.Birthday)
+                    If Not person.PlaceOfBirth Is Nothing Then CSGuideHelper.SetProperty("#placeOfBirth", person.PlaceOfBirth)
+                    If Not person.Biography Is Nothing Then CSGuideHelper.SetProperty("#biography", person.Biography)
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}] [{1}]: Cannot get information from Person {2}", _mClass, mName, _SelectedListCastItemId))
+            End Try
+
         End Sub
         Private Function getAbsActorThumbPath(url As String) As String
             Dim rgx As New System.Text.RegularExpressions.Regex(".*\/(.*)$")
@@ -316,11 +322,11 @@ Namespace ClickfinderSimpleGuide
                     item.Label = cast.Name + " (" + cast.Character + ")"
                     item.Label2 = cast.Name
                     item.Label3 = cast.Id
-                    listCast.Add(item)
+                    _listCast.Add(item)
                 Next
 
-                If listCast.Count > 0 Then
-                    listCast.SelectedListItemIndex = 0
+                If _listCast.Count > 0 Then
+                    _listCast.SelectedListItemIndex = 0
                 End If
             Catch ex As Exception
                 Log.[Error]("GUIVideoInfo exception SetActorGUIListItems: {0}", ex.Message)

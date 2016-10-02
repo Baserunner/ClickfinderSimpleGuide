@@ -183,7 +183,7 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, mName, new_windowId))
 
             AbortRunningThreads()
-
+            _ItemsCache.Clear()
             MyBase.OnPageDestroy(new_windowId)
             Dispose()
             AllocResources()

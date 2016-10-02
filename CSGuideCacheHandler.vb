@@ -55,7 +55,7 @@ Namespace ClickfinderSimpleGuide
                     File.WriteAllText(_lastUpdateFilename, myJasonCache2)
                 End If
             Catch ex As ThreadAbortException
-                MyLog.Info(String.Format("[{0}] [{1}]: Cache Builder Thread aborted", _mClass, mName))
+                MyLog.Info(String.Format("[{0}] [{1}]: ThreadAbortException", _mClass, mName))
             Catch ex As Exception
                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try
@@ -100,6 +100,7 @@ Namespace ClickfinderSimpleGuide
         End Function
         Private Sub removeOldEntries(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            MyLog.Debug(String.Format("[{0}] [{1}]: Checking for cache entries to remove", _mClass, mName))
             Try
                 For Each key As String In New List(Of String)(tmdbCache.Keys)
                     If Date.Today > tmdbCache(key).keepUntilDate Then
