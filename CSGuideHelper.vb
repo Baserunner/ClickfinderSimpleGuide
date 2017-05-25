@@ -9,6 +9,9 @@ Imports MediaPortal.Player
 Imports System.Text.RegularExpressions
 Imports enrichEPG.TvDatabase
 
+Imports System.IO
+Imports System.Text
+
 Namespace ClickfinderSimpleGuide
     Public Class CSGuideHelper
 #Region "Members"
@@ -18,7 +21,7 @@ Namespace ClickfinderSimpleGuide
 #Region "Properties"
         Public Shared ReadOnly Property Version() As String
             Get
-                Return "v0.9.4.0"
+                Return "v0.9.5.0"
             End Get
         End Property
 #End Region
@@ -279,13 +282,61 @@ Namespace ClickfinderSimpleGuide
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             Dim directory As New IO.DirectoryInfo(fileDir)
             Dim deleteCounter As Integer = 0
-            For Each file As IO.FileInfo In directory.GetFiles("*.jpg")
-                If (Now - file.CreationTime).Days > daysOld Then
-                    file.Delete()
-                    deleteCounter = deleteCounter + 1
+            Dim numberOfFilesInDir As Integer = 0
+
+            ' MyLog.Debug(String.Format("[CSGuideHelper] [{0}]: Started", mName, deleteCounter, fileDir))
+            Try
+                numberOfFilesInDir = directory.GetFiles().Count
+                If numberOfFilesInDir <= 40000 Then
+                    For Each file As IO.FileInfo In directory.GetFiles("*.jpg")
+                        If (Now - file.CreationTime).Days > daysOld Then
+                            file.Delete()
+                            deleteCounter = deleteCounter + 1
+                        End If
+                    Next
+                Else
+                    MyLog.Warn(String.Format("[CSGuideHelper] [{0}]: There are {1} files in {2} - Did not clean up, too many ... ", mName, numberOfFilesInDir, fileDir))
                 End If
-            Next
-            MyLog.Debug(String.Format("[CSGuideHelper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
+
+
+                MyLog.Debug(String.Format("[CSGuideHelper] [{0}]: Deleted {1} files in {2}", mName, deleteCounter, fileDir))
+            Catch ex As Exception
+                MyLog.Error("[CSGuideHelper] [{0}]: exception err: {1} stack: {2}", mName, ex.Message, ex.StackTrace)
+            End Try
+            ' MyLog.Debug(String.Format("[CSGuideHelper] [{0}]: Ended", mName, deleteCounter, fileDir))
+        End Sub
+
+        Public Shared Sub checkSkinFolder()
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
+            Dim myPath As String
+            'Dim tmDbLibConfig As String
+            'Dim tmDbLibConfigFile As String
+
+            Try
+                myPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart\"))
+
+                If (Not Directory.Exists(myPath)) Then
+                    Directory.CreateDirectory(myPath)
+                End If
+                myPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster\"))
+                If (Not Directory.Exists(myPath)) Then
+                    Directory.CreateDirectory(myPath)
+                End If
+                myPath = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor\"))
+                If (Not Directory.Exists(myPath)) Then
+                    Directory.CreateDirectory(myPath)
+                End If
+
+                'tmDbLibConfigFile = Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbLibConfig.xml"))
+                'If (Not File.Exists(tmDbLibConfigFile)) Then
+                '    tmDbLibConfig = "<?xml version=""1.0"" encoding=""utf-8""?><TMDbConfig><Images><BaseUrl>http://image.tmdb.org/t/p/</BaseUrl><SecureBaseUrl>https://image.tmdb.org/t/p/</SecureBaseUrl><PosterSizes><string>w92</string><string>w154</string><string>w185</string><string>w342</string><string>w500</string><string>w780</string><string>original</string></PosterSizes><BackdropSizes><string>w300</string><string>w780</string><string>w1280</string><string>original</string></BackdropSizes><ProfileSizes><string>w45</string><string>w185</string><string>h632</string><string>original</string></ProfileSizes><LogoSizes><string>w45</string><string>w92</string><string>w154</string><string>w185</string><string>w300</string><string>w500</string><string>original</string></LogoSizes></Images><ChangeKeys><string>adult</string><string>air_date</string><string>also_known_as</string><string>alternative_titles</string><string>biography</string><string>birthday</string><string>budget</string><string>cast</string><string>certifications</string><string>character_names</string><string>created_by</string><string>crew</string><string>deathday</string><string>episode</string><string>episode_number</string><string>episode_run_time</string><string>freebase_id</string><string>freebase_mid</string><string>general</string><string>genres</string><string>guest_stars</string><string>homepage</string><string>images</string><string>imdb_id</string><string>languages</string><string>name</string><string>network</string><string>origin_country</string><string>original_name</string><string>original_title</string><string>overview</string><string>parts</string><string>place_of_birth</string><string>plot_keywords</string><string>production_code</string><string>production_companies</string><string>production_countries</string><string>releases</string><string>revenue</string><string>runtime</string><string>season</string><string>season_number</string><string>season_regular</string><string>spoken_languages</string><string>status</string><string>tagline</string><string>title</string><string>translations</string><string>tvdb_id</string><string>tvrage_id</string><string>type</string><string>video</string><string>videos</string></ChangeKeys></TMDbConfig>"
+                '    File.WriteAllText(tmDbLibConfigFile, tmDbLibConfig, Encoding.UTF8)
+                'End If
+                MyLog.Debug("[CSGuideHelper] [{0}]: Checked media directories: OK", mName)
+            Catch ex As Exception
+                MyLog.Error("[CSGuideHelper] [{0}]: exception err: {1} stack: {2}", mName, ex.Message, ex.StackTrace)
+            End Try
+
         End Sub
 
         Friend Shared ReadOnly Property ratingStar(ByVal Program As Program) As Integer

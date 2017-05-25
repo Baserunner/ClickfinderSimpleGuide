@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Version>2.0</Version>
+  <Groups>
+    <Items>
+      <GroupItem Name="Plugins">
+        <ParentGroup />
+        <DisplayName>Plugin-DLLs</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Plugins</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\obj\x86\Release\ClickfinderSimpleGuide.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ff153bcc-d412-46e8-9852-b6cca33b261e}-NiceEPG.dll</ZipFileName>
+              <DestinationFilename>%Base%\plugins\windows\ClickfinderSimpleGuide.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\bin\x86\Release\enrichEPG.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{06c174f9-e11b-4308-93c5-945682170c25}-enrichEPG.dll</ZipFileName>
+              <DestinationFilename>%Base%\plugins\windows\enrichEPG.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\bin\x86\Release\Newtonsoft.Json.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0534420e-d5a6-4446-9fe4-a208f95450c4}-Newtonsoft.Json.dll</ZipFileName>
+              <DestinationFilename>%Base%\plugins\windows\Newtonsoft.Json.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\bin\x86\Release\TMDbLib.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{146bf06d-7b26-4f63-87fc-4f5a70e8e2e2}-TMDbLib.dll</ZipFileName>
+              <DestinationFilename>%Base%\plugins\windows\TMDbLib.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_TMDbLogo.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f5e23b30-fafc-4d3e-9be3-459c7e5e2ab7}-ClickfinderSG_TMDbLogo.png</ZipFileName>
+              <DestinationFilename>%Base%\plugins\windows\ClickfinderSG_TMDbLogo.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="Titan Skins">
+        <ParentGroup />
+        <DisplayName>Titan Skins und Media</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Titan Skins und Media</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_starblack.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0d0453fa-6286-4196-8098-76f4246fe84e}-starblack.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_starblack.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_starwhite.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8c2168b8-103d-4c99-9261-19f5662e3d5c}-starwhite.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_starwhite.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\hover_ClickfinderSimpleGuide.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1d2cea12-5735-4009-9525-54db43424190}-hover_ClickfinderProgramGuide.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\hover_ClickfinderSimpleGuide.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R1.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{96fc7978-e251-4db9-815d-c4486f020673}-ClickfinderSG_R1.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R1.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8646ad3b-5c06-45e4-a1e6-e48cb35d6f96}-ClickfinderSG_R2.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R3.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{321c862f-dc4d-49dc-92a4-c15987bd6d86}-ClickfinderSG_R3.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R3.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R4.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7582c561-a754-46f5-9cf5-e7ab7af588eb}-ClickfinderSG_R4.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R4.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\Media\CSG_panel_video_actors.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d8f60ec1-019a-432d-b201-e3db266cd188}-ClickfinderSG_R5.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\CSG_panel_video_actors.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{3bc3055f-5dd4-4cc1-821c-e118dac21c82}-ClickfinderSG_R6.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.window.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{bc29dabb-625d-4a2a-930d-69fce3c51558}-ClickfinderSimpleGuide.window.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.window.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b2586a79-ad8d-414e-853a-20f9a94b5576}-ClickfinderSimpleGuide.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ba9254bc-8698-4585-a49a-ec98fb133f40}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d81e957f-f916-49ea-b4c0-a26f09554c43}-ClickfinderSG_Tagestipp.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ee090c9a-f677-4dc4-baa8-3497f341b120}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\ClickfinderSimpleGuideTMDb.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c9be09cb-e69c-4fbf-9e66-2093191eaed7}-ClickfinderSimpleGuideTMDb.xml</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideTMDb.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_TMDbLogo.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5e3e807f-7760-4b48-a5eb-165ad87b750f}-ClickfinderSG_TMDbLogo.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_TMDbLogo.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="Titan Skins Logos">
+        <ParentGroup />
+        <DisplayName>FSK Logos</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>FSK Logos</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{3c74a2f9-9c2b-4372-8a4f-e43963fa2d3e}-FSK0.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{3e2e6088-7724-472d-83bd-5ed3e5c57186}-FSK6.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK12.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{083d7a15-2180-46bd-bc1c-8c845b92b064}-FSK12.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK12.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK18.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{704f6c2c-92bb-4a8d-a1f1-93dde6fef7f9}-FSK18.png</ZipFileName>
+              <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK18.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="StreamedMP Skins">
+        <ParentGroup />
+        <DisplayName>StreamedMP Skins</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>StreamedMP Skins</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dd7aa2f0-ad30-42a2-b9ee-1e75f1826adc}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.window.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e3280f1d-4a5f-4593-8711-c42e02538e6c}-ClickfinderSimpleGuide.window.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.window.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7893b268-662b-4d3f-b05d-8237db57820f}-ClickfinderSimpleGuide.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{273ddf12-fbde-4db1-848c-63ba6dd39ce0}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuideTMDb.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1211827c-5bb6-41fd-928f-a8c3b6407cfb}-ClickfinderSimpleGuideTMDb.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuideTMDb.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\common.overlays.cf.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{56b6ca09-a6e5-492f-8a20-ef93b9c61ff8}-common.overlays.cf.xml</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\common.overlays.cf.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_detail_frame.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{77fa4038-0c26-4048-861d-24ed75e19f27}-ClickfinderSG_detail_frame.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_detail_frame.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_DetailBG.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a9157099-903a-42b6-b535-3ffd53efab1f}-ClickfinderSG_DetailBG.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_DetailBG.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_Overlay.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6977c47b-62c6-4443-ab6f-66e9575aa8bd}-ClickfinderSG_Overlay.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_Overlay.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R1.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{42cec0ab-e44d-43c4-a138-72f1c9a670a9}-ClickfinderSG_R1.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R1.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a4f775f3-e7a0-489b-8b64-16fd07fa893a}-ClickfinderSG_R2.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R3.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{44ec5af0-2456-49de-8733-c4efd4ad46b9}-ClickfinderSG_R3.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R3.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R4.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b386d548-b587-40d2-935b-9d32f0a60ea8}-ClickfinderSG_R4.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R4.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R5.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{04910089-a238-4ed1-a253-151ec242a36c}-ClickfinderSG_R5.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R5.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{aeb999ab-7907-4841-a0b9-8c84c2c1e2b6}-ClickfinderSG_R6.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_SepV.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{72a198ba-b8a9-4a40-8ccf-b84bc932d2af}-ClickfinderSG_SepV.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_SepV.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_shadow_cover.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5f0d8d83-6374-4af3-80be-3490b2a6ce68}-ClickfinderSG_shadow_cover.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_shadow_cover.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_starblack.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0c87e80a-bcd4-40fa-8159-2061ba11f854}-ClickfinderSG_starblack.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_starblack.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_starwhite.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{11fd0082-b9ee-47e5-bc55-b18b1f328f52}-ClickfinderSG_starwhite.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_starwhite.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dbd7a351-c7b3-4812-a923-f68ccdd8ce7b}-ClickfinderSG_Tagestipp.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_TMDbLogo.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{689cbe21-2358-4be0-9fc9-731bb93c4100}-ClickfinderSG_TMDbLogo.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_TMDbLogo.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_TopBarBG.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{3b5676d2-34b5-4f5a-a6a5-9f8cbf3d0471}-ClickfinderSG_TopBarBG.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_TopBarBG.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\hover_ClickfinderProgramGuide.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ea4116ec-14cd-42f5-8770-2fd4b7a55307}-hover_ClickfinderProgramGuide.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\hover_ClickfinderProgramGuide.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="StreamedMP Skins Logos">
+        <ParentGroup />
+        <DisplayName>StreamedMP Skins Logos</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>StreamedMP Skins Logos</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Audio\dolbydigital.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4568835e-5ea4-4fd1-a068-9e108edf7ce8}-dolbydigital.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\dolbydigital.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Audio\stereo.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d4255817-c77c-4ff9-99e7-232491dc2a03}-stereo.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\stereo.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\default.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{813650ba-7c2d-425a-8fc7-0b2a0178776e}-default.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\default.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{653a27e5-d7f2-41f7-9bdb-bf102b2417a2}-FSK0.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6240536c-f673-45fe-bbd6-94502e9a937f}-FSK6.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK12.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f2b368b3-d28c-43c3-a89e-afa851c840da}-FSK12.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK12.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK18.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{53d6feb2-9f82-45f1-8e59-5abeb36b145a}-FSK18.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK18.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\540.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{43c7de39-be70-492d-8c87-144ade70d06f}-540.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\540.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\720P.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0840bd86-e20a-4c48-a3a7-434297231abd}-720P.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\720P.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\default.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{34dd20db-c5b7-4e7a-ad01-7c14fba93c9b}-default.png</ZipFileName>
+              <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\default.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+    </Items>
+  </Groups>
+  <Sections>
+    <Items>
+      <SectionItem Guid="05903304-9fa4-4305-bc5b-5224ae310853" Name="Welcome Screen" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>Welcome to the Extension Installer of Clickfinder Simple Guide</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Description">
+              <Value>This plugin is an EPG plugin based on Scroungers Clickfinder Program Guide. Its intention is to provide EPG information at one glance with handy navigation options.
+
+Requires "TV Movie EPG Import++" version 1.6.4.2.</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Welcome Screen</PanelName>
+        <WizardButtonsEnum>NextCancel</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="4ef706a0-f045-40ce-865b-40d9314b398a" Name="Tree View Selector" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header Title">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Header title</Description>
+            </SectionParam>
+            <SectionParam Name="Header description">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Description of section, shown in under section title</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+            <SectionParam Name="Description ">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Description of this operation</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups>
+          <string>Plugins</string>
+          <string>Titan Skins</string>
+          <string>Titan Skins Logos</string>
+          <string>StreamedMP Skins</string>
+          <string>StreamedMP Skins Logos</string>
+        </IncludedGroups>
+        <PanelName>Tree View Selector</PanelName>
+        <WizardButtonsEnum>BackNextCancel</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="d3377a4b-39b8-46b7-bdcb-db0b6ff1f5de" Name="Install Section" ConditionGroup="Plugins">
+        <Params>
+          <Items>
+            <SectionParam Name="Header Title">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Header title</Description>
+            </SectionParam>
+            <SectionParam Name="Header description">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Description of section, shown in under section title</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="Plugins">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="Titan Skins">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="Titan Skins Logos">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="StreamedMP Skins">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="StreamedMP Skins Logos">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+          </Items>
+        </Actions>
+        <IncludedGroups>
+          <string>Plugins</string>
+          <string>Titan Skins</string>
+          <string>Titan Skins Logos</string>
+          <string>Configuration</string>
+          <string>StreamedMP Skins</string>
+          <string>StreamedMP Skins Logos</string>
+        </IncludedGroups>
+        <PanelName>Install Section</PanelName>
+        <WizardButtonsEnum>Next</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="266fa451-d4a8-48d7-8bdb-2b57bacc168e" Name="Setup Complete" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>The Extension Installer Wizard has successfully installed [Name].</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Show radio buttons">
+              <Value />
+              <ValueType>Bool</ValueType>
+              <Description>Use radiobutton in place of combobox</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Setup Complete</PanelName>
+        <WizardButtonsEnum>Finish</WizardButtonsEnum>
+      </SectionItem>
+    </Items>
+  </Sections>
+  <Dependencies>
+    <Items>
+      <DependencyItem>
+        <Type>MediaPortal</Type>
+        <Id />
+        <MinVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MinVersion>
+        <MaxVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MaxVersion>
+        <WarnOnly>false</WarnOnly>
+        <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+        <Name>MediaPortal</Name>
+      </DependencyItem>
+    </Items>
+  </Dependencies>
+  <PluginDependencies>
+    <Items />
+  </PluginDependencies>
+  <GeneralInfo>
+    <Name>Clickfinder Simple Guide</Name>
+    <Id>25b1c2fc-b16e-43a7-b837-e35d656abcd5</Id>
+    <Author>Baserunner</Author>
+    <HomePage />
+    <ForumPage />
+    <UpdateUrl />
+    <Version>
+      <Major>0</Major>
+      <Minor>9</Minor>
+      <Build>5</Build>
+      <Revision>0</Revision>
+    </Version>
+    <ExtensionDescription>This plugin is an EPG plugin based on Scroungers Clickfinder Program Guide. Its intention is to provide EPG information at one glance with handy navigation options.Requires "TV Movie EPG Import++" version 1.6.4.2.</ExtensionDescription>
+    <VersionDescription />
+    <DevelopmentStatus>Beta</DevelopmentStatus>
+    <OnlineLocation />
+    <ReleaseDate>2016-07-02T20:58:06</ReleaseDate>
+    <Tags />
+    <Location>E:\GitHub\ClickfinderSimpleGuide\ClickfinderSimpleGuide\mpe1\ClickfinderSimpleGuide_v0.9.5.mpe1</Location>
+    <Params>
+      <Items>
+        <SectionParam Name="Icon">
+          <Value>..\..\ConfigIcons\CSG_Setup.png</Value>
+          <ValueType>File</ValueType>
+          <Description>The icon file of the package (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Online Icon">
+          <Value />
+          <ValueType>String</ValueType>
+          <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Configuration file">
+          <Value />
+          <ValueType>Template</ValueType>
+          <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+        </SectionParam>
+        <SectionParam Name="Online Screenshots">
+          <Value>https://github.com/Baserunner/ClickfinderSimpleGuide/tree/master/Screenshots</Value>
+          <ValueType>String</ValueType>
+          <Description>Online stored screenshot urls separated by ; </Description>
+        </SectionParam>
+        <SectionParam Name="Force to uninstall on update">
+          <Value>YES</Value>
+          <ValueType>Bool</ValueType>
+          <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+        </SectionParam>
+      </Items>
+    </Params>
+  </GeneralInfo>
+  <UniqueFileList>
+    <Items>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\obj\x86\Release\ClickfinderSimpleGuide.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ff153bcc-d412-46e8-9852-b6cca33b261e}-NiceEPG.dll</ZipFileName>
+        <DestinationFilename>%Base%\plugins\windows\ClickfinderSimpleGuide.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\bin\x86\Release\enrichEPG.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{06c174f9-e11b-4308-93c5-945682170c25}-enrichEPG.dll</ZipFileName>
+        <DestinationFilename>%Base%\plugins\windows\enrichEPG.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\bin\x86\Release\Newtonsoft.Json.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0534420e-d5a6-4446-9fe4-a208f95450c4}-Newtonsoft.Json.dll</ZipFileName>
+        <DestinationFilename>%Base%\plugins\windows\Newtonsoft.Json.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\bin\x86\Release\TMDbLib.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{146bf06d-7b26-4f63-87fc-4f5a70e8e2e2}-TMDbLib.dll</ZipFileName>
+        <DestinationFilename>%Base%\plugins\windows\TMDbLib.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_TMDbLogo.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f5e23b30-fafc-4d3e-9be3-459c7e5e2ab7}-ClickfinderSG_TMDbLogo.png</ZipFileName>
+        <DestinationFilename>%Base%\plugins\windows\ClickfinderSG_TMDbLogo.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_starblack.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0d0453fa-6286-4196-8098-76f4246fe84e}-starblack.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_starblack.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_starwhite.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8c2168b8-103d-4c99-9261-19f5662e3d5c}-starwhite.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_starwhite.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\hover_ClickfinderSimpleGuide.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1d2cea12-5735-4009-9525-54db43424190}-hover_ClickfinderProgramGuide.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\hover_ClickfinderSimpleGuide.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R1.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{96fc7978-e251-4db9-815d-c4486f020673}-ClickfinderSG_R1.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R1.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8646ad3b-5c06-45e4-a1e6-e48cb35d6f96}-ClickfinderSG_R2.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R3.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{321c862f-dc4d-49dc-92a4-c15987bd6d86}-ClickfinderSG_R3.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R3.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R4.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7582c561-a754-46f5-9cf5-e7ab7af588eb}-ClickfinderSG_R4.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R4.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\Media\CSG_panel_video_actors.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d8f60ec1-019a-432d-b201-e3db266cd188}-ClickfinderSG_R5.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\CSG_panel_video_actors.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\ClickfinderSG_R6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{3bc3055f-5dd4-4cc1-821c-e118dac21c82}-ClickfinderSG_R6.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_R6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.window.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{bc29dabb-625d-4a2a-930d-69fce3c51558}-ClickfinderSimpleGuide.window.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.window.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuide.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b2586a79-ad8d-414e-853a-20f9a94b5576}-ClickfinderSimpleGuide.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ba9254bc-8698-4585-a49a-ec98fb133f40}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d81e957f-f916-49ea-b4c0-a26f09554c43}-ClickfinderSG_Tagestipp.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ee090c9a-f677-4dc4-baa8-3497f341b120}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\Titan\ClickfinderSimpleGuideTMDb.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c9be09cb-e69c-4fbf-9e66-2093191eaed7}-ClickfinderSimpleGuideTMDb.xml</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\ClickfinderSimpleGuideTMDb.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{3c74a2f9-9c2b-4372-8a4f-e43963fa2d3e}-FSK0.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{3e2e6088-7724-472d-83bd-5ed3e5c57186}-FSK6.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK12.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{083d7a15-2180-46bd-bc1c-8c845b92b064}-FSK12.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK12.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\Skins\Titan\Media\Logos\ClickfinderSG\FSK18.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{704f6c2c-92bb-4a8d-a1f1-93dde6fef7f9}-FSK18.png</ZipFileName>
+        <DestinationFilename>%Config%\skin\Titan\Media\Logos\ClickfinderSG\FSK18.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.include.hiddenMenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dd7aa2f0-ad30-42a2-b9ee-1e75f1826adc}-ClickfinderSimpleGuide.include.hiddenMenu.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.include.hiddenMenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.window.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e3280f1d-4a5f-4593-8711-c42e02538e6c}-ClickfinderSimpleGuide.window.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.window.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuide.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7893b268-662b-4d3f-b05d-8237db57820f}-ClickfinderSimpleGuide.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuide.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuideBoot.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{273ddf12-fbde-4db1-848c-63ba6dd39ce0}-ClickfinderSimpleGuideBoot.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuideBoot.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\ClickfinderSimpleGuideTMDb.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1211827c-5bb6-41fd-928f-a8c3b6407cfb}-ClickfinderSimpleGuideTMDb.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\ClickfinderSimpleGuideTMDb.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\common.overlays.cf.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{56b6ca09-a6e5-492f-8a20-ef93b9c61ff8}-common.overlays.cf.xml</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\common.overlays.cf.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_detail_frame.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{77fa4038-0c26-4048-861d-24ed75e19f27}-ClickfinderSG_detail_frame.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_detail_frame.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_DetailBG.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a9157099-903a-42b6-b535-3ffd53efab1f}-ClickfinderSG_DetailBG.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_DetailBG.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_Overlay.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6977c47b-62c6-4443-ab6f-66e9575aa8bd}-ClickfinderSG_Overlay.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_Overlay.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R1.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{42cec0ab-e44d-43c4-a138-72f1c9a670a9}-ClickfinderSG_R1.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R1.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a4f775f3-e7a0-489b-8b64-16fd07fa893a}-ClickfinderSG_R2.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R3.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{44ec5af0-2456-49de-8733-c4efd4ad46b9}-ClickfinderSG_R3.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R3.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R4.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b386d548-b587-40d2-935b-9d32f0a60ea8}-ClickfinderSG_R4.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R4.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R5.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{04910089-a238-4ed1-a253-151ec242a36c}-ClickfinderSG_R5.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R5.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_R6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{aeb999ab-7907-4841-a0b9-8c84c2c1e2b6}-ClickfinderSG_R6.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_R6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_SepV.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{72a198ba-b8a9-4a40-8ccf-b84bc932d2af}-ClickfinderSG_SepV.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_SepV.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_shadow_cover.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5f0d8d83-6374-4af3-80be-3490b2a6ce68}-ClickfinderSG_shadow_cover.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_shadow_cover.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_starblack.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0c87e80a-bcd4-40fa-8159-2061ba11f854}-ClickfinderSG_starblack.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_starblack.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_starwhite.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{11fd0082-b9ee-47e5-bc55-b18b1f328f52}-ClickfinderSG_starwhite.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_starwhite.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_Tagestipp.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dbd7a351-c7b3-4812-a923-f68ccdd8ce7b}-ClickfinderSG_Tagestipp.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_Tagestipp.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_TMDbLogo.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{689cbe21-2358-4be0-9fc9-731bb93c4100}-ClickfinderSG_TMDbLogo.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_TMDbLogo.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\ClickfinderSG_TopBarBG.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{3b5676d2-34b5-4f5a-a6a5-9f8cbf3d0471}-ClickfinderSG_TopBarBG.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\ClickfinderSG_TopBarBG.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\hover_ClickfinderProgramGuide.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ea4116ec-14cd-42f5-8770-2fd4b7a55307}-hover_ClickfinderProgramGuide.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\hover_ClickfinderProgramGuide.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Audio\dolbydigital.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4568835e-5ea4-4fd1-a068-9e108edf7ce8}-dolbydigital.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\dolbydigital.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Audio\stereo.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d4255817-c77c-4ff9-99e7-232491dc2a03}-stereo.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\stereo.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\default.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{813650ba-7c2d-425a-8fc7-0b2a0178776e}-default.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Audio\default.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK0.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{653a27e5-d7f2-41f7-9bdb-bf102b2417a2}-FSK0.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK0.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6240536c-f673-45fe-bbd6-94502e9a937f}-FSK6.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK12.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f2b368b3-d28c-43c3-a89e-afa851c840da}-FSK12.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK12.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\ClickfinderSG\FSK18.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{53d6feb2-9f82-45f1-8e59-5abeb36b145a}-FSK18.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\ClickfinderSG\FSK18.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\540.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{43c7de39-be70-492d-8c87-144ade70d06f}-540.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\540.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\720P.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0840bd86-e20a-4c48-a3a7-434297231abd}-720P.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\720P.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\skins\StreamedMP\Media\Logos\Resolution\default.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{34dd20db-c5b7-4e7a-ad01-7c14fba93c9b}-default.png</ZipFileName>
+        <DestinationFilename>%Skin%\StreamedMP\Media\Logos\Resolution\default.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\..\ConfigIcons\CSG_Setup.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5031e221-9d16-4bd7-9d78-4cb47ce4016a}-CSG_Setup.png</ZipFileName>
+        <DestinationFilename />
+      </FileItem>
+    </Items>
+  </UniqueFileList>
+  <ProjectSettings>
+    <FolderGroups />
+    <ProjectFilename>ClickfinderSimpleGuide_v0.9.5.xmp2</ProjectFilename>
+    <UpdatePath1 />
+    <UpdatePath2 />
+    <UpdatePath3 />
+  </ProjectSettings>
+  <IsSkin>false</IsSkin>
+</PackageClass>

@@ -1,18 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <window>
   <controls>
-    <control>
-      <description>BG</description>
+<control>
+      <description>Fanart Background #1</description>
       <type>image</type>
-      <id>1</id>
+      <id>60</id>
+      <posY>0</posY>
+      <posX>0</posX>
       <width>1920</width>
       <height>1080</height>
-      <!-- texture>hover_ClickfinderSimpleGuide.png</texture -->
-      <texture>hover_tetris.png</texture>
+      <texture>#Fanart.1</texture>
+      <animation effect="fade" time="1200">visible</animation>
+      <animation effect="fade" time="1200" delay="300">hidden</animation>
+    </control>
+    <control>
+      <description>Fanart Background #2</description>
+      <type>image</type>
+      <id>61</id>
+      <posY>0</posY>
+      <posX>0</posX>
+      <width>1920</width>
+      <height>1080</height>
+      <texture>#Fanart.2</texture>
+      <animation effect="fade" time="1200">visible</animation>
+      <animation effect="fade" time="1200" delay="300">hidden</animation>
     </control>
 
+
     <control>
-      
       <description>background listview</description>
       <type>image</type>
       <id>0</id>

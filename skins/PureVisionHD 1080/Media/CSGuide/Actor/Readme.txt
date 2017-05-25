@@ -1,0 +1,1 @@
+Folder caches Art images from TMDb for Clickfinder Simple Guide Plugin

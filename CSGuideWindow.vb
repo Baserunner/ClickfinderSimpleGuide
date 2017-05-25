@@ -156,9 +156,13 @@ Namespace ClickfinderSimpleGuide
 #Region "GUI Events"
 
         Protected Overrides Sub OnPageLoad()
+
+            CSGuideHelper.checkSkinFolder()
+
             If _ItemsCache.Count = 0 Then
                 InitWindow()
             End If
+
             _backdrop = New ImageSwapper
             _backdrop.PropertyOne = "#Fanart.1"
             _backdrop.PropertyTwo = "#Fanart.2"
@@ -183,7 +187,7 @@ Namespace ClickfinderSimpleGuide
             MyLog.Debug(String.Format("[{0}] [{1}]: Destroying ... New WindowID {2}", _mClass, mName, new_windowId))
 
             AbortRunningThreads()
-            _ItemsCache.Clear()
+            If new_windowId <> 730352 Then _ItemsCache.Clear()
             MyBase.OnPageDestroy(new_windowId)
             Dispose()
             AllocResources()
@@ -574,11 +578,19 @@ Namespace ClickfinderSimpleGuide
                             If Not _TMDbCache.ContainsKey(_tmdbCacheKey) Then
                                 _cacheHander.AddItem(TVMovieProgram.Retrieve(_SelectedEPGItemId), _TMDbCache)
                                 ' Try to persist the Cache, only if the cache build is not running
-                                If Not _ThreadBuildTMDb.IsAlive Then
+                                If _ThreadBuildTMDb IsNot Nothing Then
+                                    If Not _ThreadBuildTMDb.IsAlive Then
+                                        _cacheHander.persistCache(_TMDbCache)
+                                    End If
+                                Else
                                     _cacheHander.persistCache(_TMDbCache)
                                 End If
+                                'If Not _ThreadBuildTMDb.IsAlive Then
+                                '    _cacheHander.persistCache(_TMDbCache)
+                                'End If
+
                             End If
-                            If _TMDbCache.Item(_tmdbCacheKey).movie Is Nothing Then
+                                If _TMDbCache.Item(_tmdbCacheKey).movie Is Nothing Then
                                 CSGuideHelper.ShowNotify("Kein TMDb Eintrag")
                             Else
                                 If Not File.Exists(_TMDbCache.Item(_tmdbCacheKey).Misc.absFanartPath) Then
@@ -1110,11 +1122,10 @@ Namespace ClickfinderSimpleGuide
             Dim getYearString As String = ""
             Dim getEpisodeString As String = ""
 
-            _ProgramList.Visible = False
-            _ProgramList.AllocResources() 'was macht das?
-            _ProgramList.Clear()
-
             Try
+                _ProgramList.Visible = False
+                _ProgramList.AllocResources() 'was macht das?
+                _ProgramList.Clear()
 
                 For i = 0 To _ItemsCache.Count - 1
 
@@ -1183,15 +1194,21 @@ Namespace ClickfinderSimpleGuide
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
 
             Try
-                If _ThreadLoadItemsFromDatabase.IsAlive = True Then
-                    _ThreadLoadItemsFromDatabase.Abort()
-                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadLoadItemsFromDatabase aborted", _mClass, mName))
+                If _ThreadLoadItemsFromDatabase IsNot Nothing Then
+                    If _ThreadLoadItemsFromDatabase.IsAlive = True Then
+                        _ThreadLoadItemsFromDatabase.Abort()
+                        MyLog.Debug(String.Format("[{0}] [{1}]: ThreadLoadItemsFromDatabase aborted", _mClass, mName))
+                    End If
                 End If
-                If _ThreadFillProgramList.IsAlive = True Then
-                    _ThreadFillProgramList.Abort()
-                    MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, mName))
+
+                If _ThreadFillProgramList IsNot Nothing Then
+                    If _ThreadFillProgramList.IsAlive = True Then
+                        _ThreadFillProgramList.Abort()
+                        MyLog.Debug(String.Format("[{0}] [{1}]: ThreadFillEPGList aborted", _mClass, mName))
+                    End If
                 End If
-                If _UseTMDb Then ' to avoid exception
+
+                If _UseTMDb And _ThreadBuildTMDb IsNot Nothing Then ' to avoid exception
                     If _ThreadBuildTMDb.IsAlive = True Then
                         _ThreadBuildTMDb.Abort()
                         MyLog.Debug(String.Format("[{0}] [{1}]: ThreadBuildTMDb aborted", _mClass, mName))
@@ -1281,26 +1298,31 @@ Namespace ClickfinderSimpleGuide
         End Function
 
         Private Shared Sub FetchConfig(client As TMDbClient)
-            Dim configXml As New FileInfo(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbLibConfig.xml")))
+            Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
 
-            Console.WriteLine("Config file: " & configXml.FullName & ", Exists: " & configXml.Exists)
+            Try
+                Dim configXml As New FileInfo(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\CSGuideTMDbLibConfig.xml")))
+                MyLog.Debug(String.Format("[{0}]:Config file: {1}, Exists: {2}", mName, configXml.FullName, configXml.Exists))
 
-            If configXml.Exists AndAlso configXml.LastWriteTimeUtc >= DateTime.UtcNow.AddHours(-1) Then
-                Console.WriteLine("Using stored config")
-                Dim xml As String = File.ReadAllText(configXml.FullName, Encoding.Unicode)
+                If configXml.Exists AndAlso configXml.LastWriteTimeUtc >= DateTime.UtcNow.AddHours(-1) Then
+                    MyLog.Debug(String.Format("[{0}]: Using stored config", mName))
+                    Dim xml As String = File.ReadAllText(configXml.FullName, Encoding.Unicode)
 
-                Dim xmlDoc As New XmlDocument()
-                xmlDoc.LoadXml(xml)
+                    Dim xmlDoc As New XmlDocument()
+                    xmlDoc.LoadXml(xml)
 
-                client.SetConfig(Serializer.Deserialize(Of TMDbConfig)(xmlDoc))
-            Else
-                Console.WriteLine("Getting new config")
-                client.GetConfig()
+                    client.SetConfig(Serializer.Deserialize(Of TMDbConfig)(xmlDoc))
+                Else
+                    MyLog.Debug(String.Format("[{0}]: Getting new config", mName))
+                    client.GetConfig()
 
-                Console.WriteLine("Storing config")
-                Dim xmlDoc As XmlDocument = Serializer.Serialize(client.Config)
-                File.WriteAllText(configXml.FullName, xmlDoc.OuterXml, Encoding.Unicode)
-            End If
+                    MyLog.Debug(String.Format("[{0}]: Storing config", mName))
+                    Dim xmlDoc As XmlDocument = Serializer.Serialize(client.Config)
+                    File.WriteAllText(configXml.FullName, xmlDoc.OuterXml, Encoding.Unicode)
+                End If
+            Catch ex As Exception
+                MyLog.Error(String.Format("[{0}]: Exception err: {1} stack: {2}", mName, ex.Message, ex.StackTrace))
+            End Try
         End Sub
 
 

@@ -19,8 +19,7 @@ Namespace ClickfinderSimpleGuide
         Private Shared m_clickfinderPath As String
         Private Shared m_TVMovieIsEnabled As String
         Private Shared m_TVMovieLastUpdate As String
-        'Private Shared m_TMDbAPIKey As String = "xxx"
-        Private Shared m_TMDbAPIKey As String = "b791cd5a2442ab1e01348a207969a17f"
+        Private Shared m_TMDbAPIKey As String = "xxx"
         Private Shared m_configFileName As String = "ClickfinderSimpleGuide.xml"
         Friend Shared Property TMDbAPIKey() As String
             Get
@@ -331,7 +330,7 @@ Namespace ClickfinderSimpleGuide
            "Now",
            "All Channels",
            "Filme",
-           "0", False)
+           "0", True)
             m_view(5) = _view
 
             _view = New CSGuideView(
@@ -361,7 +360,7 @@ Namespace ClickfinderSimpleGuide
             "Now",
             "All Channels",
             "Tages-Tipps!",
-            "0", False)
+            "0", True)
             m_view(8) = _view
 
         End Sub

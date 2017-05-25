@@ -1,0 +1,284 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Music and Video Overlays, Excludes Filmstrip layout -->
+<window>
+  <controls>
+    <control>
+      <description>dialog bg</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>22</posX>
+      <posY>114</posY>
+      <width>768</width>
+      <height>218</height>
+      <texture>dialogprogressbg.png</texture>
+      <visible>player.hasmedia+string.equals(#StreamedMP.VideoWallpaper,false)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <!-- MUSIC OVERLAY -->
+    <control>
+      <description>Default Music Logo</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>50</posX>
+      <posY>146</posY>
+      <width>161</width>
+      <height>161</height>
+      <keepaspectratio>no</keepaspectratio>
+      <centered>yes</centered>
+      <zoom>yes</zoom>
+      <texture>defaultAudioBig.png</texture>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Artist Thumb</description>
+      <type>image</type>
+      <id>5220</id>
+      <posX>50</posX>
+      <posY>146</posY>
+      <width>161</width>
+      <height>161</height>
+      <keepaspectratio>no</keepaspectratio>
+      <centered>yes</centered>
+      <zoom>yes</zoom>
+      <texture>#StreamedMP.ArtistPath\#StreamedMP.Current.ArtistL.jpg</texture>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Album Thumb</description>
+      <type>image</type>
+      <id>5230</id>
+      <posX>50</posX>
+      <posY>146</posY>
+      <width>161</width>
+      <height>161</height>
+      <keepaspectratio>no</keepaspectratio>
+      <centered>yes</centered>
+      <zoom>no</zoom>
+      <texture>#Play.Current.Thumb</texture>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Music Artist and Album Animation</description>
+      <type>animation</type>
+      <id>5210</id>
+      <posX>50</posX>
+      <posY>146</posY>
+      <width>161</width>
+      <height>161</height>
+      <textures>#Play.Current.Thumb;#StreamedMP.ArtistPath\#StreamedMP.Current.ArtistL.jpg</textures>
+      <Duration>0:0:45</Duration>
+      <randomize>no</randomize>
+      <keepaspectratio>no</keepaspectratio>
+      <centered>yes</centered>
+      <zoom>yes</zoom>
+      <visible>player.hasaudio+control.hasthumb(5220)+control.hasthumb(5230)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500" reversible="true">Visible</animation>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Selectable Button</description>
+      <type>button</type>
+      <id>1701</id>
+      <posX>42</posX>
+      <posY>138</posY>
+      <width>176</width>
+      <height>176</height>
+      <textureFocus>thumbborder5.png</textureFocus>
+      <textureNoFocus>-</textureNoFocus>
+      <!--<action>18</action>-->
+      <hyperlink>510</hyperlink>
+      <colordiffuse>f1ffffff</colordiffuse>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>artist info label</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>510</width>
+      <height>60</height>
+      <posX>230</posX>
+      <posY>140</posY>
+      <label>#Play.Current.Artist</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream12tc</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>title info label</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>510</width>
+      <height>60</height>
+      <posX>230</posX>
+      <posY>175</posY>
+      <label>#Play.Current.Title</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10tc</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>album info label</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>510</width>
+      <height>60</height>
+      <posX>230</posX>
+      <posY>204</posY>
+      <label>#Play.Current.Album</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10c</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>play time / duration label</description>
+      <type>label</type>
+      <id>0</id>
+      <width>510</width>
+      <height>60</height>
+      <posX>230</posX>
+      <posY>231</posY>
+      <label>#currentplaytime / #duration</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10c</font>
+      <visible>player.hasaudio+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>next song label</description>
+      <type>label</type>
+      <id>0</id>
+      <width>63</width>
+      <height>60</height>
+      <posX>230</posX>
+      <posY>270</posY>
+      <label>Next:</label>
+      <textcolor>FF025984</textcolor>
+      <font>mediastream10</font>
+      <visible>player.hasaudio+!string.equals(#Play.Next.Title,)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>next song info label</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>300</posX>
+      <posY>270</posY>
+      <width>450</width>
+      <height>60</height>
+      <label>#Play.Next.Title by #Play.Next.Artist</label>
+      <textcolor>FF999999</textcolor>
+      <font>mediastream10</font>
+      <visible>player.hasaudio+!string.equals(#Play.Next.Title,)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <!-- VIDEO OVERLAY -->
+    <control>
+      <description>video preview window</description>
+      <type>videowindow</type>
+      <id>99</id>
+      <posX>50</posX>
+      <posY>142</posY>
+      <width>294</width>
+      <height>161</height>
+      <action>18</action>
+      <onleft>1701</onleft>
+      <textureFocus>tv_blue_border.png</textureFocus>
+      <visible>player.hasvideo+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Title</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>390</width>
+      <height>60</height>
+      <posX>370</posX>
+      <posY>146</posY>
+      <label>#Play.Current.Title  #Play.Current.Year</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10tc</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasvideo+string.equals(#StreamedMP.VideoWallpaper,false)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    
+    <control>
+      <description>Genre</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>375</width>
+      <height>60</height>
+      <posX>370</posX>
+      <posY>186</posY>
+      <label>#Play.Current.Genre</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10c</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasvideo+string.equals(#StreamedMP.VideoWallpaper,false)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>Director</description>
+      <type>fadelabel</type>
+      <id>0</id>
+      <width>375</width>
+      <height>60</height>
+      <posX>370</posX>
+      <posY>216</posY>
+      <label>#Play.Current.Director</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10c</font>
+      <scrollStartDelaySec>30</scrollStartDelaySec>
+      <wrapString> | </wrapString>
+      <visible>player.hasvideo+string.equals(#StreamedMP.VideoWallpaper,false)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+    <control>
+      <description>play time / duration label</description>
+      <type>label</type>
+      <id>0</id>
+      <width>375</width>
+      <height>60</height>
+      <posX>370</posX>
+      <posY>246</posY>
+      <label>#currentplaytime / #duration</label>
+      <textcolor>FFFFFFFF</textcolor>
+      <font>mediastream10c</font>
+      <visible>player.hasvideo+string.equals(#StreamedMP.VideoWallpaper,false)+!facadeview.filmstrip</visible>
+      <animation effect="fade" time="500">WindowOpen</animation>
+      <animation effect="fade" time="500">WindowClose</animation>
+    </control>
+  </controls>
+</window>
+<!--Checksum:d5f8152c6a6f2041b43258d60e116b48-->

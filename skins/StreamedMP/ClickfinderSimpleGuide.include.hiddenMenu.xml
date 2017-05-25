@@ -1,0 +1,195 @@
+﻿<window>
+  <controls>
+	<!-- hidden_menu control -->    
+ <control>
+      <type>actiongroup</type>
+      <description>action menu</description>
+      <defaultcontrol>3</defaultcontrol>
+      <onexit>37</onexit>
+      <buttonX>1848</buttonX>
+      <buttonY>75</buttonY>
+      <buttonwidth>72</buttonwidth>
+      <buttonheight>216</buttonheight>
+      <textureFocus>#StreamedMP.ActionMenu.Image</textureFocus>
+      <textureNoFocus>#StreamedMP.ActionMenu.Image</textureNoFocus>
+      <dimColor>00ffffff</dimColor>
+      <control>
+        <type>image</type>
+        <posX>1541</posX>
+        <posY>0</posY>
+        <width>380</width>
+        <height>1080</height>
+        <texture>hiddenmenu_right.png</texture>
+        <visible>!Control.HasFocus(37)</visible>
+        <animation effect="slide" time="100" start="450,0">visible</animation>
+        <animation effect="slide" time="0" end="450,0">hidden</animation>
+      </control>
+      <control>
+        <id>0</id>
+        <description>dummy button</description>
+        <label>-</label>
+        <type>button</type>
+        <posX>1503</posX>
+        <posY>0</posY>
+        <width>417</width>
+        <height>1080</height>
+        <visible>!Control.HasFocus(37)</visible>
+        <animation effect="slide" time="100" start="450,0">visible</animation>
+        <animation effect="slide" time="0" end="450,0">hidden</animation>
+      </control>
+      <control>
+        <description>label VIEWS</description>
+ <type>label</type>
+        <id>0</id>
+        <label>496</label>
+       
+ <!-- label>924</label -->
+<label>Views</label>
+        <font>mediastream12tc</font>
+        <posX>1600</posX>
+        <posY>240</posY>
+        <visible>!Control.HasFocus(37)</visible>
+        <animation effect="slide" time="100" start="450,0">visible</animation>
+        <animation effect="slide" time="0" end="450,0">hidden</animation>
+      </control>
+   
+      <control>
+        <type>group</type>
+        <description>group element</description>
+        <visible>!Control.HasFocus(37)</visible>
+        <animation effect="slide" time="100" start="450,0">visible</animation>
+        <animation effect="slide" time="0" end="450,0">hidden</animation>
+        <posX>1560</posX>
+        <posY>375</posY>
+        <width>330</width>
+        <height>1080</height>
+        <layout>StackLayout(0, Vertical, true)</layout>
+       <control>
+          <description>View1</description>
+          <type>button</type>
+          <id>91</id>
+          <width>360</width>
+        <textXOff>40</textXOff>
+        <label>View1</label>
+          <onup>100</onup>
+          <ondown>92</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+          
+        </control>
+     <control>
+          <description>View2</description>
+          <type>button</type>
+          <id>92</id>
+          <width>360</width>
+  <textXOff>40</textXOff>
+        <label>View2</label>
+          <onup>91</onup>
+          <ondown>93</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+        </control>
+    <control>
+          <description>View3</description>
+          <type>button</type>
+          <id>93</id>
+          <width>360</width>
+         <textXOff>40</textXOff>
+          <label>View3</label>
+          <onup>92</onup>
+          <ondown>94</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+        </control>
+		<control>
+          <description>View4</description>
+          <type>button</type>
+          <id>94</id>
+          <width>360</width>
+           <textXOff>40</textXOff>
+          <onup>93</onup>
+          <ondown>95</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+        
+        </control>
+				<control>
+          <description>View5</description>
+          <type>button</type>
+          <id>95</id>
+          <width>360</width>
+            <textXOff>40</textXOff>
+          <onup>94</onup>
+          <ondown>96</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+        
+        </control>
+				<control>
+          <description>View6</description>
+          <type>button</type>
+          <id>96</id>
+          <width>360</width>
+               <textXOff>40</textXOff>
+          <onup>95</onup>
+          <ondown>97</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+        </control>
+				<control>
+          <description>View7</description>
+          <type>button</type>
+          <id>97</id>
+          <width>360</width>
+              <textXOff>40</textXOff>
+          <onup>96</onup>
+          <ondown>98</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+        </control>
+	<control>
+          <description>View8</description>
+          <type>button</type>
+          <id>98</id>
+          <width>360</width>
+             <textXOff>40</textXOff>
+          <onup>97</onup>
+          <ondown>101</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+          
+        </control>
+     <control>
+          <description>TMDb</description>
+          <type>button</type>
+          <id>101</id>
+          <width>360</width>
+  <textXOff>40</textXOff>
+           <onup>98</onup>
+          <ondown>100</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+         
+        </control>
+       <control>
+          <description>View0</description>
+          <type>button</type>
+          <id>100</id>
+          <width>360</width>
+             <textXOff>40</textXOff>
+          <onup>101</onup>
+          <ondown>91</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+        
+        </control>
+      </control>
+    </control>
+  </controls>
+</window>
+<!--Checksum:1dbfd11397e9d2b56859ed7cbbf67394-->

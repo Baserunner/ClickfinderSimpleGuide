@@ -27,7 +27,7 @@
       <type>actiongroup</type>
       <description>action menu</description>
       <defaultcontrol>3</defaultcontrol>
-      <onexit>50</onexit>
+      <onexit>37</onexit>
       <dimColor>00ffffff</dimColor>
       <buttonX>-460</buttonX>
       <buttonY>155</buttonY>
@@ -50,7 +50,7 @@
         <posX>0</posX>
         <width>612</width>
         <!-- height>1074</height -->
-		<height>874</height>
+		<height>974</height>
         <texture>menu_bg.png</texture>
         <visible>!Control.HasFocus(37)+control.isvisible(37)</visible>
         <animation effect="fade" time="0">WindowClose</animation>
@@ -210,6 +210,22 @@
           <textureNoFocus>-</textureNoFocus>
           <textcolorNoFocus>ff393939</textcolorNoFocus>          
           <onup>97</onup>
+          <ondown>101</ondown>
+          <onright>37</onright>
+          <onleft>37</onleft>
+          <textXOff>62</textXOff>
+          <textYOff>16</textYOff>
+        </control>
+						<control>
+          <description>TMDb</description>
+          <type>button</type>
+          <id>101</id>
+          <width>499</width>
+          <height>69</height>
+          <textureFocus>hiddenmenu_item_selected.png</textureFocus>
+          <textureNoFocus>-</textureNoFocus>
+          <textcolorNoFocus>ff393939</textcolorNoFocus>          
+          <onup>98</onup>
           <ondown>100</ondown>
           <onright>37</onright>
           <onleft>37</onleft>
@@ -225,7 +241,7 @@
           <textureFocus>hiddenmenu_item_selected.png</textureFocus>
           <textureNoFocus>-</textureNoFocus>
           <textcolorNoFocus>ff393939</textcolorNoFocus>          
-          <onup>98</onup>
+          <onup>101</onup>
           <ondown>91</ondown>
           <onright>37</onright>
           <onleft>37</onleft>

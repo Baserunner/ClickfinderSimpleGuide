@@ -98,11 +98,13 @@ Namespace ClickfinderSimpleGuide
             End If
             Return returnDict
         End Function
+
         Private Sub removeOldEntries(ByRef tmdbCache As Dictionary(Of String, CSGuideTMDBCacheItem))
             Dim mName As String = System.Reflection.MethodInfo.GetCurrentMethod.Name
             MyLog.Debug(String.Format("[{0}] [{1}]: Checking for cache entries to remove", _mClass, mName))
             Try
                 For Each key As String In New List(Of String)(tmdbCache.Keys)
+
                     If Date.Today > tmdbCache(key).keepUntilDate Then
                         If Utils.FileDelete(tmdbCache(key).Misc.absFanartPath) Then
                             MyLog.Debug(String.Format("[{0}] [{1}]: Deleted {2}", _mClass, mName, tmdbCache(key).Misc.absFanartPath))
@@ -117,6 +119,11 @@ Namespace ClickfinderSimpleGuide
                 CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Actor")), 14)
                 CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Poster")), 14)
                 CSGuideHelper.imageCleaner(Path.Combine(Config.GetSubFolder(Config.Dir.Skin, Config.SkinName & "\media\CSGuide\Fanart")), 14)
+
+                ' Delete old Hyperlinks-Entries
+                ' MyLog.Debug(String.Format("[{0}] [{1}]: Checking old Hyperlinks: START", _mClass, mName))
+                ' CSGuideHelper.imageCleaner(CSGuideSettings.ClickfinderImagePath, 14)
+                ' MyLog.Debug(String.Format("[{0}] [{1}]: Checking old Hyperlinks: END", _mClass, mName))
             Catch ex As Exception
                 MyLog.Error(String.Format("[{0}] [{1}]: Exception err: {2} stack: {3}", _mClass, mName, ex.Message, ex.StackTrace))
             End Try

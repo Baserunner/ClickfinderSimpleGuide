@@ -118,7 +118,7 @@ Namespace ClickfinderSimpleGuide
                 MyLog.DebugModeOn = CSGuideSettings.DebugMode
                 MyLog.BackupLogFiles()
 
-                MyLog.Info(String.Format("[{0}] [{1}] *** Starting *** ", _mClass, _mName))
+                MyLog.Info(String.Format("[{0}] [{1}] *** Starting Version {2} *** ", _mClass, _mName, CSGuideHelper.Version))
                 If CSGuideSettings.DebugMode Then
                     CSGuideSettings.logAll()
                 Else
